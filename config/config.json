@@ -1,0 +1,12 @@
+{
+	"development": {
+		"MONGODB_URI": "mongodb://localhost:27017/flat-inventory",
+		"JWT_SECRET": "seidnyuaeifybeiouxw90eb7rb376r7b59034574382bn0572340ndtgr76ft9YesIamAMightyPassword",
+		"SESSION_SECRET": "Shewastooshorttoseeoverthefence"
+	},
+		"test": {
+		"MONGODB_URI": "mongodb://localhost:27017/dflat-inventory-test",
+		"JWT_SECRET": "asjlkdjhsdilufhsdkljfhsjkldhf",
+		"SESSION_SECRET": "fpoiertfiojsdofijsoifj"
+	}
+}
