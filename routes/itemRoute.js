@@ -56,15 +56,17 @@ router.get('/query', (req, res) => {
 router.post('/', (req, res) => {
     const token = req.header('x-auth') || req.session.accessToken;
     const body = _.pick(req.body, ['_id', 'name', 'description', 'location', 'quantity', 'label', 'createdBy', 'updatedBy']);
+    
     const item = new Item(body);
 
     User.findByToken(token)
     .then(user => {
         item.createdBy = user;
-        return instance.save();
+        return item.save();
     })
-    .then(result => {
-        res.send({ result });
+    .populate('apartment')
+    .then(item => {
+        res.send({ item });
     })
     .catch(e => {
         if (e.error) {
@@ -77,26 +79,6 @@ router.post('/', (req, res) => {
     });
 });
 
-router.patch('/:id', (req, res) => {
-  const token = req.header('x-auth') || req.session.accessToken;
-  const id = req.params.id;
-  const body = _.pick(req.body, ['name', 'description', 'location', 'quantity', 'family', 'label', 'createdBy', 'updatedBy']);
 
-  if (!ObjectID.isValid(id)) {
-    return res.status(404).send();
-  }
-
-  User.findByToken(token)
-    .then(user => {
-      return Item.findByIdAndUpdate(id, {
-        $set: body,
-        updatedBy: user._id
-      }, {
-        new: true
-      });
-    })
-    .then(result => res.send({ result }))
-    .catch(e => res.status(400).send(e));
-});
 
 module.exports = router;

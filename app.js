@@ -10,6 +10,7 @@ const path = require('path');
 const cors = require('cors');
 
 const index = require('./routes/index');
+const user = require('./routes/userRoute');
 const item = require('./routes/itemRoute');
 
 const app = express();
@@ -48,6 +49,7 @@ app.use(session({
 }));
 
 app.use('/', index);
+app.use('/api/users', user);
 app.use('/api/items', item);
 
 // app.use('/public', express.static(path.join(__dirname, './media')));
