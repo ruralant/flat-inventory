@@ -52,7 +52,7 @@ app.use('/', index);
 app.use('/api/users', user);
 app.use('/api/items', item);
 
-// app.use('/public', express.static(path.join(__dirname, './media')));
+app.use('/public', express.static(path.join(__dirname, './media')));
 
 // 404 errors forwarded to the Error Handler function 
 app.use(function (req, res, next) {
