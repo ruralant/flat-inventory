@@ -45,9 +45,9 @@ router.get('/query', (req, res) => {
 
   Instance.find(mongoQuery)
     .populate('apartment')
-    .then(instances => {
+    .then(rooms => {
       res.send({
-        instances
+        items
       });
     }).catch(e => res.status(400).send(e));
 });
