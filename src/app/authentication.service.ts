@@ -17,7 +17,7 @@ export class AuthenticationService {
   }
 
   login(email: string, password: string): Observable<boolean> {
-    return this.http.post(`${constURL}/user/login`, { email, password })
+    return this.http.post(`${constURL}/users/login`, { email, password })
       .map(res => {
         let token = res.json() && res.json().token;
         this.token = token;

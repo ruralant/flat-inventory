@@ -84,11 +84,11 @@ UserSchema.statics.findByToken = function (token) {
 };
 
 UserSchema.statics.findByCredentials = function (email, password) {
+    console.log('called');
     var User = this;
 
     return User.findOne({
-        email,
-        active: true
+        email
     })
         .then((user) => {
             if (!user) {
