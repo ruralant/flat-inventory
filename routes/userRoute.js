@@ -12,13 +12,13 @@ let { authenticate } = require('./../middleware/auth');
 // let {sendEmail} = require('./email.js');
 
 // creates a super user if does not exist, one time only
-User.findOne({ email: "superuser" }).then((user) => {
+User.findOne({ email: "super@user" }).then((user) => {
   if (!user) {
     let superUser = {
       "_id": ObjectID.ObjectId("58f60bdc7314d23bd3ce92e3"),
       "firstName": "superuser",
       "lastName": "superuser",
-      "email": "superuser",
+      "email": "super@user",
       "password": "password",
       "userType": "superuser"
     };
@@ -48,8 +48,11 @@ router.post('/', authenticate, (req, res) => {
 // log a user in
 router.post('/login', (req, res) => {
   const body = _.pick(req.body, ['email', 'password']);
+  console.log('email: ', body.email);
+  console.log('password: ', body.password);
 
   User.findByCredentials(body.email, body.password).then(user => {
+    console.log('user: ', user);
     return user.generateAuthToken('auth').then(token => {
       res.setHeader('x-auth', token);
       req.session.accessToken = token;
