@@ -60,7 +60,7 @@ UserSchema.methods.generateAuthToken = function (access) {
     var token = jwt.sign({
         _id: user._id.toHexString(),
         access
-    }, process.env.JWT_SECRET, { expiresIn: '8h' }).toString();
+    }, process.env.JWT_SECRET, { expiresIn: '4h' }).toString();
 
     return user.save().then(() => {
         return token;

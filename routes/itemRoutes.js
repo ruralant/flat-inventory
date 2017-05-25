@@ -5,12 +5,15 @@ const { ObjectID } = require('mongodb');
 const request = require('request');
 const mongoose = require('mongoose');
 
+const User = require('../models/userModel');
 const { Item } = require('../models/itemModel');
+let { authenticate } = require('./../middleware/auth');
 
 // GET all the Items
-router.get('/', (req, res) => {
+router.get('/', authenticate, (req, res) => {
     Item.find()
     .populate('apartment')
+    .populate('user')
     .then(items => {
         res.send(items);
     }, (e) => {
@@ -18,8 +21,8 @@ router.get('/', (req, res) => {
     });
 });
 
-// GET query Items
-router.get('/query', (req, res) => {
+// GET query of Items
+router.get('/query', authenticate, (req, res) => {
   const searchQuery = req.query;
   const limit = parseInt(req.params.limit) || null;
   // in the search term I want to be able to query both query with name or description, then query both with only one. So I take which has been queried and copy that across to query both, plus I query the label with the search term just for wider visibilty
@@ -43,17 +46,18 @@ router.get('/query', (req, res) => {
   };
   mongoQuery.$and.push(searchQuery);
 
-  Instance.find(mongoQuery)
+  Item.find(mongoQuery)
     .populate('apartment')
-    .then(instances => {
+    .populate('user')
+    .then(items => {
       res.send({
-        instances
+        items
       });
     }).catch(e => res.status(400).send(e));
 });
 
 // Create a new item
-router.post('/', (req, res) => {
+router.post('/', authenticate, (req, res) => {
     const token = req.header('x-auth') || req.session.accessToken;
     const body = _.pick(req.body, ['_id', 'name', 'description', 'location', 'quantity', 'label', 'createdBy', 'updatedBy']);
     
@@ -64,7 +68,6 @@ router.post('/', (req, res) => {
         item.createdBy = user;
         return item.save();
     })
-    .populate('apartment')
     .then(item => {
         res.send({ item });
     })
@@ -79,6 +82,44 @@ router.post('/', (req, res) => {
     });
 });
 
+// UPDATE item
+router.patch('/:id', authenticate, (req, res) => {
+  const token = req.header('x-auth') || req.session.accessToken;
+  const id = req.params.id;
+  const body = _.pick(req.body, ['name', 'description', 'location', 'quantity', 'label', 'createdBy', 'updatedBy']);
 
+  if (!ObjectID.isValid(id)) {
+    return res.status(404).send({
+      error: "ObjectID not valid"
+    });
+  }
+
+  User.findByToken(token)
+    .then(user => {
+      return Item.findByIdAndUpdate(id, {
+        $set: body,
+        updatedBy: user._id
+      }, {
+        new: true
+      });
+    })
+    .then(item => res.send({ item }))
+    .catch(e => res.status(400).send(e));
+});
+
+// DELETE item
+router.delete('/:id', authenticate, (req, res) => {
+  const id = req.params.id;
+
+  if (!ObjectID.isValid(id)) {
+    return res.status(404).send({
+      error: "ObjectID not valid"
+    });
+  }
+
+  Item.findByIdAndRemove(id)
+    .then(() => res.send({ message: "Item Deleted" })
+    .catch(e => res.status(400).send(e)));
+});
 
 module.exports = router;

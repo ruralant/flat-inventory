@@ -44,6 +44,17 @@ router.post('/', authenticate, (req, res) => {
   
 });
 
+// CREATE a user
+router.post('/register', (req, res) => {
+  let body = _.pick(req.body, ['_id', 'firstName', 'lastName', 'email', 'password', 'createdBy', 'userType']);
+
+  var user = new User(body);
+
+  user.save()
+  .then(() => res.send({message: 'User Created'}))
+  .catch(e => res.status(400).send(e));
+});
+
 
 // log a user in
 router.post('/login', (req, res) => {
@@ -232,17 +243,17 @@ router.delete('/:id', (req, res) => {
       active: false
     }
   }, {
-      new: true
-    }).then((user) => {
-      if (user === null) {
-        return res.status(404).send({
-          error: "No user found"
-        });
-      }
-      res.send({ user });
-    })
-    .catch(e => res.status(400).send(e)
-  );
+    new: true
+  })
+  .then((user) => {
+    if (user === null) {
+      return res.status(404).send({
+        error: "No user found"
+      });
+    }
+    res.send({ user });
+  })
+  .catch(e => res.status(400).send(e));
 });
 
 // CHANGE password

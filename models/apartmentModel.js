@@ -5,7 +5,7 @@ const ApartmentSchema = mongoose.Schema({
         type: String
     },
     location: {
-        type: String,
+        type: mongoose.Schema.ObjectId, ref: 'Apartment'
     },
     availability: {
         type: Boolean
