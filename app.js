@@ -13,6 +13,7 @@ const index = require('./routes/index');
 const user = require('./routes/userRoutes');
 const room = require('./routes/roomRoutes');
 const item = require('./routes/itemRoutes');
+const apartment = require('./routes/apartmentRoutes');
 
 const app = express();
 
@@ -53,6 +54,7 @@ app.use('/', index);
 app.use('/api/users', user);
 app.use('/api/rooms', room);
 app.use('/api/items', item);
+app.use('/api/apartments', apartment);
 
 app.use('/public', express.static(path.join(__dirname, './media')));
 

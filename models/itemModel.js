@@ -15,9 +15,12 @@ const ItemSchema = mongoose.Schema({
         type: Number,
         default: 0
     },
+    stock: {
+        type: Number,
+        default: 0
+    },
     label: {
         type: String,
-        required: true,
         lowercase: true
     },
     createdBy: {
