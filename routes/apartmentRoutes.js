@@ -12,13 +12,19 @@ let { authenticate } = require('./../middleware/auth');
 
 // GET all the apartments
 router.get('/', authenticate, (req, res) => {
-    Apartment.find()
-    .populate('room')
-    .populate('user')
-    .then(apartments => {
-        res.send(apartments);
-    }, (e) => {
-        res.status(400).send(e);
+    const token = req.header('x-auth') || req.session.accessToken;
+    
+    User.findByToken(token)
+    .then(user => {
+        // look up for all the apartments created by the current user
+        Apartment.find({ createdBy: user._id })
+        .populate('room')
+        .populate('user')
+        .then(apartments => {
+            res.send(apartments);
+        }, (e) => {
+            res.status(400).send(e);
+        });
     });
 });
 

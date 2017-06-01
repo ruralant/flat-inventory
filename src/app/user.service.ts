@@ -21,35 +21,26 @@ export class UserService {
   }
 
   getUser() {
-    const user = localStorage.getItem('currentUser');
-    // ternary operate that checks if user exists, if not sets token to blank which will send user to login
-    const token = user ? JSON.parse(user).token : '';
     const headers = new Headers({ 'x-auth': token });
     const options = new RequestOptions({ headers: headers });
-    return this.http.get(`${constURL}/user/status`, options)
+    return this.http.get(`${constURL}/users/status`, options)
       // return this.http.get(`/api/user/status`, options)
       .map(res => res.json())
       .catch(this.handleError);
   }
 
   getInstanceUsers() {
-    const user = localStorage.getItem('currentUser');
-    // ternary operate that checks if user exists, if not sets token to blank which will send user to login
-    const token = user ? JSON.parse(user).token : '';
     const headers = new Headers({ 'x-auth': token });
     const options = new RequestOptions({ headers: headers });
-    return this.http.get(`${constURL}/user/`, options)
+    return this.http.get(`${constURL}/users/`, options)
       .map(res => res.json().user);
   }
 
   getOneUser(id: string): any {
-    const user = localStorage.getItem('currentUser');
-    // ternary operate that checks if user exists, if not sets token to blank which will send user to login
-    const token = user ? JSON.parse(user).token : '';
     const headers = new Headers({ 'x-auth': token });
     let options = new RequestOptions({ headers: headers });
 
-    return this.http.get(`${constURL}/user/query?_id=${id}`, options)
+    return this.http.get(`${constURL}/users/query?_id=${id}`, options)
       .map(res => {
         return res.json().user;
       })
@@ -61,7 +52,7 @@ export class UserService {
     let headers = new Headers({ 'Content-Type': 'application/json', 'x-auth': token });
     let options = new RequestOptions({ headers: headers });
 
-    return this.http.post(`${constURL}/user`, model, options)
+    return this.http.post(`${constURL}/users`, model, options)
       .map(res => {
         return res.json();
       })
@@ -69,13 +60,10 @@ export class UserService {
   }
 
   editUser(id: string, user: any): any {
-    let currentUser = localStorage.getItem('currentUser');
-    // ternary operate that checks if user exists, if not sets token to blank which will send user to login
-    let token = user ? JSON.parse(currentUser).token : '';
     let headers = new Headers({ 'Content-Type': 'application/json', 'x-auth': token });
     let option = new RequestOptions({ headers: headers });
 
-    return this.http.patch(`${constURL}/user/updateUser/${id}`, user, option)
+    return this.http.patch(`${constURL}/users/updateUser/${id}`, user, option)
       .map(res => {
         return res.json().user;
       })
@@ -83,12 +71,9 @@ export class UserService {
   }
 
   deleteUser(id: string): any {
-    const user = localStorage.getItem('currentUser');
-    // ternary operate that checks if user exists, if not sets token to blank which will send user to login
-    const token = user ? JSON.parse(user).token : '';
     const headers = new Headers({ 'x-auth': token });
     const options = new RequestOptions({ headers: headers });
-    return this.http.delete(`${constURL}/user/${id}`, options)
+    return this.http.delete(`${constURL}/users/${id}`, options)
       .map(res => {
         return res.json();
       })
@@ -110,7 +95,7 @@ export class UserService {
 
     const options = new RequestOptions({ headers });
 
-    return this.http.patch(`${constURL}/user/profilePasswordChange`, passwordModel, options)
+    return this.http.patch(`${constURL}/users/profilePasswordChange`, passwordModel, options)
       .map(res => {
         return res.json();
       })
@@ -122,7 +107,7 @@ export class UserService {
   forgotPassword(email: string) {
     const body = { email };
 
-    return this.http.post(`${constURL}/user/passwordreset`, body)
+    return this.http.post(`${constURL}/users/passwordreset`, body)
       .map(res => res.json())
       .catch(err => {
         return Observable.of(false);
