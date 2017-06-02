@@ -12,7 +12,8 @@ const ApartmentSchema = mongoose.Schema({
         type: String
     },
     availability: {
-        type: Boolean
+        type: Boolean,
+        default: false
     },
     rooms: {
         type: mongoose.Schema.ObjectId, ref: 'Room'

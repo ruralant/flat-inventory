@@ -16,15 +16,14 @@ router.get('/', authenticate, (req, res) => {
     
     User.findByToken(token)
     .then(user => {
-        // look up for all the apartments created by the current user
-        Apartment.find({ createdBy: user._id })
-        .populate('room')
-        .populate('user')
-        .then(apartments => {
-            res.send(apartments);
-        }, (e) => {
-            res.status(400).send(e);
-        });
+      // look up for all the apartments created by the current user
+      Apartment.find({ createdBy: ObjectID.ObjectId(user._id) })
+      .populate('rooms')
+      .populate('user')
+      .then(apartments => res.send(apartments),
+       (e) => {
+          res.status(400).send(e);
+      });
     });
 });
 
@@ -57,7 +56,7 @@ router.get('/query', authenticate, (req, res) => {
   mongoQuery.$and.push(searchQuery);
 
   Apartment.find(mongoQuery)
-    .populate('room')
+    .populate('rooms')
     .populate('user')
     .then(apartments => {
       res.send({
@@ -69,7 +68,7 @@ router.get('/query', authenticate, (req, res) => {
 // Create a new apartment
 router.post('/', authenticate, (req, res) => {
     const token = req.header('x-auth') || req.session.accessToken;
-    const body = _.pick(req.body, ['_id', 'name', 'description', 'location', 'availability', 'label', 'rooms', 'createdBy', 'updatedBy']);
+    const body = _.pick(req.body, ['_id', 'name', 'description', 'location', 'availability', 'rooms', 'label', 'createdBy', 'updatedBy']);
     
     const apartment = new Apartment(body);
 
@@ -96,7 +95,7 @@ router.post('/', authenticate, (req, res) => {
 router.patch('/:id', authenticate, (req, res) => {
   const token = req.header('x-auth') || req.session.accessToken;
   const id = req.params.id;
-  const body = _.pick(req.body, ['reference', 'description', 'availability', 'label', 'createdBy', 'updatedBy']);
+  const body = _.pick(req.body, ['reference', 'description', 'availability', 'rooms', 'label', 'createdBy', 'updatedBy']);
 
   if (!ObjectID.isValid(id)) {
     return res.status(404).send({

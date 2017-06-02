@@ -47,7 +47,6 @@ export class LoginComponent implements OnInit {
     if (confirm(`Would you like password reset link sent for ${el}?`)) {
       this.userService.forgotPassword(el)
         .subscribe(result => {
-          console.log(result);
           if (result === false) {
             UIkit.notification(`FAIL: No such user exists`, { status: 'warning' });
           } else {

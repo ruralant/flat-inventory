@@ -59,11 +59,8 @@ router.post('/register', (req, res) => {
 // log a user in
 router.post('/login', (req, res) => {
   const body = _.pick(req.body, ['email', 'password']);
-  console.log('email: ', body.email);
-  console.log('password: ', body.password);
 
   User.findByCredentials(body.email, body.password).then(user => {
-    console.log('user: ', user);
     return user.generateAuthToken('auth').then(token => {
       res.setHeader('x-auth', token);
       req.session.accessToken = token;
@@ -91,8 +88,6 @@ router.delete('/', authenticate, (req, res) => {
 // send a password reset link to a user
 router.post('/passwordreset', (req, res) => {
   const body = _.pick(req.body, ['email']);
-  console.log(req.body.email);
-  // const body = {email: 'r.sherman@jayex.com'};
   User.findOne({
     email: body.email
   }).then((user) => {

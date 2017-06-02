@@ -1,5 +1,62 @@
 <h3 *ngIf="currentUser">Hello {{currentUser.firstName}}!!</h3>
 
-<p>
-  home works!
-</p>
+<button class="uk-button uk-button-default uk-margin-small-right" type="button" uk-toggle="target: #apt-modal">Create Apartment</button>
+
+<!-- This is the modal -->
+<div id="apt-modal" uk-modal>
+    <div class="uk-modal-dialog uk-modal-body">
+        <h2 class="uk-modal-title">Create a new apartment</h2>
+        <form class="uk-form" name="form" (ngSubmit)="f.form.valid; createApartment()" #f="ngForm" novalidate>
+          <div class="uk-margin" [ngClass]="{'has-error': f.submitted && !name.valid}">
+            <label class="uk-form-label" for="name">Apartment Name</label>
+            <div class="uk-form-controls">
+              <input class="uk-input" id="name" type="text" placeholder="Add the name of the apartment" name="name" [(ngModel)]="newApartment.name"
+                #name="ngModel" required>
+              <div *ngIf="f.submitted && !name.valid" class="help-block">The apartment name is required</div>
+            </div>
+          </div>
+
+          <div class="uk-margin">
+            <label class="uk-form-label" for="description">Description</label>
+            <div class="uk-form-controls">
+              <input class="uk-input" id="description" type="text" placeholder="Add the apartment descripton" name="description" description="description" [(ngModel)]="newApartment.description"
+                #description="ngModel">
+            </div>
+          </div>
+
+          <div class="uk-margin">
+            <label class="uk-form-label" for="location">Postcode</label>
+            <div class="uk-form-controls">
+              <input class="uk-input" id="location" type="text" placeholder="Add the postcode of the apartment" name="location" location="location" [(ngModel)]="newApartment.location"
+                #location="ngModel">
+            </div>
+          </div>
+
+          <div class="uk-margin">
+            <label class="uk-form-label" for="availability">Is the apartment available?</label>
+            <div class="uk-form-controls">
+              <select [(ngModel)]="newApartment.availability" class="uk-select" id="availability" name="availability">
+                  <option value="true">Yes</option>
+                  <option value="false">No</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="uk-margin">
+            <label class="uk-form-label" for="label">Labels</label>
+            <div class="uk-form-controls">
+              <input class="uk-input" id="label" type="text" placeholder="Add labels dividied by a comma" name="label" label="label" [(ngModel)]="newApartment.label"
+                #label="ngModel">
+            </div>
+          </div>
+
+
+          <div *ngIf="error" class="alert alert-danger">{{error}}</div>
+            <!-- <button class="uk-button uk-button-default uk-button-small uk-text-success uk-button-default-success">Create a New User</button> -->
+          <p class="uk-text-right">
+              <button class="uk-button uk-button-primary ">Save</button>
+          </p>
+        </form>
+    </div>
+</div>
+
