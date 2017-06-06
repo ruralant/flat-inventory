@@ -1,0 +1,65 @@
+<div class="wrapper">
+  <div class="content">
+
+    <form class="uk-form" name="edit-apartment-form" (ngSubmit)="f.form.valid && apartmentUpdate(apartmentToBeModified._id, apartmentToBeModified, f)" #f="ngForm"
+      novalidate>
+      <input type="hidden" value="{{apartmentToBeModified._id}}" name="id">
+
+      <div class="uk-margin" [ngClass]="{'has-error': f.submitted && !name.valid}">
+        <label class="uk-form-label">Apartment Name</label>
+        <div class="uk-form-controls">
+          <input class="uk-input" type="text" id="name" value="{{apartmentToBeModified.name}}" #name="ngModel" placeholder="Apartment Name"
+            [(ngModel)]="apartmentToBeModified.name" name="apartment-name">
+          <div *ngIf="f.submitted && !name.valid" class="help-block">&nbsp;The apartment name is required</div>
+        </div>
+      </div>
+
+      <div class="uk-margin" [ngClass]="{'has-error': f.submitted && !description.valid}">
+        <label class="uk-form-label">Apartment Description</label>
+        <input class="uk-input" type="text" id="description" value="{{apartmentToBeModified.description}}" #description="ngModel" placeholder="Add the apartment description"
+          [(ngModel)]="apartmentToBeModified.description" name="apartment-description">
+        <div *ngIf="f.submitted && !description.valid" class="help-block">&nbsp;The apartment description is required</div>
+      </div>
+
+      <div class="uk-margin" [ngClass]="{'has-error': f.submitted && !location.valid}">
+        <label class="uk-form-label">Apartment Location</label>
+        <input class="uk-input" type="text" id="location" value="{{apartmentToBeModified.location}}" #location="ngModel" placeholder="Add the apartment location"
+          [(ngModel)]="apartmentToBeModified.location" name="apartment-location">
+        <div *ngIf="f.submitted && !location.valid" class="help-block">&nbsp;The apartment location is required</div>
+      </div>
+
+      <div class="uk-margin" [ngClass]="{'has-error': f.submitted && !availability.valid}">
+        <label class="uk-form-label" for="availability">Apartment Availability:</label>
+        <div class="uk-form-controls">
+          <select class="uk-select" id="availability" name="availability" [(ngModel)]="apartmentToBeModified.availability" #availability="ngModel">
+          <option value="true">Available</option>
+          <option value="false">Unavailable</option>
+        </select>
+          <div *ngIf="f.submitted && !availability.valid" class="help-block">&nbsp;The apartment availability is required</div>
+        </div>
+      </div>
+
+      <div *ngIf="apartmentToBeModified.apartmentType === 'local'" class="uk-margin">
+        <label class="uk-form-label">Group Intance:</label>
+        <input *ngIf="apartmentToBeModified.family[0]" class="uk-input" type="text" id="family" value="{{apartmentToBeModified.family[0].name}}" #family="ngModel" placeholder="apartment family"
+            [(ngModel)]="apartmentToBeModified.family[0].name" name="apartment-family" disabled>
+        <input *ngIf="!apartmentToBeModified.family[0]" class="uk-input" type="text" id="family" value="This apartment is not part of a Group" placeholder="apartment family" name="apartment-family" disabled>
+      </div>
+
+      <div class="uk-margin" [ngClass]="{'has-error': f.submitted && !labels.valid}">
+        <label class="uk-form-label">Labels:</label>
+        <input class="uk-input" type="date" id="labels" value="{{apartmentToBeModified.labels}}" #labels="ngModel" [(ngModel)]="apartmentToBeModified.labels"
+          name="istance-labels">
+        <div *ngIf="f.submitted && !labels.valid" class="help-block">&nbsp;At least a label is required</div>
+      </div>
+
+      <p *ngIf="apartmentToBeModified.updatedAt && apartmentToBeModified.updatedBy" class="updatedBy">Updated by {{apartmentToBeModified.updatedBy.firstName}} {{apartmentToBeModified.updatedBy.lastName}} on {{apartmentToBeModified.updatedAt | date:'short'}}</p>
+
+
+      <div class="uk-margin">
+        <button class="uk-button uk-button-small uk-button-default uk-text-success uk-button-default-success">Save apartment</button>
+      </div>
+    </form>
+
+  </div>
+</div>

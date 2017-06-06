@@ -16,43 +16,59 @@ export class ApartmentService {
     return Promise.reject(error.message || error);
   }
 
-  searchApartments(search): any {
+  searchApartments(search: string): any {
     const url = search != null ? `${constURL}/apartments/query${search}` : `${constURL}/apartments/`;
     return this.http.get(url)
-    .map(res => res.json().apartment)
-    .catch(this.handleError)
+      .map(res => res.json().apartment)
+      .catch(this.handleError)
   }
 
   getApartments(): any {
     let headers = new Headers({ 'Content-Type': 'application/json', 'x-auth': token });
     let options = new RequestOptions({ headers: headers });
     return this.http.get(`${constURL}/apartments`, options)
-    .map(res => res.json())
-    .catch(this.handleError)
+      .map(res => res.json())
+      .catch(this.handleError)
+  }
+
+  getOneApartment(id: any): any {
+    let headers = new Headers({ 'Content-Type': 'application/json', 'x-auth': token });
+    let options = new RequestOptions({ headers: headers });
+    return this.http.get(`${constURL}/apartments/query?_id=${id}`, options)
+      .map(res =>  res.json().apartments)
+      .catch(this.handleError)
+  }
+
+  getApartmentItems(id: any): any {
+    let headers = new Headers({ 'Content-Type': 'application/json', 'x-auth': token });
+    let options = new RequestOptions({ headers: headers });
+    return this.http.get(`${constURL}/apartments/query?_id=${id}`, options)
+      .map(res =>  res.json())
+      .catch(this.handleError)
   }
 
   createApartment(apartment: object): any {
     let headers = new Headers({ 'Content-Type': 'application/json', 'x-auth': token });
     let options = new RequestOptions({ headers: headers });
     return this.http.post(`${constURL}/apartments`, apartment, options)
-    .map(res =>  res.json().apartment )
-    .catch(this.handleError)
+      .map(res =>  res.json().apartment )
+      .catch(this.handleError)
   }
 
   editApartment(id: string, apartment: object): any {
     let headers = new Headers({ 'Content-Type': 'application/json', 'x-auth': token });
     let options = new RequestOptions({ headers: headers });
     return this.http.patch(`${constURL}/apartments/${id}`, apartment, options)
-    .map(res => res.json())
-    .catch(this.handleError);
+      .map(res => res.json())
+      .catch(this.handleError);
   }
 
   deleteApartment(id: string): any {
     let headers = new Headers({ 'Content-Type': 'application/json', 'x-auth': token });
     let options = new RequestOptions({ headers: headers });
     return this.http.delete(`${constURL}/apartments/${id}`)
-    .map(res => res.json())
-    .catch(this.handleError);
+      .map(res => res.json())
+      .catch(this.handleError);
   }
 
 }

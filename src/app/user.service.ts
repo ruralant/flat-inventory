@@ -21,25 +21,23 @@ export class UserService {
   }
 
   getUser() {
-    const headers = new Headers({ 'x-auth': token });
-    const options = new RequestOptions({ headers: headers });
+    let headers = new Headers({ 'Content-Type': 'application/json', 'x-auth': token });
+    let options = new RequestOptions({ headers: headers });
     return this.http.get(`${constURL}/users/status`, options)
-      // return this.http.get(`/api/user/status`, options)
       .map(res => res.json())
       .catch(this.handleError);
   }
 
   getInstanceUsers() {
-    const headers = new Headers({ 'x-auth': token });
-    const options = new RequestOptions({ headers: headers });
+    let headers = new Headers({ 'Content-Type': 'application/json', 'x-auth': token });
+    let options = new RequestOptions({ headers: headers });
     return this.http.get(`${constURL}/users/`, options)
       .map(res => res.json().user);
   }
 
   getOneUser(id: string): any {
-    const headers = new Headers({ 'x-auth': token });
+    let headers = new Headers({ 'Content-Type': 'application/json', 'x-auth': token });
     let options = new RequestOptions({ headers: headers });
-
     return this.http.get(`${constURL}/users/query?_id=${id}`, options)
       .map(res => {
         return res.json().user;
@@ -51,7 +49,6 @@ export class UserService {
     let paths = [];
     let headers = new Headers({ 'Content-Type': 'application/json', 'x-auth': token });
     let options = new RequestOptions({ headers: headers });
-
     return this.http.post(`${constURL}/users`, model, options)
       .map(res => {
         return res.json();
@@ -71,8 +68,8 @@ export class UserService {
   }
 
   deleteUser(id: string): any {
-    const headers = new Headers({ 'x-auth': token });
-    const options = new RequestOptions({ headers: headers });
+    let headers = new Headers({ 'Content-Type': 'application/json', 'x-auth': token });
+    let options = new RequestOptions({ headers: headers });
     return this.http.delete(`${constURL}/users/${id}`, options)
       .map(res => {
         return res.json();
@@ -106,7 +103,6 @@ export class UserService {
 
   forgotPassword(email: string) {
     const body = { email };
-
     return this.http.post(`${constURL}/users/passwordreset`, body)
       .map(res => res.json())
       .catch(err => {

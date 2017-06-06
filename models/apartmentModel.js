@@ -15,9 +15,9 @@ const ApartmentSchema = mongoose.Schema({
         type: Boolean,
         default: false
     },
-    rooms: {
+    rooms: [{
         type: mongoose.Schema.ObjectId, ref: 'Room'
-    },
+    }],
     label: {
         type: String,
         lowercase: true

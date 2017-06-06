@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { UserService } from '../user.service';
 import { ApartmentService } from '../apartment.service';
+import { ItemService } from '../item.service';
 
 declare var UIkit: any;
 
@@ -18,7 +19,8 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private userService: UserService,
-    private apartmentService: ApartmentService
+    private apartmentService: ApartmentService,
+    private itemService: ItemService
   ) { }
 
   getCurrentUser(): void {
@@ -32,7 +34,6 @@ export class HomeComponent implements OnInit {
     this.apartmentService.getApartments()
       .subscribe(apartments => {
         this.apartments = apartments;
-        console.log(this.apartments);
       })
   }
 
@@ -45,6 +46,10 @@ export class HomeComponent implements OnInit {
           UIkit.notification(`An error occurred. The apartment has not been created`, { status: 'warning' });
         }
       }
+  }
+
+  createItem(): void {
+    this.itemService.getItems()
   }
 
 

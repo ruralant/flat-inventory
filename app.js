@@ -58,6 +58,10 @@ app.use('/api/apartments', apartment);
 
 app.use('/public', express.static(path.join(__dirname, './media')));
 
+// app.get('*', (req, res) => {
+//   res.sendFile(path.join(__dirname, 'dist/index.html'));
+// });
+
 // 404 errors forwarded to the Error Handler function 
 app.use(function (req, res, next) {
 	const err = new Error('Not Found');

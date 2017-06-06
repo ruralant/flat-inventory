@@ -20,6 +20,7 @@ router.get('/', authenticate, (req, res) => {
       Apartment.find({ createdBy: ObjectID.ObjectId(user._id) })
       .populate('rooms')
       .populate('user')
+      .populate('updatedBy')
       .then(apartments => res.send(apartments),
        (e) => {
           res.status(400).send(e);
@@ -58,10 +59,9 @@ router.get('/query', authenticate, (req, res) => {
   Apartment.find(mongoQuery)
     .populate('rooms')
     .populate('user')
+    .populate('updatedBy')
     .then(apartments => {
-      res.send({
-        apartments
-      });
+      res.send({ apartments });
     }).catch(e => res.status(400).send(e));
 });
 
@@ -95,7 +95,7 @@ router.post('/', authenticate, (req, res) => {
 router.patch('/:id', authenticate, (req, res) => {
   const token = req.header('x-auth') || req.session.accessToken;
   const id = req.params.id;
-  const body = _.pick(req.body, ['reference', 'description', 'availability', 'rooms', 'label', 'createdBy', 'updatedBy']);
+  const body = _.pick(req.body, ['name', 'description', 'location', 'availability', 'rooms', 'label', 'createdBy', 'updatedBy']);
 
   if (!ObjectID.isValid(id)) {
     return res.status(404).send({

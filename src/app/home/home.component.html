@@ -1,3 +1,4 @@
+<app-topnav>Loading...</app-topnav>
 <h3 *ngIf="currentUser">Hello {{currentUser.firstName}}!!</h3>
 
 <button class="uk-button uk-button-default uk-margin-small-right" type="button" uk-toggle="target: #apt-modal">Create Apartment</button>
@@ -59,4 +60,14 @@
         </form>
     </div>
 </div>
+
+<div *ngFor="let apartment of apartments">
+  <table>
+    <td>{{apartment.name}}</td>
+    <td><button routerLink="/apartments/{{apartment._id}}">View</button></td>
+    <td><button routerLink="/apartments/edit/{{apartment._id}}">Edit</button></td>
+  </table>
+</div>
+
+<button class="uk-button uk-button-default uk-margin-small-right" type="button" uk-toggle="target: #apt-modal">Create Apartment</button>
 

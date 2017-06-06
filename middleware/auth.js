@@ -8,11 +8,8 @@ var authenticate = (req, res, next) => {
         }
         req.token = token;
         next();
-    }).catch((e) => {
-        res.status(400).send({
-            message: "No authenticated"
-        });
-    });
+    }).catch(e => res.status(400).send({ message: "No authenticated" })
+    );
 };
 
 var adminAuth = (req, res, next) => {

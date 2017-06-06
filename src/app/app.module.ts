@@ -5,20 +5,39 @@ import { HttpModule } from '@angular/http';
 
 import { RoutingModule } from './routing/routing.module';
 
+import { AuthenticationService } from './authentication.service';
+import { AuthGuardService } from './auth-guard.service';
+import { ApartmentService } from './apartment.service';
+import { UserService } from './user.service';
+import { ItemService } from './item.service';
+
 import { AppComponent } from './app.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { LoginComponent } from './login/login.component';
-import { AuthenticationService } from './authentication.service';
-import { UserService } from './user.service';
 import { HomeComponent } from './home/home.component';
-import { ApartmentService } from './apartment.service';
+import { ApartmentComponent } from './apartment/apartment.component';
+import { EditAptComponent } from './apartment/edit-apt.component';
+import { ApartmentSectionComponent } from './apartment/apartment-section.component';
+import { TopnavComponent } from './topnav/topnav.component';
+import { RoomComponent } from './room/room.component';
+import { RoomSectionComponent } from './room/room-section.component';
+import { EditRoomComponent } from './room/edit-room.component';
+import { ItemComponent } from './item/item.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LandingPageComponent,
     LoginComponent,
-    HomeComponent
+    HomeComponent,
+    ApartmentComponent,
+    EditAptComponent,
+    ApartmentSectionComponent,
+    TopnavComponent,
+    RoomComponent,
+    RoomSectionComponent,
+    EditRoomComponent,
+    ItemComponent
   ],
   imports: [
     BrowserModule,
@@ -27,9 +46,11 @@ import { ApartmentService } from './apartment.service';
     RoutingModule
   ],
   providers: [
+    AuthGuardService,
     AuthenticationService,
     UserService,
-    ApartmentService
+    ApartmentService,
+    ItemService
   ],
   bootstrap: [AppComponent]
 })
