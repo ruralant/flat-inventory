@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, Response, RequestOptions } from '@angular/http';
-
+import { Response, Http, Headers, RequestOptions } from '@angular/http';
+import { environment } from './../environments/environment';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/toPromise';
-import { environment } from './../environments/environment';
 
 const constURL: string = `${environment.constURL}/api`;
 const token = localStorage.getItem('currentUser') ? JSON.parse(localStorage.getItem('currentUser')).token : '';
@@ -18,13 +16,27 @@ export class ItemService {
     return Promise.reject(error.message || error);
   }
 
-  getItems(): void {
+  getItems() {
     let headers = new Headers({ 'Content-Type': 'application/json', 'x-auth': token });
     let options = new RequestOptions({ headers: headers });
-    this.http.get(`${constURL}/items/`, options)
-      .map(res => {
-        return res.json().item;
-      })
+    return this.http.get(`${constURL}/items`, options)
+      .map(res => res.json())
+      .catch(this.handleError)
+  }
+
+  getOneItem(id: any) {
+    let headers = new Headers({ 'Content-Type': 'application/json', 'x-auth': token });
+    let options = new RequestOptions({ headers: headers });
+    return this.http.get(`${constURL}/items/query?_id=${id}`, options)
+      .map(res =>  res.json())
+      .catch(this.handleError)
+  }
+
+  createItem(item: any) {
+    let headers = new Headers({ 'Content-Type': 'application/json', 'x-auth': token });
+    let options = new RequestOptions({ headers: headers });
+    return this.http.post(`${constURL}/items/`, options)
+      .map(res => res.json())
       .catch(this.handleError)
   }
 

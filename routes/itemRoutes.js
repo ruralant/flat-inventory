@@ -58,28 +58,31 @@ router.get('/query', authenticate, (req, res) => {
 
 // Create a new item
 router.post('/', authenticate, (req, res) => {
-    const token = req.header('x-auth') || req.session.accessToken;
-    const body = _.pick(req.body, ['_id', 'name', 'description', 'location', 'quantity', 'stock', 'label', 'createdBy', 'updatedBy']);
+  const token = req.header('x-auth') || req.session.accessToken;
+  const body = _.pick(req.body, ['_id', 'name', 'description', 'location', 'quantity', 'stock', 'label', 'createdBy', 'updatedBy']);
     
-    const item = new Item(body);
+  const item = new Item(body);
 
-    User.findByToken(token)
-    .then(user => {
-        item.createdBy = user;
-        return item.save();
-    })
-    .then(item => {
-        res.send({ item });
-    })
-    .catch(e => {
-        if (e.error) {
-            console.log(e.error.erromsg);
-            res.status(400).send(e.error.erromsg);
-        } else {
-            console.log(e);
-            res.status(400).send(e);
-        }
-    });
+  User.findByToken(token)
+  .then(user => {
+    item.createdBy = user;
+    return item.save();
+  })
+  // .then(item => {
+  //   findByIdAndUpdate(item.location)
+  // })
+  .then(item => {
+    res.send({ item });
+  })
+  .catch(e => {
+    if (e.error) {
+      console.log(e.error.erromsg);
+      res.status(400).send(e.error.erromsg);
+    } else {
+      console.log(e);
+      res.status(400).send(e);
+    }
+  });
 });
 
 // UPDATE item

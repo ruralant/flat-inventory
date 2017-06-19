@@ -38,7 +38,6 @@ export class ApartmentComponent implements OnInit {
     this.route.params
       .switchMap((params: Params) => this.apartmentService.getApartmentItems(params['id']))
       .subscribe(result => {
-        console.log(result);
         this.items = result;
       })
   }

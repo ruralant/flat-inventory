@@ -1,30 +1,4 @@
-{
-	"development": {
-		"PORT": 3000,
-		"MONGODB_URI": "mongodb://localhost:27017/flat-inventory",
-		"JWT_SECRET": "seidnyuaeifybeiouxw90eb7rb376r7b59034574382bn0572340ndtgr76ft9YesIamAMightyPassword",
-		"SESSION_SECRET": "Shewastooshorttoseeoverthefence",
-		"USEREMAIL": "",
-		"USERPASSWORD": "",
-		"HOSTEMAIL": "",
-		"PRODUCTIONADMINEMAILTO": "",
-		"RUN_USER": ""
-	},
 	"production": {
-		"PORT": 3000,
-		"MONGODB_URI": "mongodb://localhost:27017/flat-inventory",
-		"JWT_SECRET": "donwue982346bdq2p389v7g90[E798A6RAB7OEIX63IBP0498QV[0GP6X87OT673AYesIamAMightyPassword",
-		"SESSION_SECRET": "Shewastooshorttoseeoverthefence",
-		"USEREMAIL": "",
-		"USERPASSWORD": "",
-		"HOSTEMAIL": "",
-		"PRODUCTIONADMINEMAILTO": "",
-		"RUN_USER": ""
-	},
-	"test": {
-		"PORT": 3000,
-		"MONGODB_URI": "mongodb://localhost:27017/flat-inventory-test",
-		"JWT_SECRET": "asjlkdjhsdilufhsdkljfhsjkldhf",
-		"SESSION_SECRET": "fpoiertfiojsdofijsoifj"
+		"MONGODB_URI": "",
 	}
 }

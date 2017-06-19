@@ -1,7 +1,6 @@
 const nodemailer = require('nodemailer');
 
 function sendEmail(req, res, next) {
-	console.log(req.body);
 	const mailTransport = nodemailer.createTransport({
 		host: process.env.HOSTEMAIL,
 		port: 587,

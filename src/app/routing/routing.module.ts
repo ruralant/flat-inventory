@@ -13,13 +13,16 @@ import { ApartmentSectionComponent } from '../apartment/apartment-section.compon
 import { RoomComponent } from '../room/room.component';
 import { RoomSectionComponent } from '../room/room-section.component';
 import { EditRoomComponent} from '../room/edit-room.component';
-
-
+import { ItemSectionComponent } from '../item/item-section.component';
+import { ItemComponent } from '../item/item.component';
+import { CreateItemComponent } from '../item/create-item.component';
+import { EditItemComponent } from '../item/edit-item.component';
+import { ItemsViewComponent } from '../item/items-view.component';
 
 const routes: Routes = [
   { path: 'landing', component: LandingPageComponent },
   { path: 'home', component: HomeComponent },
-  { path: 'login', component: LoginComponent},
+  { path: 'login', component: LoginComponent },
   { 
     path: 'apartments', canActivate: [AuthGuardService], component: ApartmentSectionComponent, children: [
       { path: ':id', component: ApartmentComponent },
@@ -28,8 +31,16 @@ const routes: Routes = [
   },
   {
     path: 'rooms', canActivate: [AuthGuardService], component: RoomSectionComponent, children: [
-      { path: ':id', component: RoomComponent},
+      { path: ':id', component: RoomComponent },
       { path: 'edit/:id', component: EditRoomComponent }
+    ]
+  },
+  {
+    path: 'items', canActivate: [AuthGuardService], component: ItemSectionComponent, children: [
+      { path: '', component: ItemsViewComponent },
+      { path: ':id',  component: ItemComponent },
+      { path: 'new', component: CreateItemComponent },
+      { path: 'edit/:id', component: EditItemComponent }
     ]
   },
   { path: '**', redirectTo: '/landing', pathMatch: 'full' },

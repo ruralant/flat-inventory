@@ -8,9 +8,9 @@ const ItemSchema = mongoose.Schema({
     description: {
         type: String,
     },
-    location: {
+    location: [{
         type: mongoose.Schema.ObjectId, ref: 'Apartment'
-    },
+    }],
     quantity: {
         type: Number,
         default: 0

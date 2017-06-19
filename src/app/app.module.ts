@@ -23,6 +23,10 @@ import { RoomComponent } from './room/room.component';
 import { RoomSectionComponent } from './room/room-section.component';
 import { EditRoomComponent } from './room/edit-room.component';
 import { ItemComponent } from './item/item.component';
+import { EditItemComponent } from './item/edit-item.component';
+import { CreateItemComponent } from './item/create-item.component';
+import { ItemSectionComponent } from './item/item-section.component';
+import { ItemsViewComponent } from './item/items-view.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +41,11 @@ import { ItemComponent } from './item/item.component';
     RoomComponent,
     RoomSectionComponent,
     EditRoomComponent,
-    ItemComponent
+    ItemComponent,
+    EditItemComponent,
+    CreateItemComponent,
+    ItemSectionComponent,
+    ItemsViewComponent
   ],
   imports: [
     BrowserModule,
