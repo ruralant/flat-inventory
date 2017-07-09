@@ -79,9 +79,7 @@ router.delete('/', authenticate, (req, res) => {
       Message: "Succesfully Logout"
     });
   }, () => {
-    res.status(400).json({
-      status: 'error, not logged out!'
-    });
+    res.status(400).json({ status: 'error, not logged out!' });
   });
 });
 
@@ -105,9 +103,7 @@ router.post('/passwordreset', (req, res) => {
           host: 'localhost:4200'
         }
       });
-      res.send({
-        message: 'A password reset has been emailed to your account. Follow the instructions in the email.'
-      });
+      res.send({ message: 'A password reset has been emailed to your account. Follow the instructions in the email.' });
     });
   }).catch(e => res.status(400).send(e));
 });
@@ -183,9 +179,7 @@ router.patch('/updateUser/:id', authenticate, (req, res) => {
   const body = _.pick(req.body, ['firstName', 'lastName', 'email', 'userType', 'password', 'active', '_id', 'updatedBy']);
 
   if (!ObjectID.isValid(id)) {
-    return res.status(404).send({
-      error: "ObjectID not valid"
-    });
+    return res.status(404).send({ error: "ObjectID not valid" });
   }
 
   function patchUsers(path, body) {
@@ -274,9 +268,8 @@ router.patch('/profilePasswordChange', (req, res) => {
     })
     .then((user) => {
       user.password = req.body.newPassword;
-      user.save().then(result => {
-        res.status(200).send({ result });
-      });
+      user.save()
+      .then(result => res.status(200).send({ result }));
     })
     .catch(e => { res.status(400).send(e); 
   });

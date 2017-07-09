@@ -2,6 +2,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MaterialModule } from '@angular/material';
 
 import { RoutingModule } from './routing/routing.module';
 
@@ -10,6 +12,7 @@ import { AuthGuardService } from './auth-guard.service';
 import { ApartmentService } from './apartment.service';
 import { UserService } from './user.service';
 import { ItemService } from './item.service';
+import { SnackbarService } from './snackbar.service';
 
 import { AppComponent } from './app.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
@@ -51,14 +54,17 @@ import { ItemsViewComponent } from './item/items-view.component';
     BrowserModule,
     FormsModule,
     HttpModule,
-    RoutingModule
+    RoutingModule,
+    BrowserAnimationsModule,
+    MaterialModule
   ],
   providers: [
     AuthGuardService,
     AuthenticationService,
     UserService,
     ApartmentService,
-    ItemService
+    ItemService,
+    SnackbarService
   ],
   bootstrap: [AppComponent]
 })

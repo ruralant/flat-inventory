@@ -22,9 +22,7 @@ router.get('/', authenticate, (req, res) => {
       .populate('user')
       .populate('updatedBy')
       .then(apartments => res.send(apartments),
-       (e) => {
-          res.status(400).send(e);
-      });
+       (e) => res.status(400).send(e));
     });
 });
 
@@ -67,28 +65,26 @@ router.get('/query', authenticate, (req, res) => {
 
 // Create a new apartment
 router.post('/', authenticate, (req, res) => {
-    const token = req.header('x-auth') || req.session.accessToken;
-    const body = _.pick(req.body, ['_id', 'name', 'description', 'location', 'availability', 'rooms', 'label', 'createdBy', 'updatedBy']);
-    
-    const apartment = new Apartment(body);
+  const token = req.header('x-auth') || req.session.accessToken;
+  const body = _.pick(req.body, ['_id', 'name', 'description', 'location', 'availability', 'rooms', 'label', 'createdBy', 'updatedBy']);
+  
+  const apartment = new Apartment(body);
 
-    User.findByToken(token)
-    .then(user => {
-        apartment.createdBy = user;
-        return apartment.save();
-    })
-    .then(apartment => {
-        res.send({ apartment });
-    })
-    .catch(e => {
-        if (e.error) {
-            console.log(e.error.erromsg);
-            res.status(400).send(e.error.erromsg);
-        } else {
-            console.log(e);
-            res.status(400).send(e);
-        }
-    });
+  User.findByToken(token)
+  .then(user => {
+    apartment.createdBy = user;
+    return apartment.save();
+  })
+  .then(apartment => res.send({ apartment }))
+  .catch(e => {
+    if (e.error) {
+      console.log(e.error.erromsg);
+      res.status(400).send(e.error.erromsg);
+    } else {
+      console.log(e);
+      res.status(400).send(e);
+    }
+  });
 });
 
 // UPDATE apartment
@@ -98,9 +94,7 @@ router.patch('/:id', authenticate, (req, res) => {
   const body = _.pick(req.body, ['name', 'description', 'location', 'availability', 'rooms', 'label', 'createdBy', 'updatedBy']);
 
   if (!ObjectID.isValid(id)) {
-    return res.status(404).send({
-      error: "ObjectID not valid"
-    });
+    return res.status(404).send({ error: "ObjectID not valid" });
   }
 
   User.findByToken(token)

@@ -1,39 +1,40 @@
 const mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
 
 const ItemSchema = mongoose.Schema({
-    name: {
-        type: String,
-        required: true
-    },
-    description: {
-        type: String,
-    },
-    location: [{
-        type: mongoose.Schema.ObjectId, ref: 'Apartment'
-    }],
-    quantity: {
-        type: Number,
-        default: 0
-    },
-    stock: {
-        type: Number,
-        default: 0
-    },
-    label: {
-        type: String,
-        lowercase: true
-    },
-    createdBy: {
-        type: mongoose.Schema.ObjectId, ref: 'User'
-    },
-    updatedBy: {
-        type: mongoose.Schema.ObjectId, ref: 'User'
-    }
+  name: {
+    type: String,
+    required: true
+  },
+  description: {
+    type: String,
+  },
+  location: [{
+    type: mongoose.Schema.ObjectId, ref: 'Apartment'
+  }],
+  quantity: {
+    type: Number,
+    default: 0
+  },
+  stock: {
+    type: Number,
+    default: 0
+  },
+  label: {
+    type: String,
+    lowercase: true
+  },
+  createdBy: {
+    type: mongoose.Schema.ObjectId, ref: 'User'
+  },
+  updatedBy: {
+    type: mongoose.Schema.ObjectId, ref: 'User'
+  }
 }, {
-    timestamps: {
-        createdAt: 'createdAt',
-        updatedAt: 'updatedAt'
-    }
+  timestamps: {
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  }
 });
 
 const Item = mongoose.model('Item', ItemSchema);

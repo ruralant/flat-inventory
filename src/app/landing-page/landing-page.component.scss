@@ -1,0 +1,48 @@
+$background-main-color: #f44336;
+
+video {
+    position: fixed;
+    z-index: 0;
+}
+
+#main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: black;
+    z-index: -100;
+}
+
+button {
+    background-color: $background-main-color;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    -webkit-transition: .3s;
+    transition: .3s;
+    margin: 5px;
+    z-index: 100;
+}
+
+button:hover {
+    -webkit-transition: .3s;
+    transition: .3s;
+    border-radius: 20px;
+}
+
+button:hover:after {
+    -webkit-transition: .3s;
+    transition: .3s;
+    border-radius: 6px;
+}
+
+button:first-child {
+    background-color: lightslategray;
+}
