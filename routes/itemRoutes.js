@@ -50,9 +50,7 @@ router.get('/query', authenticate, (req, res) => {
     .populate('apartment')
     .populate('user')
     .then(items => {
-      res.send({
-        items
-      });
+      res.send({ items });
     }).catch(e => res.status(400).send(e));
 });
 
