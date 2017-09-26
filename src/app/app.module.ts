@@ -31,7 +31,7 @@ import { CreateItemComponent } from './item/create-item.component';
 import { ItemSectionComponent } from './item/item-section.component';
 import { ItemsViewComponent } from './item/items-view.component';
 import { CreateAptComponent } from './apartment/create-apt.component';
-import { CreateRoomComponent } from './room/src/app/room/create-room.component';
+import { CreateRoomComponent } from './room/create-room.component';
 
 @NgModule({
   declarations: [
