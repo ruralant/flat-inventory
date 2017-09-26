@@ -30,6 +30,7 @@ import { EditItemComponent } from './item/edit-item.component';
 import { CreateItemComponent } from './item/create-item.component';
 import { ItemSectionComponent } from './item/item-section.component';
 import { ItemsViewComponent } from './item/items-view.component';
+import { CreateAptComponent } from './apartment/create-apt.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { ItemsViewComponent } from './item/items-view.component';
     EditItemComponent,
     CreateItemComponent,
     ItemSectionComponent,
-    ItemsViewComponent
+    ItemsViewComponent,
+    CreateAptComponent
   ],
   imports: [
     BrowserModule,

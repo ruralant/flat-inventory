@@ -1,36 +1,7 @@
 <app-topnav>Loading...</app-topnav>
 <h3 *ngIf="currentUser">Hello {{currentUser.firstName}}!!</h3>
 
-<!-- This is the modal -->
-<h2>Create a new apartment</h2>
-<form name="form" (ngSubmit)="createApartment()" novalidate>
-  <md-input-container>
-    <input mdInput id="name" type="text" placeholder="Add the name of the apartment" name="name" [(ngModel)]="newApartment.name"
-      #name="ngModel" required>
-  </md-input-container>
-
-  <md-input-container>
-    <input mdInput id="description" type="text" placeholder="Add the apartment descripton" name="description" description="description" [(ngModel)]="newApartment.description"
-      #description="ngModel">
-  </md-input-container>
-
-  <md-input-container>
-    <input mdInput id="location" type="text" placeholder="Add the postcode of the apartment" name="location" location="location" [(ngModel)]="newApartment.location"
-      #location="ngModel">
-  </md-input-container>
-
-  <md-select [(ngModel)]="newApartment.availability" id="availability" name="availability">
-      <md-option value="true">Yes</md-option>
-      <md-option value="false">No</md-option>
-  </md-select>
-
-  <md-input-container>
-    <input mdInput id="label" type="text" placeholder="Add labels dividied by a comma" name="label" label="label" [(ngModel)]="newApartment.label"
-      #label="ngModel">
-  </md-input-container>
-
-  <button md-raised-button>Save</button>
-</form>
+<app-create-apt></app-create-apt>
 
 <div *ngFor="let apartment of apartments">
   <table>

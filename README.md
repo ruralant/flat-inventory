@@ -6,6 +6,7 @@ I develop the application following the PWA (Progressive Web App) manifesto and 
 It can also be added to the drower on any **iOS** device but until Safari is not fully supporting **Service Workers** notifications and offline features are limied.
 
 #### Live Demo: <link>
+(coming soon)
 
 ## Technologies Used:
 - **Angular 4.3.4**

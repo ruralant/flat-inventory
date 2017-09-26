@@ -21,7 +21,7 @@ export class HomeComponent implements OnInit {
     private userService: UserService,
     private apartmentService: ApartmentService,
     private itemService: ItemService,
-    private snackbarService: SnackbarService
+    // private snackbarService: SnackbarService
   ) { }
 
   getCurrentUser(): void {
@@ -38,16 +38,16 @@ export class HomeComponent implements OnInit {
       })
   }
 
-  createApartment(): void {
-    this.apartmentService.createApartment(this.newApartment)
-    .subscribe(apartment => {
-      this.snackbarService.showSnackBar("The apartment has been created.");
-    }), err => {
-        if(err.status === 400) {
-          // UIkit.notification(`An error occurred. The apartment has not been created`, { status: 'warning' });
-        }
-      }
-  }
+  // createApartment(): void {
+  //   this.apartmentService.createApartment(this.newApartment)
+  //   .subscribe(apartment => {
+  //     this.snackbarService.showSnackBar("The apartment has been created.");
+  //   }), err => {
+  //       if(err.status === 400) {
+  //         // UIkit.notification(`An error occurred. The apartment has not been created`, { status: 'warning' });
+  //       }
+  //     }
+  // }
 
   createItem(): void {
     this.itemService.getItems()
