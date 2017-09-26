@@ -8,7 +8,7 @@ const constURL: string = `${environment.constURL}/api`;
 const token = localStorage.getItem('currentUser') ? JSON.parse(localStorage.getItem('currentUser')).token : '';
 
 @Injectable()
-export class ApartmentService {
+export class RoomService {
 
   constructor(private http: Http) { }
 
@@ -16,58 +16,59 @@ export class ApartmentService {
     return Promise.reject(error.message || error);
   }
 
-  searchApartments(search: string): any {
-    const url = search != null ? `${constURL}/apartments/query${search}` : `${constURL}/apartments/`;
+  searchRooms(search: string): any {
+    const url = search != null ? `${constURL}/rooms/query${search}` : `${constURL}/rooms/`;
     return this.http.get(url)
-      .map(res => res.json().apartment)
+      .map(res => res.json().room)
       .catch(this.handleError)
   }
 
-  getApartments(): any {
+  getRooms(): any {
     let headers = new Headers({ 'Content-Type': 'application/json', 'x-auth': token });
     let options = new RequestOptions({ headers: headers });
-    return this.http.get(`${constURL}/apartments`, options)
+    return this.http.get(`${constURL}/rooms`, options)
       .map(res => res.json())
       .catch(this.handleError)
   }
 
-  getOneApartment(id: any): any {
+  getOneRoom(id: any): any {
     let headers = new Headers({ 'Content-Type': 'application/json', 'x-auth': token });
     let options = new RequestOptions({ headers: headers });
-    return this.http.get(`${constURL}/apartments/query?_id=${id}`, options)
-      .map(res =>  res.json().apartments)
+    return this.http.get(`${constURL}/rooms/query?_id=${id}`, options)
+      .map(res =>  res.json().room)
       .catch(this.handleError)
   }
 
-  getApartmentItems(id: any): any {
+  getRoomItems(id: any): any {
     let headers = new Headers({ 'Content-Type': 'application/json', 'x-auth': token });
     let options = new RequestOptions({ headers: headers });
-    return this.http.get(`${constURL}/apartments/query?_id=${id}`, options)
+    return this.http.get(`${constURL}/rooms/query?_id=${id}`, options)
       .map(res =>  res.json())
       .catch(this.handleError)
   }
 
-  createApartment(apartment: object): any {
+  createRoom(room: object): any {
     let headers = new Headers({ 'Content-Type': 'application/json', 'x-auth': token });
     let options = new RequestOptions({ headers: headers });
-    return this.http.post(`${constURL}/apartments`, apartment, options)
-      .map(res =>  res.json().apartment )
+    return this.http.post(`${constURL}/rooms`, room, options)
+      .map(res =>  res.json().room )
       .catch(this.handleError)
   }
 
-  editApartment(id: string, apartment: object): any {
+  editRoom(id: string, room: object): any {
     let headers = new Headers({ 'Content-Type': 'application/json', 'x-auth': token });
     let options = new RequestOptions({ headers: headers });
-    return this.http.patch(`${constURL}/apartments/${id}`, apartment, options)
+    return this.http.patch(`${constURL}/rooms/${id}`, room, options)
       .map(res => res.json())
       .catch(this.handleError);
   }
 
-  deleteApartment(id: string): any {
+  deleteRoom(id: string): any {
     let headers = new Headers({ 'Content-Type': 'application/json', 'x-auth': token });
     let options = new RequestOptions({ headers: headers });
-    return this.http.delete(`${constURL}/apartments/${id}`)
+    return this.http.delete(`${constURL}/rooms/${id}`)
       .map(res => res.json())
       .catch(this.handleError);
   }
+
 }

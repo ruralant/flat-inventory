@@ -23,7 +23,6 @@ export class ItemComponent implements OnInit {
     this.itemService.getItems()
       .subscribe(items => {
         this.items = items;
-        console.log(this.items)
       })
   }
 }
