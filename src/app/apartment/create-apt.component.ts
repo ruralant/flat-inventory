@@ -13,7 +13,7 @@ export class CreateAptComponent implements OnInit {
 
   constructor(
     private apartmentService: ApartmentService,
-    private snackbarService: SnackbarService    
+    private snackbar: SnackbarService    
   ) { }
 
   ngOnInit() {
@@ -22,10 +22,10 @@ export class CreateAptComponent implements OnInit {
   createApartment(): void {
     this.apartmentService.createApartment(this.newApartment)
     .subscribe(apartment => {
-      this.snackbarService.showSnackBar("The apartment has been created.");
+      this.snackbar.showSnackBar("The apartment has been created.");
     }), err => {
         if(err.status === 400) {
-          // UIkit.notification(`An error occurred. The apartment has not been created`, { status: 'warning' });
+          this.snackbar.showSnackBar("Something went wrong!")
         }
       }
   }
