@@ -1,3 +1,29 @@
-<p>
-  create-room works!
-</p>
+<h2>Create a new room</h2>
+<form name="form" (ngSubmit)="createRoom()" novalidate>
+  <md-input-container>
+    <input mdInput id="name" type="text" placeholder="Add the name of the room" name="name" [(ngModel)]="newRoom.name"
+      #name="ngModel" required>
+  </md-input-container>
+
+  <md-input-container>
+    <input mdInput id="description" type="text" placeholder="Add the room descripton" name="description" description="description" [(ngModel)]="newRoom.description"
+      #description="ngModel">
+  </md-input-container>
+
+  <md-input-container>
+    <input mdInput id="location" type="text" placeholder="Add the postcode of the room" name="location" location="location" [(ngModel)]="newRoom.location"
+      #location="ngModel">
+  </md-input-container>
+
+  <md-select [(ngModel)]="newRoom.availability" id="availability" name="availability">
+      <md-option value="true">Yes</md-option>
+      <md-option value="false">No</md-option>
+  </md-select>
+
+  <md-input-container>
+    <input mdInput id="label" type="text" placeholder="Add labels dividied by a comma" name="label" label="label" [(ngModel)]="newRoom.label"
+      #label="ngModel">
+  </md-input-container>
+
+  <button md-raised-button>Save</button>
+</form>
