@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ItemService } from '../item.service';
 import { ApartmentService } from '../apartment.service';
-
-declare const UIkit;
+import { SnackbarService } from '../snackbar.service';
 
 @Component({
   selector: 'app-create-item',
   templateUrl: './create-item.component.html',
-  styleUrls: ['./create-item.component.css']
+  styleUrls: ['./create-item.component.scss']
 })
 export class CreateItemComponent implements OnInit {
 
@@ -16,20 +15,17 @@ export class CreateItemComponent implements OnInit {
 
   constructor(
     private itemService: ItemService,
-    private apartmentService: ApartmentService
+    private apartmentService: ApartmentService,
+    private snackbar: SnackbarService
   ) { }
 
-  ngOnInit() {
-    this.getApartments();
-  }
-
-  createItem() {
+  createItem(): void {
     this.itemService.createItem(this.newItem)
       .subscribe(item => {
-        UIkit.notification(`The item has been created.`, { status: 'success' });
+        this.snackbar.showSnackBar(`The item has been created.`)
     }), err => {
         if(err.status === 400) {
-          UIkit.notification(`An error occurred. The item has not been created`, { status: 'warning' });
+          this.snackbar.showSnackBar(`An error occurred. The item has not been created`)
         }
       }
   }
@@ -40,6 +36,10 @@ export class CreateItemComponent implements OnInit {
         console.log(apartments);
         this.apartments = apartments;
       })
+  }
+
+  ngOnInit() {
+    this.getApartments();
   }
 
 }

@@ -32,6 +32,4 @@ function sendEmail(req, res, next) {
 	return;
 }
 
-module.exports = {
-	sendEmail
-};
+module.exports = { sendEmail };

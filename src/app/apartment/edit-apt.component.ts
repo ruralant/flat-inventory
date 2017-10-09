@@ -8,7 +8,7 @@ import { ApartmentService } from '../apartment.service';
 @Component({
   selector: 'app-edit-apt',
   templateUrl: './edit-apt.component.html',
-  styleUrls: ['./edit-apt.component.css']
+  styleUrls: ['./edit-apt.component.scss']
 })
 export class EditAptComponent implements OnInit {
 
