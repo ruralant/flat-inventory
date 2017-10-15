@@ -13,10 +13,10 @@ let { authenticate } = require('./../middleware/auth');
 // GET all the rooms
 router.get('/', authenticate, (req, res) => {
   Room.find()
-  .populate('apartment')
-  .populate('user')
-  .then(rooms => res.send(rooms))
-  .catch(e => res.status(400).send(e));
+    .populate('apartment')
+    .populate('user')
+    .then(rooms => res.send(rooms))
+    .catch(e => res.status(400).send(e));
 });
 
 // GET query of rooms
@@ -59,20 +59,20 @@ router.post('/', authenticate, (req, res) => {
   const room = new Room(body);
 
   User.findByToken(token)
-  .then(user => {
-    room.createdBy = user;
-    return room.save();
-  })
-  .then(room => res.send({ room }))
-  .catch(e => {
-    if (e.error) {
-      console.log(e.error.erromsg);
-      res.status(400).send(e.error.erromsg);
-    } else {
-      console.log(e);
-      res.status(400).send(e);
-    }
-  });
+    .then(user => {
+      room.createdBy = user;
+      return room.save();
+    })
+    .then(room => res.send({ room }))
+    .catch(e => {
+      if (e.error) {
+        console.log(e.error.erromsg);
+        res.status(400).send(e.error.erromsg);
+      } else {
+        console.log(e);
+        res.status(400).send(e);
+      }
+    });
 });
 
 // UPDATE room
@@ -88,16 +88,16 @@ router.patch('/:id', authenticate, (req, res) => {
   }
 
   User.findByToken(token)
-  .then(user => {
-    return Room.findByIdAndUpdate(id, {
-      $set: body,
-      updatedBy: user._id
-    }, {
-      new: true
-    });
-  })
-  .then(room => res.send({ room }))
-  .catch(e => res.status(400).send(e));
+    .then(user => {
+      return Room.findByIdAndUpdate(id, {
+        $set: body,
+        updatedBy: user._id
+      }, {
+        new: true
+      });
+    })
+    .then(room => res.send({ room }))
+    .catch(e => res.status(400).send(e));
 });
 
 // DELETE room

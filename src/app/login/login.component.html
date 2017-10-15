@@ -3,10 +3,10 @@
     <legend>Welcome to Flat Iventory</legend>
     <div [ngClass]="{'has-error': f.submitted && !email.valid}" >
       <label for="email">Email</label>
-      <div>
-        <input id="email" type="email" placeholder="Email" name="email" [(ngModel)]="model.email" #email="ngModel" required>
+      <mat-input-container>
+        <input matInput id="email" type="email" placeholder="Email" name="email" [(ngModel)]="model.email" #email="ngModel" required>
         <div *ngIf="f.submitted && !email.valid" class="help-block">Email is required</div>
-      </div>
+      </mat-input-container>
     </div>
     <div [ngClass]="{'has-error': f.submitted && !password.valid}">
       <label for="password">Password</label>

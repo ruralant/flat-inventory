@@ -12,9 +12,9 @@ let { authenticate } = require('./../middleware/auth');
 
 // GET all the apartments
 router.get('/', authenticate, (req, res) => {
-    const token = req.header('x-auth') || req.session.accessToken;
+  const token = req.header('x-auth') || req.session.accessToken;
     
-    User.findByToken(token)
+  User.findByToken(token)
     .then(user => {
       // look up for all the apartments created by the current user
       Apartment.find({ createdBy: ObjectID.ObjectId(user._id) })
@@ -60,7 +60,8 @@ router.get('/query', authenticate, (req, res) => {
     .populate('updatedBy')
     .then(apartments => {
       res.send({ apartments });
-    }).catch(e => res.status(400).send(e));
+    })
+    .catch(e => res.status(400).send(e));
 });
 
 // Create a new apartment
@@ -71,20 +72,20 @@ router.post('/', authenticate, (req, res) => {
   const apartment = new Apartment(body);
 
   User.findByToken(token)
-  .then(user => {
-    apartment.createdBy = user;
-    return apartment.save();
-  })
-  .then(apartment => res.send({ apartment }))
-  .catch(e => {
-    if (e.error) {
-      console.log(e.error.erromsg);
-      res.status(400).send(e.error.erromsg);
-    } else {
-      console.log(e);
-      res.status(400).send(e);
-    }
-  });
+    .then(user => {
+      apartment.createdBy = user;
+      return apartment.save();
+    })
+    .then(apartment => res.send({ apartment }))
+    .catch(e => {
+      if (e.error) {
+        console.log(e.error.erromsg);
+        res.status(400).send(e.error.erromsg);
+      } else {
+        console.log(e);
+        res.status(400).send(e);
+      }
+    });
 });
 
 // UPDATE apartment

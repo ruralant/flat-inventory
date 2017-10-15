@@ -1,29 +1,29 @@
 <h2>Create a new apartment</h2>
 <form name="form" (ngSubmit)="createApartment()" novalidate>
-  <md-input-container>
-    <input mdInput id="name" type="text" placeholder="Add the name of the apartment" name="name" [(ngModel)]="newApartment.name"
+  <mat-input-container>
+    <input matInput id="name" type="text" placeholder="Add the name of the apartment" name="name" [(ngModel)]="newApartment.name"
       #name="ngModel" required>
-  </md-input-container>
+  </mat-input-container>
 
-  <md-input-container>
-    <input mdInput id="description" type="text" placeholder="Add the apartment descripton" name="description" description="description" [(ngModel)]="newApartment.description"
+  <mat-input-container>
+    <input matInput id="description" type="text" placeholder="Add the apartment descripton" name="description" description="description" [(ngModel)]="newApartment.description"
       #description="ngModel">
-  </md-input-container>
+  </mat-input-container>
 
-  <md-input-container>
-    <input mdInput id="location" type="text" placeholder="Add the postcode of the apartment" name="location" location="location" [(ngModel)]="newApartment.location"
+  <mat-input-container>
+    <input matInput id="location" type="text" placeholder="Add the postcode of the apartment" name="location" location="location" [(ngModel)]="newApartment.location"
       #location="ngModel">
-  </md-input-container>
+  </mat-input-container>
 
-  <md-select [(ngModel)]="newApartment.availability" id="availability" name="availability">
-      <md-option value="true">Yes</md-option>
-      <md-option value="false">No</md-option>
-  </md-select>
+  <mat-select [(ngModel)]="newApartment.availability" id="availability" name="availability">
+      <mat-option value="true">Yes</mat-option>
+      <mat-option value="false">No</mat-option>
+  </mat-select>
 
-  <md-input-container>
-    <input mdInput id="label" type="text" placeholder="Add labels dividied by a comma" name="label" label="label" [(ngModel)]="newApartment.label"
+  <mat-input-container>
+    <input matInput id="label" type="text" placeholder="Add labels dividied by a comma" name="label" label="label" [(ngModel)]="newApartment.label"
       #label="ngModel">
-  </md-input-container>
+  </mat-input-container>
 
-  <button md-raised-button>Save</button>
+  <button mat-raised-button>Save</button>
 </form>

@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Location } from '@angular/common';
-import { SnackbarService } from '../snackbar.service';
+import { MatSnackBar } from '@angular/material';
 
 import { RoomService } from '../room.service';
 
 @Component({
   selector: 'app-edit-room',
   templateUrl: './edit-room.component.html',
-  styleUrls: ['./edit-room.component.css']
+  styleUrls: ['./edit-room.component.scss']
 })
 export class EditRoomComponent implements OnInit {
 
@@ -18,23 +18,25 @@ export class EditRoomComponent implements OnInit {
     private roomService: RoomService,
     private route: ActivatedRoute,
     private location: Location,
-    private snackbar: SnackbarService
+    private snackbar: MatSnackBar
   ) { }
 
   ngOnInit() {
     this.route.params
       .switchMap((params: Params) => this.roomService.getOneRoom(params['id']))
-      .subscribe(result => this.roomToBeModified = result[0]) // check if this syntax is working
+      .subscribe(result => {
+        this.roomToBeModified = result[0] // check if this syntax is working
+      })
   }
 
   updateRoom(id: any) {
     this.roomService.editRoom(id, this.roomToBeModified)
       .subscribe(result => {
-        this.snackbar.showSnackBar("The room has been modified.");        
-        this.location.back();
+        this.snackbar.open(`The room ${this.roomToBeModified.name} has been correctly modified`)
+        this.location.back()
       }, err => {
         if (err.status === 400) {
-          this.snackbar.showSnackBar("Something went wrong!")          
+          this.snackbar.open('Something went wrong')         
         }
       });
   }

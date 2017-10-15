@@ -7,8 +7,12 @@ mongoose.Promise = global.Promise;
 
 // a scheme for users
 const UserSchema = mongoose.Schema({
-  firstName: String,
-  lastName: String,
+  firstName: { 
+    type: String
+  },
+  lastName: {
+    type: String
+  },
   email: {
     type: String,
     trim: true,
@@ -51,15 +55,15 @@ const UserSchema = mongoose.Schema({
 });
 
 UserSchema.methods.toJSON = function () {
-  var user = this;
-  var userObject = user.toObject();
+  const user = this;
+  const userObject = user.toObject();
   // set the information contained in the User Object
   return _.pick(userObject, ['_id', 'email', 'firstName', 'lastName', 'userType', 'instance', 'updatedBy', 'updatedAt', 'active', 'createdAt', 'status']);
 };
 
 UserSchema.methods.generateAuthToken = function (access) {
-  var user = this;
-  var token = jwt.sign({
+  const user = this;
+  const token = jwt.sign({
     _id: user._id.toHexString(),
     access
   }, process.env.JWT_SECRET, { expiresIn: '4h' }).toString();
@@ -86,7 +90,7 @@ UserSchema.statics.findByToken = function (token) {
 };
 
 UserSchema.statics.findByCredentials = function (email, password) {
-  var User = this;
+  const User = this;
 
   return User.findOne({ email })
   .then((user) => {
@@ -107,7 +111,7 @@ UserSchema.statics.findByCredentials = function (email, password) {
 };
 
 UserSchema.pre('save', function (next) {
-  var user = this;
+  let user = this;
 
   if (user.isModified('password')) {
     bcrypt.genSalt(10, (err, salt) => {

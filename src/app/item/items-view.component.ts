@@ -4,7 +4,7 @@ import { ItemService } from '../item.service';
 @Component({
   selector: 'app-items-view',
   templateUrl: './items-view.component.html',
-  styleUrls: ['./items-view.component.css']
+  styleUrls: ['./items-view.component.scss']
 })
 export class ItemsViewComponent implements OnInit {
 

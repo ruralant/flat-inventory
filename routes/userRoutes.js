@@ -22,7 +22,7 @@ User.findOne({ email: "super@user" }).then((user) => {
       "password": "password",
       "userType": "superuser"
     };
-    var newUser = new User(superUser);
+    const newUser = new User(superUser);
     newUser.save();
   }
 });
@@ -32,7 +32,7 @@ router.post('/', authenticate, (req, res) => {
   const token = req.header('x-auth') || req.session.accessToken;
   let body = _.pick(req.body, ['_id', 'firstName', 'lastName', 'email', 'password', 'createdBy', 'userType']);
 
-  var user = new User(body);
+  let user = new User(body);
 
   User.findByToken(token)
     .then(currentUser => {
@@ -48,7 +48,7 @@ router.post('/', authenticate, (req, res) => {
 router.post('/register', (req, res) => {
   let body = _.pick(req.body, ['_id', 'firstName', 'lastName', 'email', 'password', 'createdBy', 'userType']);
 
-  var user = new User(body);
+  let user = new User(body);
 
   user.save()
   .then(() => res.send({message: 'User Created'}))
@@ -86,26 +86,28 @@ router.delete('/', authenticate, (req, res) => {
 // send a password reset link to a user
 router.post('/passwordreset', (req, res) => {
   const body = _.pick(req.body, ['email']);
-  User.findOne({
-    email: body.email
-  }).then((user) => {
-    return user.generateAuthToken().then((token) => {
-      let resetToken = token;
-      let emailURL = (`/passwordReset/${token}`);
-      emailHandler.sendEmail({
-        body: {
-          receiver: user.email,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          sender: 'no-reply@jayex.com',
-          type: 'passwordReset',
-          emailURL,
-          host: 'localhost:4200'
-        }
+
+  User.findOne({ email: body.email })
+    .then((user) => {
+      return user.generateAuthToken().then((token) => {
+        let resetToken = token;
+        let emailURL = (`/passwordReset/${token}`);
+        emailHandler.sendEmail({
+          body: {
+            receiver: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            sender: 'no-reply@jayex.com',
+            type: 'passwordReset',
+            emailURL,
+            host: 'localhost:4200'
+          }
+        });
+        res.send({ 
+          message: 'A password reset has been emailed to your account. Follow the instructions in the email.'
+        });
       });
-      res.send({ message: 'A password reset has been emailed to your account. Follow the instructions in the email.' });
-    });
-  }).catch(e => res.status(400).send(e));
+    }).catch(e => res.status(400).send(e));
 });
 
 

@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Location } from '@angular/common';
-import { SnackbarService } from '../snackbar.service';
+import { MatSnackBar } from '@angular/material';
+
 
 import { ApartmentService } from '../apartment.service';
 
@@ -18,7 +19,7 @@ export class EditAptComponent implements OnInit {
     private apartmentService: ApartmentService,
     private route: ActivatedRoute,
     private location: Location,
-    private snackbar: SnackbarService
+    private snackbar: MatSnackBar
   ) { }
 
   ngOnInit() {
@@ -32,11 +33,11 @@ export class EditAptComponent implements OnInit {
   apartmentUpdate(id: any) {
     this.apartmentService.editApartment(id, this.apartmentToBeModified)
       .subscribe(result => {
-        this.snackbar.showSnackBar("The room has been modified.");              
+        this.snackbar.open("The room has been modified.");              
         this.location.back();
       }, err => {
         if (err.status === 400) {
-          this.snackbar.showSnackBar("Something went wrong!")          
+          this.snackbar.open("Something went wrong!")          
         }
       });
   }

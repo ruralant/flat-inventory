@@ -3,13 +3,10 @@ import { ActivatedRoute, Params } from '@angular/router';
 
 import { ApartmentService } from '../apartment.service';
 
-declare var UIkit: any;
-
-
 @Component({
   selector: 'app-apartment',
   templateUrl: './apartment.component.html',
-  styleUrls: ['./apartment.component.css']
+  styleUrls: ['./apartment.component.scss']
 })
 export class ApartmentComponent implements OnInit {
 

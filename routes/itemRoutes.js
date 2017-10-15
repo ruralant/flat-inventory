@@ -11,14 +11,12 @@ let { authenticate } = require('./../middleware/auth');
 
 // GET all the Items
 router.get('/', authenticate, (req, res) => {
-    Item.find()
+  Item.find()
     .populate('apartment')
     .populate('user')
     .then(items => {
-        res.send(items);
-    }, (e) => {
-        res.status(400).send(e);
-    });
+      res.send(items);
+    }, (e) => res.status(400).send(e));
 });
 
 // GET query of Items
@@ -49,9 +47,8 @@ router.get('/query', authenticate, (req, res) => {
   Item.find(mongoQuery)
     .populate('apartment')
     .populate('user')
-    .then(items => {
-      res.send({ items });
-    }).catch(e => res.status(400).send(e));
+    .then(items => res.send({ items }))
+    .catch(e => res.status(400).send(e));
 });
 
 // Create a new item

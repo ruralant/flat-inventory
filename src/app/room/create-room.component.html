@@ -1,29 +1,29 @@
 <h2>Create a new room</h2>
 <form name="form" (ngSubmit)="createRoom()" novalidate>
-  <md-input-container>
-    <input mdInput id="name" type="text" placeholder="Add the name of the room" name="name" [(ngModel)]="newRoom.name"
+  <mat-input-container>
+    <input matInput id="name" type="text" placeholder="Add the name of the room" name="name" [(ngModel)]="newRoom.name"
       #name="ngModel" required>
-  </md-input-container>
+  </mat-input-container>
 
-  <md-input-container>
-    <input mdInput id="description" type="text" placeholder="Add the room descripton" name="description" description="description" [(ngModel)]="newRoom.description"
+  <mat-input-container>
+    <input matInput id="description" type="text" placeholder="Add the room descripton" name="description" description="description" [(ngModel)]="newRoom.description"
       #description="ngModel">
-  </md-input-container>
+  </mat-input-container>
 
-  <md-input-container>
-    <input mdInput id="location" type="text" placeholder="Add the postcode of the room" name="location" location="location" [(ngModel)]="newRoom.location"
+  <mat-input-container>
+    <input matInput id="location" type="text" placeholder="Add the postcode of the room" name="location" location="location" [(ngModel)]="newRoom.location"
       #location="ngModel">
-  </md-input-container>
+  </mat-input-container>
 
-  <md-select [(ngModel)]="newRoom.availability" id="availability" name="availability">
-      <md-option value="true">Yes</md-option>
-      <md-option value="false">No</md-option>
-  </md-select>
+  <mat-select [(ngModel)]="newRoom.availability" id="availability" name="availability">
+      <mat-option value="true">Yes</mat-option>
+      <mat-option value="false">No</mat-option>
+  </mat-select>
 
-  <md-input-container>
-    <input mdInput id="label" type="text" placeholder="Add labels dividied by a comma" name="label" label="label" [(ngModel)]="newRoom.label"
+  <mat-input-container>
+    <input matInput id="label" type="text" placeholder="Add labels dividied by a comma" name="label" label="label" [(ngModel)]="newRoom.label"
       #label="ngModel">
-  </md-input-container>
+  </mat-input-container>
 
-  <button md-raised-button>Save</button>
+  <button mat-raised-button>Save</button>
 </form>

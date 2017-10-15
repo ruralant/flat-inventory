@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ItemService } from '../item.service';
 import { ApartmentService } from '../apartment.service';
-import { SnackbarService } from '../snackbar.service';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-create-item',
@@ -16,16 +16,16 @@ export class CreateItemComponent implements OnInit {
   constructor(
     private itemService: ItemService,
     private apartmentService: ApartmentService,
-    private snackbar: SnackbarService
+    private snackbar: MatSnackBar
   ) { }
 
   createItem(): void {
     this.itemService.createItem(this.newItem)
       .subscribe(item => {
-        this.snackbar.showSnackBar(`The item has been created.`)
+        this.snackbar.open(`The item has been created.`)
     }), err => {
         if(err.status === 400) {
-          this.snackbar.showSnackBar(`An error occurred. The item has not been created`)
+          this.snackbar.open(`An error occurred. The item has not been created`)
         }
       }
   }

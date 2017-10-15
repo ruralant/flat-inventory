@@ -1,7 +1,7 @@
-var User = require('./../models/userModel');
+const User = require('./../models/userModel');
 
-var authenticate = (req, res, next) => {
-  var token = req.header('x-auth') || req.session.accessToken;
+const authenticate = (req, res, next) => {
+  const token = req.header('x-auth') || req.session.accessToken;
   User.findByToken(token).then((user) => {
     if (!user) {
       return Promise.reject();
@@ -12,8 +12,8 @@ var authenticate = (req, res, next) => {
   .catch(e => res.status(400).send({ message: "No authenticated" }));
 };
 
-var adminAuth = (req, res, next) => {
-  var role = req.session.user.userType;
+const adminAuth = (req, res, next) => {
+  const role = req.session.user.userType;
 
   if (role === 'admin') {
     next();

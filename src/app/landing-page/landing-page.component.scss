@@ -1,4 +1,4 @@
-$background-main-color: #f44336;
+$button-main-color: #f44336;
 
 video {
     position: fixed;
@@ -9,12 +9,12 @@ video {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: black;
+    // background-color: black;
     z-index: -100;
 }
 
 button {
-    background-color: $background-main-color;
+    background-color: $button-main-color;
     border: none;
     border-radius: 4px;
     color: white;
