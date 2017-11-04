@@ -1,17 +1,17 @@
 <h2>Create a new room</h2>
 <form name="form" (ngSubmit)="createRoom()" novalidate>
   <mat-input-container>
-    <input matInput id="name" type="text" placeholder="Add the name of the room" name="name" [(ngModel)]="newRoom.name"
+    <input matInput type="text" placeholder="Add the name of the room" name="name" [(ngModel)]="newRoom.name"
       #name="ngModel" required>
   </mat-input-container>
 
   <mat-input-container>
-    <input matInput id="description" type="text" placeholder="Add the room descripton" name="description" description="description" [(ngModel)]="newRoom.description"
+    <input matInput type="text" placeholder="Add the room descripton" name="description" description="description" [(ngModel)]="newRoom.description"
       #description="ngModel">
   </mat-input-container>
 
   <mat-input-container>
-    <input matInput id="location" type="text" placeholder="Add the postcode of the room" name="location" location="location" [(ngModel)]="newRoom.location"
+    <input matInput type="text" placeholder="Add the postcode of the room" name="location" location="location" [(ngModel)]="newRoom.location"
       #location="ngModel">
   </mat-input-container>
 
@@ -21,7 +21,7 @@
   </mat-select>
 
   <mat-input-container>
-    <input matInput id="label" type="text" placeholder="Add labels dividied by a comma" name="label" label="label" [(ngModel)]="newRoom.label"
+    <input matInput type="text" placeholder="Add labels dividied by a comma" name="label" label="label" [(ngModel)]="newRoom.label"
       #label="ngModel">
   </mat-input-container>
 

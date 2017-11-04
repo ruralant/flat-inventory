@@ -39,7 +39,7 @@
 </div>
 
 <div *ngIf="apartment.items">
-  <div *ngFor="let items of apartment.items">
+  <div *ngFor="let item of apartment.items">
     <table>
       <tr>
         <th>Name</th>
@@ -53,7 +53,7 @@
         <td>{{item.description}}</td>
         <td>{{item.availability}}/{{items.stock}}</td>
         <td>{{item.label}}</td>
-        <td><button routerLink="/rooms/edit/{{room._id}}">Edit</button></td>
+        <td><button routerLink="/rooms/edit/{{item._id}}">Edit</button></td>
       </tr>
     </table>
   </div>

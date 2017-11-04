@@ -1,56 +1,29 @@
-<!-- This is the modal -->
-<div *ngIf="items.length > 0" id="item-modal" uk-modal>
-    <div class="uk-modal-dialog uk-modal-body">
-        <h2 class="uk-modal-title">Create a new item</h2>
-        <form class="uk-form" name="form" (ngSubmit)="f.form.valid; createItem(apartment._id)" #f="ngForm" novalidate>
-          <div class="uk-margin" [ngClass]="{'has-error': f.submitted && !name.valid}">
-            <label class="uk-form-label" for="name">Apartment Name</label>
-            <div class="uk-form-controls">
-              <input class="uk-input" id="name" type="text" placeholder="Add the name of the item" name="name" [(ngModel)]="newItem.name"
-                #name="ngModel" required>
-              <div *ngIf="f.submitted && !name.valid" class="help-block">The item name is required</div>
-            </div>
-          </div>
+<h2>Create a new room</h2>
+<form name="form" (ngSubmit)="createRoom()" novalidate>
+  <mat-input-container>
+    <input matInput id="name" type="text" placeholder="Add the name of the room" name="name" [(ngModel)]="newRoom.name"
+      #name="ngModel" required>
+  </mat-input-container>
 
-          <div class="uk-margin">
-            <label class="uk-form-label" for="description">Description</label>
-            <div class="uk-form-controls">
-              <input class="uk-input" id="description" type="text" placeholder="Add the item descripton" name="description" description="description" [(ngModel)]="newItem.description"
-                #description="ngModel">
-            </div>
-          </div>
+  <mat-input-container>
+    <input matInput id="description" type="text" placeholder="Add the room descripton" name="description" description="description" [(ngModel)]="newRoom.description"
+      #description="ngModel">
+  </mat-input-container>
 
-          <div class="uk-margin" [ngClass]="{'has-error': f.submitted && !name.valid}">
-            <label class="uk-form-label" for="quantity">Quantity</label>
-            <div class="uk-form-controls">
-              <input class="uk-input" id="quantity" type="number" placeholder="Add the quantity" name="quantity" quantity="quantity" [(ngModel)]="newItem.quantity"
-                #quantity="ngModel">
-              <div *ngIf="f.submitted && !quantity.valid" class="help-block">The item quantity is required</div>
-            </div>
-          </div>
+  <mat-input-container>
+    <input matInput id="location" type="text" placeholder="Add the postcode of the room" name="location" location="location" [(ngModel)]="newRoom.location"
+      #location="ngModel">
+  </mat-input-container>
 
-          <div class="uk-margin">
-            <label class="uk-form-label" for="stock">Which is the current stock?</label>
-            <div class="uk-form-controls">
-              <input class="uk-input" id="quantity" type="number" placeholder="Add the quantity" name="quantity" quantity="quantity" [(ngModel)]="newItem.quantity"
-                #quantity="ngModel">
-            </div>
-          </div>
+  <mat-select [(ngModel)]="newRoom.availability" id="availability" name="availability">
+      <mat-option value="true">Yes</mat-option>
+      <mat-option value="false">No</mat-option>
+  </mat-select>
 
-          <div class="uk-margin">
-            <label class="uk-form-label" for="label">Labels</label>
-            <div class="uk-form-controls">
-              <input class="uk-input" id="label" type="text" placeholder="Add labels dividied by a comma" name="label" label="label" [(ngModel)]="newItem.label"
-                #label="ngModel">
-            </div>
-          </div>
+  <mat-input-container>
+    <input matInput id="label" type="text" placeholder="Add labels dividied by a comma" name="label" label="label" [(ngModel)]="newRoom.label"
+      #label="ngModel">
+  </mat-input-container>
 
-
-          <div *ngIf="error" class="alert alert-danger">{{error}}</div>
-            <!-- <button class="uk-button uk-button-default uk-button-small uk-text-success uk-button-default-success">Create a New User</button> -->
-          <p class="uk-text-right">
-              <button class="uk-button uk-button-primary ">Save</button>
-          </p>
-        </form>
-    </div>
-</div>
+  <button mat-raised-button>Save</button>
+</form>
