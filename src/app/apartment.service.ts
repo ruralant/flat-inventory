@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Response, Http, Headers, RequestOptions } from '@angular/http';
-import { environment } from './../environments/environment';
-import { Observable } from 'rxjs/Observable';
+import { Http, Headers, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/map';
+
+import { environment } from './../environments/environment';
 
 const constURL: string = `${environment.constURL}/api`;
 const token = localStorage.getItem('currentUser') ? JSON.parse(localStorage.getItem('currentUser')).token : '';
@@ -10,7 +10,7 @@ const token = localStorage.getItem('currentUser') ? JSON.parse(localStorage.getI
 @Injectable()
 export class ApartmentService {
 
-  constructor(private http: Http) { }
+  constructor( private http: Http ) { }
 
   private handleError(error: any): Promise<any> {
     return Promise.reject(error.message || error);

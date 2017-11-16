@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { Http, Headers, Response, RequestOptions } from '@angular/http';
+import { Http, Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map'
 import { environment } from './../environments/environment';
@@ -12,7 +12,10 @@ const constURL: string = `${environment.constURL}/api`;
 @Injectable()
 export class AuthGuardService implements CanActivate {
 
-  constructor(private router: Router, private http: Http) { }
+  constructor( 
+    private router: Router, 
+    private http: Http
+  ) { }
 
   User: any;
 
