@@ -18,7 +18,7 @@ const apartment = require('./routes/apartmentRoutes');
 const app = express();
 
 //mongodb connection
-mongoose.Promise = global.Promise; //this should remove the mongoose working 
+mongoose.Promise = global.Promise;
 mongoose.set('debug', true); //show all the mongo queries on the console
 mongoose.connect(process.env.MONGODB_URI, { useMongoClient: true }, (err) => {
   if (err) {
@@ -30,9 +30,7 @@ mongoose.connect(process.env.MONGODB_URI, { useMongoClient: true }, (err) => {
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-  extended: false
-}));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'dist')));
 app.use('/assets', express.static('assets'));
@@ -40,14 +38,25 @@ app.use('/assets', express.static(path.join(__dirname, '../media')));
 app.use(cors());
 app.options('*', cors());
 
-//Express Session and Cookies
+//Handle Express Sessions/cookies
+let store = new MongoStore(
+  {
+    url: process.env.MONGODB_SESSION,
+    collection: 'sessions',
+    ttl: 1 * 12 * 60 * 60 // = 12 hours
+  });
+
+// Catch errors
+store.on('error', function(error) {
+  assert.ifError(error);
+  assert.ok(false);
+});
+
 app.use(session({
   secret: process.env.SESSION_SECRET,
-  saveUninitialized: true,
+  saveUninitialized: false,
   resave: true,
-  cookie: {
-    maxAge: 86400000 // remomber to change before shipping
-  }
+  store
 }));
 
 app.use('/', index);
