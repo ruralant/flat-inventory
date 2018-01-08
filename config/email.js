@@ -1,35 +1,30 @@
-const nodemailer = require('nodemailer');
+const {exec} = require('child-process-promise');
 
-function sendEmail(req, res, next) {
-	const mailTransport = nodemailer.createTransport({
-		host: process.env.HOSTEMAIL,
-		port: 587,
-		secure: false,
-		ignoreTLS: true,
-		auth: {
-			user: process.env.USEREMAIL,
-			pass: process.env.USERPASSWORD
-		}
-	});
-	const mailOptions = {};
-	const receiver = req.body.receiver;
-	const firstName = req.body.firstName;
-	const lastName = req.body.lastName;
-	const sender = req.body.sender;
-	const url = req.body.emailURL;
-	const host = req.body.host;
-	mailOptions.from = receiver;
-	mailOptions.to = receiver;
-	mailOptions.subject = 'Password reset';
-	mailOptions.text = `A password reset has been requested with this email address. Please follow the url http://${host}${url}`;
+function createEmail(sender, receiver, subject, content) {
+	exec(`sendEmail -o tls=yes -f ${process.env.USEREMAIL} -t ${receiver} -s ${process.env.HOSTEMAIL} -xu ${process.env.USEREMAIL} -xp ${process.env.USERPASSWORD} -u ${subject} -m ${content}`)
+		.then(result => console.log('Email sent'))
+		.catch(e => console.log(e));
+}
 
-	mailTransport.sendMail(mailOptions, function (error, info) {
-		if (error) {
-			console.log('Error: ', error);
-		}
-		console.log('Message sent: ' + info.response);
-	});
-	return;
+function sendEmail(req) {
+	let sender = process.env.USEREMAIL;
+	let receiver = req.body.receiver || process.env.PRODUCTIONADMINEMAILTO;	
+	let firstName = req.body.firstName;
+	let lastName = req.body.lastName;
+	let emailSubject;
+	let emailContent;
+
+	if (req.body.type === 'passwordReset') {
+		let url = req.body.emailURL;
+		let host = req.body.host;
+		emailSubject = 'Password reset';
+		emailContent = `A password reset has been requested with this email address. Please follow the url http://${host}${url} to create a new one`;		
+	} else {
+		let url = req.body.url;
+		emailSubject = 'New User Created';
+		emailContent = `The new user ${firstName} ${lastName} has been created. Please follow the url ${url} and login with your email and as passphrase the word "password". Remember to change it once you are logged in.`;
+	}
+	createEmail(sender, receiver, emailSubject, emailContent);
 }
 
 module.exports = { sendEmail };

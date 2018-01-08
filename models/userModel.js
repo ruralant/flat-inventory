@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const _ = require('lodash');
 
 mongoose.Promise = global.Promise;
 
@@ -54,25 +53,17 @@ const UserSchema = mongoose.Schema({
   }
 });
 
-UserSchema.methods.toJSON = function () {
-  const user = this;
-  const userObject = user.toObject();
-  // set the information contained in the User Object
-  return _.pick(userObject, ['_id', 'email', 'firstName', 'lastName', 'userType', 'instance', 'updatedBy', 'updatedAt', 'active', 'createdAt', 'status']);
-};
-
 UserSchema.methods.generateAuthToken = function (access) {
-  const user = this;
-  const token = jwt.sign({
+  // create a new date object so we can save the date to the user login history each time a token is created
+  let user = this;
+  let token = jwt.sign({
     _id: user._id.toHexString(),
     access
-  }, process.env.JWT_SECRET, { expiresIn: '4h' }).toString();
-
-  return user.save().then(() => {
-    return token;
-  });
+  }, process.env.JWT_SECRET, { expiresIn: '8h' }).toString();
+  return user.save()
+    .then(() => token)
+    .catch(e => console.log(e));
 };
-
 
 UserSchema.statics.findByToken = function (token) {
   const User = this;
@@ -80,8 +71,7 @@ UserSchema.statics.findByToken = function (token) {
   try {
     decoded = jwt.verify(token, process.env.JWT_SECRET);
   } catch (e) {
-    console.log(e);
-    return Promise.reject({message:'jwt expired, try logging out and back in again'});
+    return Promise.reject({ action: 'logout', message: 'jwt expired, try logging out and back in again' });
   }
 
   return User.findOne({
@@ -90,28 +80,31 @@ UserSchema.statics.findByToken = function (token) {
 };
 
 UserSchema.statics.findByCredentials = function (email, password) {
-  const User = this;
+  var User = this;
 
-  return User.findOne({ email })
-  .then((user) => {
-    if (!user) {
-      return Promise.reject();
-    }
-    return new Promise((resolve, reject) => {
-      // Use bcrypt.compare to compare password and user.password
-      bcrypt.compare(password, user.password, (err, res) => {
-        if (res) {
-          resolve(user);
-        } else {
-          reject();
-        }
+  return User.findOne({
+    email,
+    active: true
+  })
+    .then((user) => {
+      if (!user) {
+        return Promise.reject();
+      }
+      return new Promise((resolve, reject) => {
+        // Use bcrypt.compare to compare password and user.password
+        bcrypt.compare(password, user.password, (err, res) => {
+          if (res) {
+            resolve(user);
+          } else {
+            reject();
+          }
+        });
       });
     });
-  });
 };
 
 UserSchema.pre('save', function (next) {
-  let user = this;
+  var user = this;
 
   if (user.isModified('password')) {
     bcrypt.genSalt(10, (err, salt) => {

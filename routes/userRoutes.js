@@ -4,138 +4,156 @@ const _ = require('lodash');
 const bcrypt = require('bcryptjs');
 const { ObjectID } = require('mongodb');
 const emailHandler = require('../config/email');
-const reqProm = require('request-promise-native');
-const http = require('http');
 const request = require('request');
+const reqProm = require('request-promise-native');
+
 const User = require('../models/userModel');
+const { Instance } = require('../models/instanceModel.js');
 let { authenticate } = require('./../middleware/auth');
-// let {sendEmail} = require('./email.js');
 
 // creates a super user if does not exist, one time only
-User.findOne({ email: "super@user" }).then((user) => {
-  if (!user) {
-    let superUser = {
-      "_id": ObjectID.ObjectId("58f60bdc7314d23bd3ce92e3"),
-      "firstName": "superuser",
-      "lastName": "superuser",
-      "email": "super@user",
-      "password": "password",
-      "userType": "superuser"
-    };
-    const newUser = new User(superUser);
-    newUser.save();
-  }
-});
+User.findOne({
+  email: "superuser@jayex.com"
+})
+  .then((user) => {
+    if (!user) {
+      let superUser = {
+        "_id": ObjectID.ObjectId("58f60bdc7314d23bd3ce92e3"),
+        "firstName": "superuser",
+        "lastName": "superuser",
+        "email": "superuser@jayex.com",
+        "password": "Sr02P03!",
+        "userType": "superuser"
+      };
+      var newUser = new User(superUser);
+      newUser.save();
+    }
+  });
 
 // CREATE a user
 router.post('/', authenticate, (req, res) => {
-  const token = req.header('x-auth') || req.session.accessToken;
-  let body = _.pick(req.body, ['_id', 'firstName', 'lastName', 'email', 'password', 'createdBy', 'userType']);
+  const token = req.session.accessToken;
+  let body = req.body;
 
-  let user = new User(body);
+  var user = new User(body);
 
-  User.findByToken(token)
-    .then(currentUser => {
-      user.createdBy = ObjectID.ObjectId(currentUser._id);
-      return user.save();
-    })
-    .then(() => res.send({message: 'User Sent'}))
-    .catch(e => res.status(400).send(e));
-  
-});
+  function postUsers(path, userId, body) {
+    let user = body;
+    user.tempId = userId.toString();
+    user.userType = 'superuser';
 
-// CREATE a user
-router.post('/register', (req, res) => {
-  let body = _.pick(req.body, ['_id', 'firstName', 'lastName', 'email', 'password', 'createdBy', 'userType']);
+    let options = {
+      url: path + '/api/user',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-auth': token
+      },
+      form: user
+    };
 
-  let user = new User(body);
+    request.post(options, function (err, res, body) {
+      if (err) {
+        console.log(err);
+      }
+    });
+  }
+
+  let userToSaveObj;
 
   user.save()
-  .then(() => res.send({message: 'User Created'}))
-  .catch(e => res.status(400).send(e));
+    .then(userToSave => {
+      userToSaveObj = userToSave;
+      return Instance.find({});
+    })
+    .then(instances => {
+      for (let instance of instances) {
+        postUsers(instance.hostname, userToSaveObj._id, body);
+      }
+    })
+    .then(() => res.send({ status: 'success', message: 'New user created' }))
+    .catch(e => res.status(400).send({ status: 'fail', message: 'Unable to create new user', e }));
 });
 
-
-// log a user in
+// LOGIN
 router.post('/login', (req, res) => {
   const body = _.pick(req.body, ['email', 'password']);
+  let savedUser;
 
-  User.findByCredentials(body.email, body.password).then(user => {
-    return user.generateAuthToken('auth').then(token => {
-      res.setHeader('x-auth', token);
+  User.findByCredentials(body.email, body.password)
+    .then(user => {
+      savedUser = user;
+      return user.generateAuthToken('auth');
+    })
+    .then(token => {
+      res.setHeader('Set-Cookie', token);
       req.session.accessToken = token;
-      req.user = user.toJSON();
-      res.status(200).send({ token, user });
+      let { _id, email, firstName, lastName, userType } = savedUser.toJSON();
+      req.session.user = {};
+      req.session.user = { _id, email, firstName, lastName, userType };
+      res.send({
+        token,
+        user: req.session.user
+      });
+    })
+    .catch(e => {
+      console.log(e);
+      res.status(400).send({ status: 'fail', message: 'Unable to login', e });
     });
-  }).catch(e => res.status(400).send(e));
 });
 
-
 // make a user inactive
-router.delete('/', authenticate, (req, res) => {
-  User.removeToken(req.token).then(() => {
-    req.session.destroy();
-    res.status(200).send({
-      Message: "Succesfully Logout"
-    });
-  }, () => {
-    res.status(400).json({ status: 'error, not logged out!' });
-  });
+router.delete('/', (req, res) => {
+  req.session.destroy();
+  res.send({ message: 'Successfully Logout' });
 });
 
 // send a password reset link to a user
 router.post('/passwordreset', (req, res) => {
-  const body = _.pick(req.body, ['email']);
-
+  const body = _.pick(req.body, ['email', 'host']);
+  let userFound;
   User.findOne({ email: body.email })
-    .then((user) => {
-      return user.generateAuthToken().then((token) => {
-        let resetToken = token;
-        let emailURL = (`/passwordReset/${token}`);
-        emailHandler.sendEmail({
-          body: {
-            receiver: user.email,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            sender: 'no-reply@jayex.com',
-            type: 'passwordReset',
-            emailURL,
-            host: 'localhost:4200'
-          }
-        });
-        res.send({ 
-          message: 'A password reset has been emailed to your account. Follow the instructions in the email.'
-        });
-      });
-    }).catch(e => res.status(400).send(e));
-});
-
-
-// check status of current user based on a token
-router.get('/status', (req, res) => {
-  const token = req.header('x-auth') || req.session.accessToken;
-
-  User.findByToken(token)
     .then(user => {
-      if (!user) return res.status(401).send({ message: 'No user' });
-      res.status(200).json({
-        status: true,
-        token,
-        user
+      userFound = user;
+      return user.generateAuthToken('resetPassword');
+    })
+    .then(token => {
+      let resetToken = token;
+      let emailURL = (`/passwordReset/${token}`);
+      emailHandler.sendEmail({
+        body: {
+          receiver: userFound.email,
+          firstName: userFound.firstName,
+          lastName: userFound.lastName,
+          type: 'passwordReset',
+          emailURL,
+          host: body.host,
+        }
+      });
+      res.send({
+        message: 'A password reset has been emailed to your account. Follow the instructions in the email.'
       });
     })
     .catch(e => {
-      res.status(401).send({ status: false, message: 'No user' });
+      console.log(e);
+      res.status(400).send({ func: 'Password reset error', e });
     });
 });
 
-// GET list of users
-router.get('/', function (req, res) {
-  User.find().then((user) => {
-    res.send({ user });
-  }, (e) => {
-    res.status(400).send(e);
+// check status of current user based on a token
+router.get('/status', authenticate, (req, res) => {
+  res.status(200).json({
+    status: true,
+    user: req.session.user,
+    token: req.session.accessToken
   });
+});
+
+// GET list of users
+router.get('/', (req, res) => {
+  User.find()
+    .populate('updatedBy')
+    .then((user) => res.send({ user }))
+    .catch(e => res.status(400).send({ e }));
 });
 
 // QUERY for user
@@ -166,9 +184,11 @@ router.get('/query', authenticate, (req, res) => {
   }
 
   User.find(query)
+    .populate('updatedBy')
     .then((user) => {
-      res.send({ user }
-      );
+      res.send({
+        user
+      });
     }, (e) => {
       res.status(400).send(e);
     });
@@ -176,51 +196,58 @@ router.get('/query', authenticate, (req, res) => {
 
 // UPDATE user data
 router.patch('/updateUser/:id', authenticate, (req, res) => {
-  const token = req.header('x-auth') || req.session.accessToken;
+  const token = req.session.accessToken;
   const id = req.params.id;
   const body = _.pick(req.body, ['firstName', 'lastName', 'email', 'userType', 'password', 'active', '_id', 'updatedBy']);
 
   if (!ObjectID.isValid(id)) {
-    return res.status(404).send({ error: "ObjectID not valid" });
+    return res.status(404).send({
+      error: "ObjectID not valid"
+    });
   }
 
   function patchUsers(path, body) {
     let options = {
       method: 'PATCH',
       uri: path + '/api/user/updateUser/' + id,
-      headers: { 'Content-Type': 'application/json', 'x-auth': token },
+      headers: {
+        'Content-Type': 'application/json',
+        'x-auth': token
+      },
       body,
       json: true
     };
     reqProm(options);
   }
 
-  let userToEditObj;
-
-  User.findByToken(token)
-    .then(user => {
-      return User.findByIdAndUpdate(id, {
-        $set: body,
-        updatedBy: user._id
-      }, {
-        new: true
-      });
+  User.findByIdAndUpdate(id, {
+    $set: body,
+    updatedBy: ObjectID.ObjectId(req.session.user._id)
+  }, {
+      new: true
     })
     .then(userToEdit => {
       userToEditObj = userToEdit;
       return Instance.find({});
     })
     .then(instances => {
-      for(let instance of instances) {
+      for (let instance of instances) {
         patchUsers(instance.hostname, userToEditObj);
       }
     })
-    .then(() => res.send({message: 'User Sent'}))
+    .then(() => {
+      req.session.user.firstName = user.firstName;
+      req.session.user.lastName = user.lastName;
+      res.send({
+        message: 'User Sent'
+      });
+    })
     .catch(e => res.status(400).send(e));
 });
 
 // DELETE user
-router.delete('/:id', (req, res) => {
+router.delete('/:id', authenticate, (req, res) => {
+  const token = req.session.accessToken;
   const id = req.params.id;
 
   if (!ObjectID.isValid(id)) {
@@ -228,33 +255,69 @@ router.delete('/:id', (req, res) => {
       error: "ObjectID not valid"
     });
   }
+
+  function deleteUsers(path) {
+    let options = {
+      method: 'DELETE',
+      uri: path + '/api/user/' + id,
+      headers: {
+        'Content-Type': 'application/json',
+        'x-auth': token
+      }
+    };
+    reqProm(options);
+  }
+
   User.findByIdAndUpdate(id, {
     $set: {
-      updatedBy: "Current User",
+      updatedBy: ObjectID.ObjectId(req.session.user._id),
       active: false
     }
   }, {
-    new: true
-  })
-  .then((user) => {
-    if (user === null) {
-      return res.status(404).send({
-        error: "No user found"
-      });
-    }
-    res.send({ user });
-  })
-  .catch(e => res.status(400).send(e));
+      new: true
+    })
+    .then(userToDelete => {
+      return Instance.find({});
+    })
+    .then(instances => {
+      for (let instance of instances) {
+        deleteUsers(instance.hostname);
+      }
+    })
+    .then(() => res.send({
+      message: 'User Deleted'
+    }))
+    .catch(e => res.status(400).send(e));
 });
 
 // CHANGE password
-router.patch('/profilePasswordChange', (req, res) => {
-  const token = req.header('x-auth') || req.session.accessToken;
+router.patch('/profilePasswordChange', authenticate, (req, res) => {
+  const token = req.session.accessToken;
+
+  let userToSave;
+
+  // update the password on the client side
+  function resetPasswordUsers(path, userId, body) {
+    let options = {
+      url: path + '/api/user/updateUser/' + userId,
+      headers: {
+        'Content-Type': 'application/json',
+        'x-auth': token
+      },
+      form: { password: body.password }
+    };
+
+    request.patch(options, function (err, res, body) {
+      if (err) {
+        console.log(err);
+      }
+    });
+  }
 
   User.findByToken(token)
     .then(user => {
       // if the auth type is password "reset" then bypass the password check
-      if(req.header('x-auth-type') === 'reset') {
+      if (req.header('x-auth-type') === 'reset') {
         return user;
       }
       return new Promise((resolve, reject) => {
@@ -263,18 +326,67 @@ router.patch('/profilePasswordChange', (req, res) => {
           if (res) {
             resolve(user);
           } else {
-            reject({ message: 'Password incorrect' });
+            reject({
+              message: 'Password incorrect'
+            });
           }
         });
       });
     })
     .then((user) => {
       user.password = req.body.newPassword;
-      user.save()
-      .then(result => res.status(200).send({ result }));
+      return user.save()
+        .then(savedUser => {
+          userToSave = savedUser;
+          return Instance.find({});
+        })
+        .then(instances => {
+          for (let instance of instances) {
+            resetPasswordUsers(instance.hostname, userToSave._id, userToSave);
+          }
+        })
+        .then(result => {
+          res.status(200).send({ result });
+        });
     })
-    .catch(e => { res.status(400).send(e); 
-  });
+    .catch(e => {
+      res.status(400).send(e);
+    });
+});
+
+router.get('/postManyUsers/:id', authenticate, (req, res) => {
+  const token = req.session.accessToken;
+  const { id } = req.params;
+  let remoteUri;
+
+  Instance.findById(id)
+    .then(result => {
+      remoteUri = result.hostname;
+      return User.find({
+        active: true
+      });
+    })
+    .then(users => {
+      let body = users;
+      let options = {
+        method: 'POST',
+        uri: `${remoteUri}/api/user/many`,
+        headers: {
+          'Content-Type': 'application/json',
+          'x-auth': token
+        },
+        body: { "users": body },
+        json: true
+      };
+      return reqProm(options);
+    })
+    .then(string => {
+      res.send(string);
+    })
+    .catch(e => {
+      console.log(e);
+      res.status(400).send(e);
+    });
 });
 
 module.exports = router;

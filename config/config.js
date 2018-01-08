@@ -1,6 +1,11 @@
 const env = process.env.NODE_ENV || 'development';
-console.log(`config.js, line2, process.env.NODE_ENV = ${env}`);
-console.log(process.env.NODE_ENV);
+console.log((`
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+The server is running.
+The process.env.NODE_ENV = ${env}
+The PORT has been set to ${process.env.PORT} || 3000
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+`));
 
 if (env === 'development' || env === 'test') {
   const config = require('./config.json');
