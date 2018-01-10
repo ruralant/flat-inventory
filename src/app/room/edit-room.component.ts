@@ -35,9 +35,7 @@ export class EditRoomComponent implements OnInit {
         this.snackbar.open(`The room ${this.roomToBeModified.name} has been correctly modified`)
         this.location.back()
       }, err => {
-        if (err.status === 400) {
-          this.snackbar.open('Something went wrong')         
-        }
+        if (err.status === 400) { this.snackbar.open('Something went wrong') }
       });
   }
 

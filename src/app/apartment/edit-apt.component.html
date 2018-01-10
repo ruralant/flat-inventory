@@ -6,37 +6,39 @@
 
       <input type="hidden" value="{{apartmentToBeModified._id}}" name="id">
 
-      <mat-input-container>
+      <mat-form-field>
         <input matInput type="text" id="name" value="{{apartmentToBeModified.name}}" #name="ngModel" placeholder="Apartment Name"
           [(ngModel)]="apartmentToBeModified.name" name="apartment-name">
-        <!-- <div *ngIf="f.submitted && !name.valid" class="help-block">&nbsp;The apartment name is required</div> -->        </div>
-      </mat-input-container>
+        <!-- <div *ngIf="f.submitted && !name.valid" class="help-block">&nbsp;The apartment name is required</div> -->
+      </mat-form-field>
         
-      <mat-input-container>
+      <mat-form-field>
         <input matInput type="text" id="description" value="{{apartmentToBeModified.description}}" #description="ngModel" placeholder="Add the apartment description"
           [(ngModel)]="apartmentToBeModified.description" name="apartment-description">
-      </mat-input-container>
+      </mat-form-field>
 
-      <mat-input-container>        
+      <mat-form-field>        
         <input matInput type="text" value="{{apartmentToBeModified.location}}" #location="ngModel" placeholder="Add the apartment location"
           [(ngModel)]="apartmentToBeModified.location" name="apartment-location">
-      </mat-input-container>
+      </mat-form-field>
 
-      <mat-select name="availability" [(ngModel)]="apartmentToBeModified.availability" #availability="ngModel">
-        <mat-option value="true">Available</mat-option>
-        <mat-option value="false">Unavailable</mat-option>
-      </mat-select>
+      <mat-form-field>
+        <mat-select name="availability" [(ngModel)]="apartmentToBeModified.availability" #availability="ngModel">
+          <mat-option value="true">Available</mat-option>
+          <mat-option value="false">Unavailable</mat-option>
+        </mat-select>
+      </mat-form-field>
 
-      <mat-input-container *ngIf="apartmentToBeModified.apartmentType === 'local'">
+      <mat-form-field *ngIf="apartmentToBeModified.apartmentType === 'local'">
         <input matInput *ngIf="apartmentToBeModified.family[0]" type="text" value="{{apartmentToBeModified.family[0].name}}" #family="ngModel" placeholder="apartment family"
             [(ngModel)]="apartmentToBeModified.family[0].name" name="apartment-family" disabled>
         <input matInput *ngIf="!apartmentToBeModified.family[0]" type="text" value="This apartment is not part of a Group" placeholder="apartment family" name="apartment-family" disabled>
-      </mat-input-container>
+      </mat-form-field>
 
-      <mat-input-container> 
+      <mat-form-field> 
         <input matInput type="date" value="{{apartmentToBeModified.labels}}" #labels="ngModel" [(ngModel)]="apartmentToBeModified.labels"
           name="istance-labels">
-      </mat-input-container>
+      </mat-form-field>
 
       <p *ngIf="apartmentToBeModified.updatedAt && apartmentToBeModified.updatedBy" class="updatedBy">Updated by {{apartmentToBeModified.updatedBy.firstName}} {{apartmentToBeModified.updatedBy.lastName}} on {{apartmentToBeModified.updatedAt | date:'short'}}</p>
 

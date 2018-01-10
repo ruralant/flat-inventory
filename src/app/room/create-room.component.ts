@@ -25,9 +25,7 @@ export class CreateRoomComponent implements OnInit {
       .subscribe(room => {
         this.snackBar.open("The new room has been created")
       }), err => {
-        if(err.status === 400) {
-          this.snackBar.open("Something went wrong!")
-        }
+        if(err.status === 400) { this.snackBar.open("Something went wrong!") }
       }
   }
 

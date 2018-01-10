@@ -16,9 +16,7 @@ export class TopnavComponent implements OnInit {
 
   ngOnInit() {
     this.userService.getUser()
-      .subscribe(user => {
-        this.user = user.user;
-      });
+      .subscribe(user => { this.user = user.user });
   }
 
 }

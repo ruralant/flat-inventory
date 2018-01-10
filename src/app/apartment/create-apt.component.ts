@@ -24,9 +24,7 @@ export class CreateAptComponent implements OnInit {
     .subscribe(apartment => {
       this.snackbar.open("The apartment has been created.");
     }), err => {
-        if(err.status === 400) {
-          this.snackbar.open("Something went wrong!")
-        }
+        if(err.status === 400) { this.snackbar.open("Something went wrong!") }
       }
   }
 

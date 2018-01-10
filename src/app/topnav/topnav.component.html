@@ -1,18 +1,18 @@
 <nav uk-sticky class="uk-navbar-container" uk-navbar>
-    <div id="logo" class="uk-navbar-left navbar-left">
-        <!--<img src="" alt="logo">-->
-    </div>
-    <div class="uk-navbar-right">
-        <ul class="uk-navbar-nav uk-margin-right">
-            <li class="uk-active"><a class="uk-text-capitalize" href=""><span class="uk-icon uk-margin-small-right icons" uk-icon="icon: world"></span>Admin app</a></li>
-            <li *ngIf="user" class="uk-parent"><a class="uk-text-capitalize" href="#"><span class="uk-icon uk-margin-small-right icons" uk-icon="icon: user"></span>{{user.firstName}}</a>
-                <div uk-dropdown="offset: -12; pos: bottom-justify;" class="uk-dropdown-nav">
-                    <ul class="uk-nav">
-                        <li><a href="/profile">Profile</a></li>
-                        <li><a href="/login">Logout</a></li>
-                    </ul>
-                </div>
-            </li>
-        </ul>
-    </div>
+	<div id="logo" class="uk-navbar-left navbar-left">
+			<!--<img src="" alt="logo">-->
+	</div>
+	<div class="uk-navbar-right">
+		<ul class="uk-navbar-nav uk-margin-right">
+			<li class="uk-active"><a class="uk-text-capitalize" href=""><span class="uk-icon uk-margin-small-right icons" uk-icon="icon: world"></span>Admin app</a></li>
+			<li *ngIf="user" class="uk-parent"><a class="uk-text-capitalize" href="#"><span class="uk-icon uk-margin-small-right icons" uk-icon="icon: user"></span>{{user.firstName}}</a>
+				<div uk-dropdown="offset: -12; pos: bottom-justify;" class="uk-dropdown-nav">
+					<ul class="uk-nav">
+						<li><a href="/profile">Profile</a></li>
+						<li><a href="/login">Logout</a></li>
+					</ul>
+				</div>
+			</li>
+		</ul>
+	</div>
 </nav>

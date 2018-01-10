@@ -24,9 +24,7 @@ export class CreateItemComponent implements OnInit {
       .subscribe(item => {
         this.snackbar.open(`The item has been created.`)
     }), err => {
-        if(err.status === 400) {
-          this.snackbar.open(`An error occurred. The item has not been created`)
-        }
+        if(err.status === 400) { this.snackbar.open(`An error occurred. The item has not been created`) }
       }
   }
 
@@ -41,5 +39,4 @@ export class CreateItemComponent implements OnInit {
   ngOnInit() {
     this.getApartments();
   }
-
 }

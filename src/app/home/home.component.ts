@@ -23,16 +23,12 @@ export class HomeComponent implements OnInit {
 
   getCurrentUser(): void {
     this.userService.getUser()
-      .subscribe(currentUser => {
-        this.currentUser = currentUser.user;
-      })
+      .subscribe(currentUser => { this.currentUser = currentUser.user })
   }
 
   getUserApartments(): void {
     this.apartmentService.getApartments()
-      .subscribe(apartments => {
-        this.apartments = apartments;
-      })
+      .subscribe(apartments => { this.apartments = apartments })
   }
 
   // createItem(): void {

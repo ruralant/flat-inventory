@@ -3,7 +3,6 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { Location } from '@angular/common';
 import { MatSnackBar } from '@angular/material';
 
-
 import { ApartmentService } from '../apartment.service';
 
 @Component({
@@ -25,9 +24,7 @@ export class EditAptComponent implements OnInit {
   ngOnInit() {
     this.route.params
       .switchMap((params: Params) => this.apartmentService.getOneApartment(params['id']))
-      .subscribe(result => {
-        this.apartmentToBeModified = result[0];
-      })
+      .subscribe(result => { this.apartmentToBeModified = result[0] })
   }
 
   apartmentUpdate(id: any) {
@@ -36,9 +33,7 @@ export class EditAptComponent implements OnInit {
         this.snackbar.open("The room has been modified.");              
         this.location.back();
       }, err => {
-        if (err.status === 400) {
-          this.snackbar.open("Something went wrong!")          
-        }
+        if (err.status === 400) { this.snackbar.open("Something went wrong!") }
       });
   }
 }

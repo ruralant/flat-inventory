@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
 import { RoutingModule } from './routing/routing.module';
 
 import { AuthenticationService } from './authentication.service';
@@ -30,6 +29,8 @@ import { ItemSectionComponent } from './item/item-section.component';
 import { ItemsViewComponent } from './item/items-view.component';
 import { CreateAptComponent } from './apartment/create-apt.component';
 import { CreateRoomComponent } from './room/create-room.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -58,6 +59,12 @@ import { CreateRoomComponent } from './room/create-room.component';
     HttpModule,
     RoutingModule,
     BrowserAnimationsModule,
+    MatFormFieldModule,
+    MatSelectModule
+  ],
+  exports: [
+    MatFormFieldModule,
+    MatSelectModule
   ],
   providers: [
     AuthGuardService,

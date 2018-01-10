@@ -26,17 +26,13 @@ export class ApartmentComponent implements OnInit {
   getApartment(): void {
     this.route.params
       .switchMap((params: Params) => this.apartmentService.getOneApartment(params['id']))
-      .subscribe(result => {
-        this.apartment = result[0];
-      })
+      .subscribe(result => { this.apartment = result[0] })
   }
 
   getAptItems(): void {
     this.route.params
       .switchMap((params: Params) => this.apartmentService.getApartmentItems(params['id']))
-      .subscribe(result => {
-        this.items = result;
-      })
+      .subscribe(result => { this.items = result })
   }
 
 }

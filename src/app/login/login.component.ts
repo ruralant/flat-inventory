@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
-import { MatInput } from '@angular/material'
-import { MatSnackBar } from '@angular/material'
+import { MatFormField, MatSnackBar } from '@angular/material';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
-import { AuthenticationService } from '../authentication.service'
+import { AuthenticationService } from 'app/authentication.service'
 import { UserService } from 'app/user.service'
 
 @Component({
