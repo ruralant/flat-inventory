@@ -25,20 +25,15 @@ const UserSchema = mongoose.Schema({
     required: true,
     minlength: 6
   },
-  tokens: [{
-    access: {
-      type: String,
-      required: true
-    },
-    token: {
-      type: String,
-      required: true
-    }
-  }],
   userType: {
     type: String,
     required: true,
-    default: "standard"
+    default: 'standard'
+  },
+  active: {
+    type: Boolean,
+    required: true,
+    default: true
   },
   createdBy:{
     type: mongoose.Schema.ObjectId, ref: 'User'
@@ -74,9 +69,7 @@ UserSchema.statics.findByToken = function (token) {
     return Promise.reject({ action: 'logout', message: 'jwt expired, try logging out and back in again' });
   }
 
-  return User.findOne({
-    '_id': decoded._id
-  });
+  return User.findOne({ '_id': decoded._id });
 };
 
 UserSchema.statics.findByCredentials = function (email, password) {
@@ -87,6 +80,7 @@ UserSchema.statics.findByCredentials = function (email, password) {
     active: true
   })
     .then((user) => {
+      console.log('user:' , user);
       if (!user) {
         return Promise.reject();
       }

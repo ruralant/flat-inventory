@@ -6,6 +6,7 @@ const logger = require('morgan');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 const path = require('path');
 const cors = require('cors');
 
@@ -75,7 +76,7 @@ app.use((req, res, next) => {
 });
 
 // Error Handler
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   // error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};

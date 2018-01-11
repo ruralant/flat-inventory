@@ -23,7 +23,7 @@ export class CreateRoomComponent implements OnInit {
   createRoom(): void {
     this.roomService.createRoom(this.newRoom)
       .subscribe(room => {
-        this.snackBar.open("The new room has been created")
+        this.snackBar.open('The new room has been created')
       }), err => {
         if(err.status === 400) { this.snackBar.open("Something went wrong!") }
       }

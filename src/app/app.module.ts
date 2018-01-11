@@ -4,6 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RoutingModule } from './routing/routing.module';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatButtonModule } from '@angular/material/button';
 
 import { AuthenticationService } from './authentication.service';
 import { AuthGuardService } from './auth-guard.service';
@@ -29,8 +34,6 @@ import { ItemSectionComponent } from './item/item-section.component';
 import { ItemsViewComponent } from './item/items-view.component';
 import { CreateAptComponent } from './apartment/create-apt.component';
 import { CreateRoomComponent } from './room/create-room.component';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -60,11 +63,17 @@ import { MatSelectModule } from '@angular/material/select';
     RoutingModule,
     BrowserAnimationsModule,
     MatFormFieldModule,
-    MatSelectModule
+    MatSelectModule,
+    MatSnackBarModule,
+    MatInputModule,
+    MatButtonModule
   ],
   exports: [
     MatFormFieldModule,
-    MatSelectModule
+    MatSelectModule,
+    MatSnackBarModule,
+    MatInputModule,
+    MatButtonModule
   ],
   providers: [
     AuthGuardService,

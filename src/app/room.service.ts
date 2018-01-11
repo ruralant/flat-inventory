@@ -3,8 +3,7 @@ import { Http, Headers, RequestOptions } from '@angular/http';
 import { environment } from './../environments/environment';
 import 'rxjs/add/operator/map';
 
-const constURL: string = `${environment.constURL}/api`;
-const token = localStorage.getItem('currentUser') ? JSON.parse(localStorage.getItem('currentUser')).token : '';
+const constURL = `${environment.constURL}/api`;
 
 @Injectable()
 export class RoomService {
@@ -23,48 +22,36 @@ export class RoomService {
   }
 
   getRooms(): any {
-    let headers = new Headers({ 'Content-Type': 'application/json', 'x-auth': token });
-    let options = new RequestOptions({ headers: headers });
-    return this.http.get(`${constURL}/rooms`, options)
+    return this.http.get(`${constURL}/rooms`)
       .map(res => res.json())
       .catch(this.handleError)
   }
 
   getOneRoom(id: any): any {
-    let headers = new Headers({ 'Content-Type': 'application/json', 'x-auth': token });
-    let options = new RequestOptions({ headers: headers });
-    return this.http.get(`${constURL}/rooms/query?_id=${id}`, options)
+    return this.http.get(`${constURL}/rooms/query?_id=${id}`)
       .map(res =>  res.json().room)
       .catch(this.handleError)
   }
 
   getRoomItems(id: any): any {
-    let headers = new Headers({ 'Content-Type': 'application/json', 'x-auth': token });
-    let options = new RequestOptions({ headers: headers });
-    return this.http.get(`${constURL}/rooms/query?_id=${id}`, options)
+    return this.http.get(`${constURL}/rooms/query?_id=${id}`)
       .map(res =>  res.json())
       .catch(this.handleError)
   }
 
   createRoom(room: object): any {
-    let headers = new Headers({ 'Content-Type': 'application/json', 'x-auth': token });
-    let options = new RequestOptions({ headers: headers });
-    return this.http.post(`${constURL}/rooms`, room, options)
+    return this.http.post(`${constURL}/rooms`, room)
       .map(res =>  res.json().room )
       .catch(this.handleError)
   }
 
   editRoom(id: string, room: object): any {
-    let headers = new Headers({ 'Content-Type': 'application/json', 'x-auth': token });
-    let options = new RequestOptions({ headers: headers });
-    return this.http.patch(`${constURL}/rooms/${id}`, room, options)
+    return this.http.patch(`${constURL}/rooms/${id}`, room)
       .map(res => res.json())
       .catch(this.handleError);
   }
 
-  deleteRoom(id: string): any {
-    let headers = new Headers({ 'Content-Type': 'application/json', 'x-auth': token });
-    let options = new RequestOptions({ headers: headers });
+  deconsteRoom(id: string): any {
     return this.http.delete(`${constURL}/rooms/${id}`)
       .map(res => res.json())
       .catch(this.handleError);

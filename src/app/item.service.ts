@@ -3,9 +3,7 @@ import { Http, Headers, RequestOptions } from '@angular/http';
 import { environment } from './../environments/environment';
 import 'rxjs/add/operator/map';
 
-const constURL: string = `${environment.constURL}/api`;
-// remove with the new login
-const token = localStorage.getItem('currentUser') ? JSON.parse(localStorage.getItem('currentUser')).token : '';
+const constURL = `${environment.constURL}/api`;
 
 @Injectable()
 export class ItemService {
@@ -17,25 +15,19 @@ export class ItemService {
   }
 
   getItems() {
-    let headers = new Headers({ 'Content-Type': 'application/json', 'x-auth': token });
-    let options = new RequestOptions({ headers: headers });
-    return this.http.get(`${constURL}/items`, options)
+    return this.http.get(`${constURL}/items`)
       .map(res => res.json())
       .catch(this.handleError)
   }
 
   getOneItem(id: any) {
-    let headers = new Headers({ 'Content-Type': 'application/json', 'x-auth': token });
-    let options = new RequestOptions({ headers: headers });
-    return this.http.get(`${constURL}/items/query?_id=${id}`, options)
+    return this.http.get(`${constURL}/items/query?_id=${id}`)
       .map(res =>  res.json())
       .catch(this.handleError)
   }
 
   createItem(item: any) {
-    let headers = new Headers({ 'Content-Type': 'application/json', 'x-auth': token });
-    let options = new RequestOptions({ headers: headers });
-    return this.http.post(`${constURL}/items/`, options)
+    return this.http.post(`${constURL}/items/`, item)
       .map(res => res.json())
       .catch(this.handleError)
   }

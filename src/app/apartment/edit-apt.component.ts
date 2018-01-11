@@ -30,10 +30,10 @@ export class EditAptComponent implements OnInit {
   apartmentUpdate(id: any) {
     this.apartmentService.editApartment(id, this.apartmentToBeModified)
       .subscribe(result => {
-        this.snackbar.open("The room has been modified.");              
+        this.snackbar.open('The room has been modified.');
         this.location.back();
       }, err => {
-        if (err.status === 400) { this.snackbar.open("Something went wrong!") }
+        if (err.status === 400) { this.snackbar.open('Something went wrong!') }
       });
   }
 }

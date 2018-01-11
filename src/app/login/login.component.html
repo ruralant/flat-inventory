@@ -5,7 +5,7 @@
       <input matInput type="email" placeholder="Email" name="email" [(ngModel)]="model.email" #email="ngModel" required>
     </mat-form-field>
     <mat-form-field>
-      <input type="password" name="password" [(ngModel)]="model.password" #password="ngModel" placeholder="Password" required>
+      <input matInput type="password" name="password" [(ngModel)]="model.password" #password="ngModel" placeholder="Password" required>
     </mat-form-field>
     <div>
       <button mat-raised-button [disabled]="loading">Login</button>

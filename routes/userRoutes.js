@@ -1,25 +1,23 @@
 const express = require('express');
 const router = express.Router();
+const _ = require('lodash');
+const bcrypt = require('bcryptjs');
 const { ObjectID } = require('mongodb');
 const emailHandler = require('../config/email');
-const request = require('request');
-const reqProm = require('request-promise-native');
-
 const User = require('../models/userModel');
-const { Instance } = require('../models/instanceModel.js');
-let { authenticate } = require('./../middleware/auth');
+const { authenticate } = require('./../middleware/auth');
 
 // creates a super user if does not exist, one time only
-User.findOne({ email: "superuser@jayex.com" })
+User.findOne({ email: 'superuser@jayex.com' })
   .then((user) => {
     if (!user) {
       let superUser = {
-        "_id": ObjectID.ObjectId("58f60bdc7314d23bd3ce92e3"),
-        "firstName": "superuser",
-        "lastName": "superuser",
-        "email": "superuser@jayex.com",
-        "password": "password",
-        "userType": "superuser"
+        'firstName': 'superuser',
+        'lastName': 'superuser',
+        'email': 'super@user',
+        'password': 'password',
+        'userType': 'superuser',
+        'active': true
       };
       var newUser = new User(superUser);
       newUser.save();
@@ -28,64 +26,33 @@ User.findOne({ email: "superuser@jayex.com" })
 
 // CREATE a user
 router.post('/', authenticate, (req, res) => {
-  const token = req.session.accessToken;
   let { body } = req;
 
   var user = new User(body);
 
-  function postUsers(path, userId, body) {
-    let user = body;
-    user.tempId = userId.toString();
-    user.userType = 'superuser';
-
-    let options = {
-      url: path + '/api/user',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-auth': token
-      },
-      form: user
-    };
-
-    request.post(options, function (err, res, body) {
-      if (err) {
-        console.log(err);
-      }
-    });
-  }
-
-  let userToSaveObj;
-
   user.save()
-    .then(userToSave => {
-      userToSaveObj = userToSave;
-      return Instance.find({});
-    })
-    .then(instances => {
-      for (let instance of instances) {
-        postUsers(instance.hostname, userToSaveObj._id, body);
-      }
-    })
     .then(() => res.send({ status: 'success', message: 'New user created' }))
     .catch(e => res.status(400).send({ status: 'fail', message: 'Unable to create new user', e }));
 });
 
 // LOGIN
 router.post('/login', (req, res) => {
-  const { body } = req;
+  const { email, password } = req.body;
   let savedUser;
 
-  User.findByCredentials(body.email, body.password)
+  User.findByCredentials(email, password)
     .then(user => {
       savedUser = user;
       return user.generateAuthToken('auth');
     })
     .then(token => {
+      console.log('token', token);
       res.setHeader('Set-Cookie', token);
       req.session.accessToken = token;
       let { _id, email, firstName, lastName, userType } = savedUser.toJSON();
       req.session.user = {};
       req.session.user = { _id, email, firstName, lastName, userType };
+      console.log('session: ', req.session);
       res.send({
         token,
         user: req.session.user
@@ -113,7 +80,6 @@ router.post('/passwordreset', (req, res) => {
       return user.generateAuthToken('resetPassword');
     })
     .then(token => {
-      let resetToken = token;
       let emailURL = (`/passwordReset/${token}`);
       emailHandler.sendEmail({
         body: {
@@ -129,7 +95,10 @@ router.post('/passwordreset', (req, res) => {
         message: 'A password reset has been emailed to your account. Follow the instructions in the email.'
       });
     })
-    .catch(e => res.status(400).send({ func: 'Password reset error', e }));
+    .catch(e => {
+      console.log(e);
+      res.status(400).send({ func: 'Password reset error', e });
+    });
 });
 
 // check status of current user based on a token
@@ -145,7 +114,7 @@ router.get('/status', authenticate, (req, res) => {
 router.get('/', (req, res) => {
   User.find()
     .populate('updatedBy')
-    .then((user) => res.send({ user }))
+    .then(user => res.send({ user }))
     .catch(e => res.status(400).send({ e }));
 });
 
@@ -178,46 +147,24 @@ router.get('/query', authenticate, (req, res) => {
 
   User.find(query)
     .populate('updatedBy')
-    .then((user) => {
-      res.send({ user });
-    }, (e) => res.status(400).send(e));
+    .then(user => res.send({ user }))
+    .catch(e => res.status(400).send(e));
 });
 
 // UPDATE user data
 router.patch('/updateUser/:id', authenticate, (req, res) => {
-  const token = req.session.accessToken;
-  const { id } = req.params;
+  const id = req.params.id;
   const { body } = req;
 
   if (!ObjectID.isValid(id)) {
-    return res.status(404).send({ error: "ObjectID not valid" });
-  }
-
-  function patchUsers(path, body) {
-    let options = {
-      method: 'PATCH',
-      uri: path + '/api/user/updateUser/' + id,
-      headers: { 'Content-Type': 'application/json', 'x-auth': token },
-      body,
-      json: true
-    };
-    reqProm(options);
+    return res.status(404).send({ error: 'ObjectID not valid' });
   }
 
   User.findByIdAndUpdate(id, {
     $set: body,
     updatedBy: ObjectID.ObjectId(req.session.user._id)
   }, { new: true })
-    .then(userToEdit => {
-      userToEditObj = userToEdit;
-      return Instance.find({});
-    })
-    .then(instances => {
-      for (let instance of instances) {
-        patchUsers(instance.hostname, userToEditObj);
-      }
-    })
-    .then(() => {
+    .then(user => {
       req.session.user.firstName = user.firstName;
       req.session.user.lastName = user.lastName;
       res.send({ message: 'User Sent' });
@@ -227,24 +174,9 @@ router.patch('/updateUser/:id', authenticate, (req, res) => {
 
 // DELETE user
 router.delete('/:id', authenticate, (req, res) => {
-  const token = req.session.accessToken;
-  const { id } = req.params;
+  const id = req.params.id;
 
-  if (!ObjectID.isValid(id)) {
-    return res.status(404).send({ error: "ObjectID not valid" });
-  }
-
-  function deleteUsers(path) {
-    let options = {
-      method: 'DELETE',
-      uri: path + '/api/user/' + id,
-      headers: {
-        'Content-Type': 'application/json',
-        'x-auth': token
-      }
-    };
-    reqProm(options);
-  }
+  if (!ObjectID.isValid(id)) return res.status(404).send({ error: 'ObjectID not valid' });
 
   User.findByIdAndUpdate(id, {
     $set: {
@@ -252,14 +184,6 @@ router.delete('/:id', authenticate, (req, res) => {
       active: false
     }
   }, { new: true })
-    .then(userToDelete => {
-      return Instance.find({});
-    })
-    .then(instances => {
-      for (let instance of instances) {
-        deleteUsers(instance.hostname);
-      }
-    })
     .then(() => res.send({ message: 'User Deleted' }))
     .catch(e => res.status(400).send(e));
 });
@@ -267,26 +191,6 @@ router.delete('/:id', authenticate, (req, res) => {
 // CHANGE password
 router.patch('/profilePasswordChange', authenticate, (req, res) => {
   const token = req.session.accessToken;
-
-  let userToSave;
-
-  // update the password on the client side
-  function resetPasswordUsers(path, userId, body) {
-    let options = {
-      url: path + '/api/user/updateUser/' + userId,
-      headers: {
-        'Content-Type': 'application/json',
-        'x-auth': token
-      },
-      form: { password: body.password }
-    };
-
-    request.patch(options, function (err, res, body) {
-      if (err) {
-        console.log(err);
-      }
-    });
-  }
 
   User.findByToken(token)
     .then(user => {
@@ -300,55 +204,16 @@ router.patch('/profilePasswordChange', authenticate, (req, res) => {
           if (res) {
             resolve(user);
           } else {
-            reject({
-              message: 'Password incorrect'
-            });
+            reject({ message: 'Password incorrect' });
           }
         });
       });
     })
-    .then((user) => {
+    .then(user => {
       user.password = req.body.newPassword;
       return user.save()
-        .then(savedUser => {
-          userToSave = savedUser;
-          return Instance.find({});
-        })
-        .then(instances => {
-          for (let instance of instances) {
-            resetPasswordUsers(instance.hostname, userToSave._id, userToSave);
-          }
-        })
         .then(result => res.status(200).send({ result }));
     })
-    .catch(e => res.status(400).send(e));
-});
-
-router.get('/postManyUsers/:id', authenticate, (req, res) => {
-  const token = req.session.accessToken;
-  const { id } = req.params;
-  let remoteUri;
-
-  Instance.findById(id)
-    .then(result => {
-      remoteUri = result.hostname;
-      return User.find({ active: true });
-    })
-    .then(users => {
-      let body = users;
-      let options = {
-        method: 'POST',
-        uri: `${remoteUri}/api/user/many`,
-        headers: {
-          'Content-Type': 'application/json',
-          'x-auth': token
-        },
-        body: { "users": body },
-        json: true
-      };
-      return reqProm(options);
-    })
-    .then(string => res.send(string))
     .catch(e => res.status(400).send(e));
 });
 

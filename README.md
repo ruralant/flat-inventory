@@ -9,10 +9,10 @@ It can also be added to the drower on any **iOS** device but until Safari is not
 (coming soon)
 
 ## Technologies Used:
-- **Angular 4.3.4**
+- **Angular 5.2.0**
 - **PWA Manifesto**
 - **Service Workers**
-- **Node.JS 8.4.0**
+- **Node.JS 9.3.0**
 - **Express.JS**
 - **MongoDB**
 - **TypeScript**
@@ -47,11 +47,9 @@ AirBnb and Tesco API for managing reservations and Stock
 
 ### Development server
 
+Run `nodemon bin/www` for a dev node environment. The API will listen to `http://localhost:3000/`
+
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
-
-### Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|module`.
 
 ### Build
 

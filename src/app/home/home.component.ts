@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material';
 
 import { UserService } from '../user.service';
 import { ApartmentService } from '../apartment.service';
@@ -19,6 +20,7 @@ export class HomeComponent implements OnInit {
     private userService: UserService,
     private apartmentService: ApartmentService,
     private itemService: ItemService,
+    private snackbar: MatSnackBar
   ) { }
 
   getCurrentUser(): void {
@@ -31,9 +33,19 @@ export class HomeComponent implements OnInit {
       .subscribe(apartments => { this.apartments = apartments })
   }
 
-  // createItem(): void {
-  //   this.itemService.getItems()
-  // }
+  deleteApartment(id): void {
+    if (confirm('Are you sure you want to delete the apartment?')) {
+      this.apartmentService.deleteApartment(id)
+        .subscribe(result => {
+          if (result.status === 'success') {
+            this.snackbar.open('The apartment has been deleted.')
+            this.getUserApartments();
+          } else {
+            this.snackbar.open('Something went wrong! The apartment has not been delete')
+          }
+        })
+    }
+  }
 
   ngOnInit() {
     this.getCurrentUser();

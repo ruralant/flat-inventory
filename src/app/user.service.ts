@@ -6,8 +6,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 import { environment } from './../environments/environment';
 
-const constURL: string = `${environment.constURL}/api`;
-const token = localStorage.getItem('currentUser') ? JSON.parse(localStorage.getItem('currentUser')).token : '';
+const constURL = `${environment.constURL}/api`;
 
 @Injectable()
 export class UserService {
@@ -19,51 +18,38 @@ export class UserService {
   }
 
   getUser() {
-    let headers = new Headers({ 'Content-Type': 'application/json', 'x-auth': token });
-    let options = new RequestOptions({ headers: headers });
-    return this.http.get(`${constURL}/users/status`, options)
+    return this.http.get(`${constURL}/users/status`)
       .map(res => res.json())
       .catch(this.handleError);
   }
 
   getInstanceUsers() {
-    let headers = new Headers({ 'Content-Type': 'application/json', 'x-auth': token });
-    let options = new RequestOptions({ headers: headers });
-    return this.http.get(`${constURL}/users/`, options)
+    return this.http.get(`${constURL}/users/`)
       .map(res => res.json().user)
       .catch(this.handleError)
   }
 
   getOneUser(id: string): any {
-    let headers = new Headers({ 'Content-Type': 'application/json', 'x-auth': token });
-    let options = new RequestOptions({ headers: headers });
-    return this.http.get(`${constURL}/users/query?_id=${id}`, options)
+    return this.http.get(`${constURL}/users/query?_id=${id}`)
       .map(res => res.json().user)
       .catch(this.handleError);
   }
 
   newUser(model: any): any {
-    let paths = [];
-    let headers = new Headers({ 'Content-Type': 'application/json', 'x-auth': token });
-    let options = new RequestOptions({ headers: headers });
-    return this.http.post(`${constURL}/users`, model, options)
+    const paths = [];
+    return this.http.post(`${constURL}/users`, model)
       .map(res => res.json())
       .catch(this.handleError);
   }
 
   editUser(id: string, user: any): any {
-    let headers = new Headers({ 'Content-Type': 'application/json', 'x-auth': token });
-    let option = new RequestOptions({ headers: headers });
-
-    return this.http.patch(`${constURL}/users/updateUser/${id}`, user, option)
+    return this.http.patch(`${constURL}/users/updateUser/${id}`, user)
       .map(res => res.json().user)
       .catch(this.handleError);
   }
 
-  deleteUser(id: string): any {
-    let headers = new Headers({ 'Content-Type': 'application/json', 'x-auth': token });
-    let options = new RequestOptions({ headers: headers });
-    return this.http.delete(`${constURL}/users/${id}`, options)
+  deconsteUser(id: string): any {
+    return this.http.delete(`${constURL}/users/${id}`)
       .map(res => res.json())
       .catch(this.handleError);
   }
@@ -71,7 +57,8 @@ export class UserService {
   submitChangePassword(passwordModel: any, token: string): any {
     const user = localStorage.getItem('currentUser');
     let headers;
-    // if token has been submitted then it is a password reset, if there is no token then this is a logged in user request and we can grab token from the storage. We will also set the x-auth-type to auth or reset and this will alter the server request
+    // if token has been submitted then it is a password reset, if there is no token then this is a logged in user request
+    // and we can grab token from the storage. We will also set the x-auth-type to auth or reset and this will alter the server request
     if (token === null) {
       // ternary operate that checks if user exists, if not sets token to blank which will send user to login
       token = user ? JSON.parse(user).token : '';
@@ -88,8 +75,12 @@ export class UserService {
       .catch(err => { return Observable.of(false) });
   }
 
-  forgotPassword(email: string) {
-    const body = { email };
+  forgotPassword(email: string, host: string) {
+    const body = {
+      email,
+      host
+    };
+
     return this.http.post(`${constURL}/users/passwordreset`, body)
       .map(res => res.json())
       .catch(err => { return Observable.of(false) });

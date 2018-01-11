@@ -6,7 +6,8 @@
 <div *ngFor="let apartment of apartments">
   <table>
     <td>{{apartment.name}}</td>
-    <td><button md-raised-button routerLink="/apartments/{{apartment._id}}">View</button></td>
-    <td><button md-raised-button routerLink="/apartments/edit/{{apartment._id}}">Edit</button></td>
+    <td><button mat-raised-button routerLink="/apartments/{{apartment._id}}">View</button></td>
+    <td><button mat-raised-button routerLink="/apartments/edit/{{apartment._id}}">Edit</button></td>
+    <td><button mat-raised-button (click)="deleteApartment(apartment._id)" >Delete</button></td>
   </table>
 </div>

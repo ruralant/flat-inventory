@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken');
 
 const User = require('./../models/userModel');
-const { Touchscreen } = require('./../models/touchscreenModel');
 
 /**
  * In the authorization we check if session token exists, or if one has been passed through has a header
@@ -39,18 +38,14 @@ let authenticate = (req, res, next) => {
         }
         next();
       })
-      .catch(e => res.status(400).send({ message: "No authenticated" }));
+      .catch(e => res.status(400).send({ message: 'No authenticated', e }));
   }
 };
 
 let adminAuth = (req, res, next) => {
   let role = req.session.user.userType;
 
-  if (role === 'admin') {
-    next();
-  } else {
-    res.status(400).send({ message: "No permissions" });
-  }
+  role === 'admin' ? next() : res.status(400).send({ message: 'No permissions' });
 };
 
 // a method for finding a user or device by JsonWebToken
@@ -63,9 +58,7 @@ let findByToken = (codedToken) => {
     return Promise.reject();
   }
 
-  return User.findOne({
-    '_id': decoded._id
-  });
+  return User.findOne({ '_id': decoded._id });
 };
 
 module.exports = { authenticate, adminAuth, findByToken };

@@ -9,11 +9,11 @@ import { MatSnackBar } from '@angular/material';
 })
 export class CreateAptComponent implements OnInit {
 
-  newApartment: any = {}  
+  newApartment: any = {}
 
   constructor(
     private apartmentService: ApartmentService,
-    private snackbar: MatSnackBar    
+    private snackbar: MatSnackBar
   ) { }
 
   ngOnInit() {
@@ -21,11 +21,13 @@ export class CreateAptComponent implements OnInit {
 
   createApartment(): void {
     this.apartmentService.createApartment(this.newApartment)
-    .subscribe(apartment => {
-      this.snackbar.open("The apartment has been created.");
-    }), err => {
-        if(err.status === 400) { this.snackbar.open("Something went wrong!") }
+    .subscribe(result => {
+      if (result.status === 'success') {
+        this.snackbar.open('The apartment has been created.');
+      } else {
+        this.snackbar.open('Somthing went wrong! The apartment has not been created');
       }
+    });
   }
 
 }

@@ -21,9 +21,9 @@ import { ItemsViewComponent } from '../item/items-view.component';
 
 const routes: Routes = [
   { path: 'landing', component: LandingPageComponent },
-  { path: 'home', component: HomeComponent },
   { path: 'login', component: LoginComponent },
-  { 
+  { path: 'home', canActivate: [AuthGuardService], component: HomeComponent },
+  {
     path: 'apartments', canActivate: [AuthGuardService], component: ApartmentSectionComponent, children: [
       { path: ':id', component: ApartmentComponent },
       { path: 'edit/:id', component: EditAptComponent }

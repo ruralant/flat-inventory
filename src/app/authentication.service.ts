@@ -1,35 +1,57 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, Response, RequestOptions } from '@angular/http';
-import { Observable } from 'rxjs';
-import 'rxjs/add/operator/map'
-import { environment } from './../environments/environment';
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
 
-const constURL: string = `${environment.constURL}/api`;
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/observable/of';
+
+import { environment } from '../environments/environment';
+
+const constURL = `${environment.constURL}/api`;
 
 @Injectable()
 export class AuthenticationService {
-  public token: string;
 
-  constructor( private http: Http ) {
-    // set token if saved in local storage
-    let currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    this.token = currentUser && currentUser.token;
-  }
+  public token: string;
+  // Observable string sources
+  private emitChangeSource = new Subject<any>();
+  // Observable string streams
+  changeEmitted$ = this.emitChangeSource.asObservable();
+
+  constructor( private http: Http ) { }
 
   login(email: string, password: string): Observable<boolean> {
     return this.http.post(`${constURL}/users/login`, { email, password })
       .map(res => {
-        let token = res.json() && res.json().token;
-        this.token = token;
-        localStorage.setItem('currentUser', JSON.stringify({ email, token }));
         return true;
       })
-      .catch(err => { return Observable.of(false) });
+      .catch(err => {
+        return Observable.of(false);
+      });
   }
 
-  logout(): void {
+  logout(): Observable<boolean> {
     // clear token remove user from local storage to log user out
-    this.token = null;
-    localStorage.removeItem('currentUser');
+    return this.http.delete(`${constURL}/users/`)
+      .map(res => {
+        return true;
+      })
+      .catch(err => {
+        return Observable.of(false);
+      });
   }
+
+  // get the Current User information to display in page
+  getUser() {
+    return this.http.get(`${constURL}/users/status`)
+      .map(res => res.json());
+  }
+
+  // Service message commands
+  emitChange(change) {
+    this.emitChangeSource.next(change);
+  }
+
 }
