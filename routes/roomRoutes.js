@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const { ObjectID } = require('mongodb');
-const request = require('request');
 const mongoose = require('mongoose');
 
 const User = require('../models/userModel');
