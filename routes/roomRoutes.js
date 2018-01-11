@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const _ = require('lodash');
 const { ObjectID } = require('mongodb');
 const request = require('request');
 const mongoose = require('mongoose');
@@ -26,15 +25,9 @@ router.get('/query', authenticate, (req, res) => {
   // in the search term I want to be able to query both query with name or description, then query both with only one. So I take which has been queried and copy that across to query both, plus I query the label with the search term just for wider visibilty
   if (req.query.name || req.query.description) {
     req.query.$or = [];
-    req.query.$or.push({
-      name: new RegExp(req.query.name || req.query.description, 'i')
-    });
-    req.query.$or.push({
-      description: new RegExp(req.query.description || req.query.name, 'i')
-    });
-    req.query.$or.push({
-      'label': new RegExp(req.query.description || req.query.name, 'i')
-    });
+    req.query.$or.push({ name: new RegExp(req.query.name || req.query.description, 'i') });
+    req.query.$or.push({ description: new RegExp(req.query.description || req.query.name, 'i') });
+    req.query.$or.push({ 'label': new RegExp(req.query.description || req.query.name, 'i') });
     delete req.query.name;
   }
   const mongoQuery = {
@@ -54,8 +47,8 @@ router.get('/query', authenticate, (req, res) => {
 // Create a new room
 router.post('/', authenticate, (req, res) => {
   const token = req.header('x-auth') || req.session.accessToken;
-  const body = _.pick(req.body, ['_id', 'reference', 'description', 'location', 'availability', 'label', 'createdBy', 'updatedBy']);
-    
+  const { body } = req;
+
   const room = new Room(body);
 
   User.findByToken(token)
@@ -65,26 +58,18 @@ router.post('/', authenticate, (req, res) => {
     })
     .then(room => res.send({ room }))
     .catch(e => {
-      if (e.error) {
-        console.log(e.error.erromsg);
-        res.status(400).send(e.error.erromsg);
-      } else {
-        console.log(e);
-        res.status(400).send(e);
-      }
+      e.error ? res.status(400).send(e.error.erromsg) : res.status(400).send(e);
     });
 });
 
 // UPDATE room
 router.patch('/:id', authenticate, (req, res) => {
   const token = req.header('x-auth') || req.session.accessToken;
-  const id = req.params.id;
-  const body = _.pick(req.body, ['reference', 'description', 'availability', 'label', 'createdBy', 'updatedBy']);
+  const { id } = req.params;
+  const { body } = req;
 
   if (!ObjectID.isValid(id)) {
-    return res.status(404).send({
-      error: "ObjectID not valid"
-    });
+    return res.status(404).send({ error: "ObjectID not valid" });
   }
 
   User.findByToken(token)
@@ -92,9 +77,7 @@ router.patch('/:id', authenticate, (req, res) => {
       return Room.findByIdAndUpdate(id, {
         $set: body,
         updatedBy: user._id
-      }, {
-        new: true
-      });
+      }, { new: true });
     })
     .then(room => res.send({ room }))
     .catch(e => res.status(400).send(e));
@@ -102,12 +85,10 @@ router.patch('/:id', authenticate, (req, res) => {
 
 // DELETE room
 router.delete('/:id', authenticate, (req, res) => {
-  const id = req.params.id;
+  const { id } = req.params;
 
   if (!ObjectID.isValid(id)) {
-    return res.status(404).send({
-      error: "ObjectID not valid"
-    });
+    return res.status(404).send({ error: "ObjectID not valid" });
   }
 
   Room.findByIdAndRemove(id)

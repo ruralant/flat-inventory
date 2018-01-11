@@ -1,7 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const _ = require('lodash');
-const bcrypt = require('bcryptjs');
 const { ObjectID } = require('mongodb');
 const emailHandler = require('../config/email');
 const request = require('request');
@@ -12,9 +10,7 @@ const { Instance } = require('../models/instanceModel.js');
 let { authenticate } = require('./../middleware/auth');
 
 // creates a super user if does not exist, one time only
-User.findOne({
-  email: "superuser@jayex.com"
-})
+User.findOne({ email: "superuser@jayex.com" })
   .then((user) => {
     if (!user) {
       let superUser = {
@@ -22,7 +18,7 @@ User.findOne({
         "firstName": "superuser",
         "lastName": "superuser",
         "email": "superuser@jayex.com",
-        "password": "Sr02P03!",
+        "password": "password",
         "userType": "superuser"
       };
       var newUser = new User(superUser);
@@ -33,7 +29,7 @@ User.findOne({
 // CREATE a user
 router.post('/', authenticate, (req, res) => {
   const token = req.session.accessToken;
-  let body = req.body;
+  let { body } = req;
 
   var user = new User(body);
 
@@ -76,7 +72,7 @@ router.post('/', authenticate, (req, res) => {
 
 // LOGIN
 router.post('/login', (req, res) => {
-  const body = _.pick(req.body, ['email', 'password']);
+  const { body } = req;
   let savedUser;
 
   User.findByCredentials(body.email, body.password)
@@ -133,10 +129,7 @@ router.post('/passwordreset', (req, res) => {
         message: 'A password reset has been emailed to your account. Follow the instructions in the email.'
       });
     })
-    .catch(e => {
-      console.log(e);
-      res.status(400).send({ func: 'Password reset error', e });
-    });
+    .catch(e => res.status(400).send({ func: 'Password reset error', e }));
 });
 
 // check status of current user based on a token
@@ -186,34 +179,25 @@ router.get('/query', authenticate, (req, res) => {
   User.find(query)
     .populate('updatedBy')
     .then((user) => {
-      res.send({
-        user
-      });
-    }, (e) => {
-      res.status(400).send(e);
-    });
+      res.send({ user });
+    }, (e) => res.status(400).send(e));
 });
 
 // UPDATE user data
 router.patch('/updateUser/:id', authenticate, (req, res) => {
   const token = req.session.accessToken;
-  const id = req.params.id;
-  const body = _.pick(req.body, ['firstName', 'lastName', 'email', 'userType', 'password', 'active', '_id', 'updatedBy']);
+  const { id } = req.params;
+  const { body } = req;
 
   if (!ObjectID.isValid(id)) {
-    return res.status(404).send({
-      error: "ObjectID not valid"
-    });
+    return res.status(404).send({ error: "ObjectID not valid" });
   }
 
   function patchUsers(path, body) {
     let options = {
       method: 'PATCH',
       uri: path + '/api/user/updateUser/' + id,
-      headers: {
-        'Content-Type': 'application/json',
-        'x-auth': token
-      },
+      headers: { 'Content-Type': 'application/json', 'x-auth': token },
       body,
       json: true
     };
@@ -223,9 +207,7 @@ router.patch('/updateUser/:id', authenticate, (req, res) => {
   User.findByIdAndUpdate(id, {
     $set: body,
     updatedBy: ObjectID.ObjectId(req.session.user._id)
-  }, {
-      new: true
-    })
+  }, { new: true })
     .then(userToEdit => {
       userToEditObj = userToEdit;
       return Instance.find({});
@@ -238,9 +220,7 @@ router.patch('/updateUser/:id', authenticate, (req, res) => {
     .then(() => {
       req.session.user.firstName = user.firstName;
       req.session.user.lastName = user.lastName;
-      res.send({
-        message: 'User Sent'
-      });
+      res.send({ message: 'User Sent' });
     })
     .catch(e => res.status(400).send(e));
 });
@@ -248,12 +228,10 @@ router.patch('/updateUser/:id', authenticate, (req, res) => {
 // DELETE user
 router.delete('/:id', authenticate, (req, res) => {
   const token = req.session.accessToken;
-  const id = req.params.id;
+  const { id } = req.params;
 
   if (!ObjectID.isValid(id)) {
-    return res.status(404).send({
-      error: "ObjectID not valid"
-    });
+    return res.status(404).send({ error: "ObjectID not valid" });
   }
 
   function deleteUsers(path) {
@@ -273,9 +251,7 @@ router.delete('/:id', authenticate, (req, res) => {
       updatedBy: ObjectID.ObjectId(req.session.user._id),
       active: false
     }
-  }, {
-      new: true
-    })
+  }, { new: true })
     .then(userToDelete => {
       return Instance.find({});
     })
@@ -284,9 +260,7 @@ router.delete('/:id', authenticate, (req, res) => {
         deleteUsers(instance.hostname);
       }
     })
-    .then(() => res.send({
-      message: 'User Deleted'
-    }))
+    .then(() => res.send({ message: 'User Deleted' }))
     .catch(e => res.status(400).send(e));
 });
 
@@ -345,13 +319,9 @@ router.patch('/profilePasswordChange', authenticate, (req, res) => {
             resetPasswordUsers(instance.hostname, userToSave._id, userToSave);
           }
         })
-        .then(result => {
-          res.status(200).send({ result });
-        });
+        .then(result => res.status(200).send({ result }));
     })
-    .catch(e => {
-      res.status(400).send(e);
-    });
+    .catch(e => res.status(400).send(e));
 });
 
 router.get('/postManyUsers/:id', authenticate, (req, res) => {
@@ -362,9 +332,7 @@ router.get('/postManyUsers/:id', authenticate, (req, res) => {
   Instance.findById(id)
     .then(result => {
       remoteUri = result.hostname;
-      return User.find({
-        active: true
-      });
+      return User.find({ active: true });
     })
     .then(users => {
       let body = users;
@@ -380,13 +348,8 @@ router.get('/postManyUsers/:id', authenticate, (req, res) => {
       };
       return reqProm(options);
     })
-    .then(string => {
-      res.send(string);
-    })
-    .catch(e => {
-      console.log(e);
-      res.status(400).send(e);
-    });
+    .then(string => res.send(string))
+    .catch(e => res.status(400).send(e));
 });
 
 module.exports = router;

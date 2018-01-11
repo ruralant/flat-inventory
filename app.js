@@ -21,11 +21,7 @@ const app = express();
 mongoose.Promise = global.Promise;
 mongoose.set('debug', true); //show all the mongo queries on the console
 mongoose.connect(process.env.MONGODB_URI, { useMongoClient: true }, (err) => {
-  if (err) {
-    console.log(err);
-  } else {
-    console.log('Connected to mongodb.');
-  }
+  err ? console.log(err) : console.log('Connected to mongodb.');
 });
 
 app.use(logger('dev'));
@@ -72,14 +68,14 @@ app.use('/public', express.static(path.join(__dirname, './media')));
 // });
 
 // 404 errors forwarded to the Error Handler function 
-app.use(function (req, res, next) {
+app.use((req, res, next) => {
   const err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
 
 // Error Handler
-app.use(function (err, req, res, next) {
+app.use((err, req, res, next) => {
   // error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -87,7 +83,7 @@ app.use(function (err, req, res, next) {
   // rendering the error page
   res.status(err.status || 500);
   console.log(err);
-  res.send({message: err.message});
+  res.send({ message: err.message });
 });
 
 module.exports = app;
