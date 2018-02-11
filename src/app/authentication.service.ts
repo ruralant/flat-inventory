@@ -14,7 +14,6 @@ const constURL = `${environment.constURL}/api`;
 @Injectable()
 export class AuthenticationService {
 
-  public token: string;
   // Observable string sources
   private emitChangeSource = new Subject<any>();
   // Observable string streams
@@ -28,6 +27,7 @@ export class AuthenticationService {
         return true;
       })
       .catch(err => {
+        console.log(err);
         return Observable.of(false);
       });
   }

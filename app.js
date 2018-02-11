@@ -25,6 +25,15 @@ mongoose.connect(process.env.MONGODB_URI, { useMongoClient: true }, (err) => {
   err ? console.log(err) : console.log('Connected to mongodb.');
 });
 
+// some extra pm2 stats switched on here
+require('pmx').init({
+  http : true,
+  errors : true,
+  custom_probes : true,
+  network : true,
+  ports : true
+});
+
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -36,12 +45,11 @@ app.use(cors());
 app.options('*', cors());
 
 //Handle Express Sessions/cookies
-let store = new MongoStore(
-  {
-    url: process.env.MONGODB_SESSION,
-    collection: 'sessions',
-    ttl: 1 * 12 * 60 * 60 // = 12 hours
-  });
+let store = new MongoStore({
+  url: process.env.MONGODB_SESSION,
+  collection: 'sessions',
+  ttl: 1 * 12 * 60 * 60 // = 12 hours
+});
 
 // Catch errors
 store.on('error', function(error) {

@@ -15,7 +15,8 @@ export class AuthGuardService implements CanActivate {
 
   constructor(
     private router: Router,
-    private http: Http
+    private http: Http,
+    private authenticationService: AuthenticationService,
   ) { }
 
   // this is the middleware to authenticate all the users
@@ -25,6 +26,7 @@ export class AuthGuardService implements CanActivate {
       .catch(err => {
         console.log(err);
         this.router.navigate(['/login']);
+        this.authenticationService.emitChange('logout');
         return Observable.of(false);
       });
   }

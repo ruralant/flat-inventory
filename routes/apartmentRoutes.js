@@ -18,8 +18,8 @@ router.get('/', authenticate, (req, res) => {
         .populate('rooms')
         .populate('user')
         .populate('updatedBy')
-        .then(apartments => res.send(apartments),
-          (e) => res.status(400).send(e));
+        .then(apartments => res.send(apartments))
+        .catch(e => res.status(400).send(e));
     });
 });
 

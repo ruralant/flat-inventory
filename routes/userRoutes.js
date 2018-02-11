@@ -22,7 +22,8 @@ User.findOne({ email: 'superuser@jayex.com' })
       var newUser = new User(superUser);
       newUser.save();
     }
-  });
+  })
+  .catch(e => console.log(e));
 
 // CREATE a user
 router.post('/', authenticate, (req, res) => {
@@ -46,7 +47,6 @@ router.post('/login', (req, res) => {
       return user.generateAuthToken('auth');
     })
     .then(token => {
-      console.log('token', token);
       res.setHeader('Set-Cookie', token);
       req.session.accessToken = token;
       let { _id, email, firstName, lastName, userType } = savedUser.toJSON();
@@ -58,10 +58,7 @@ router.post('/login', (req, res) => {
         user: req.session.user
       });
     })
-    .catch(e => {
-      console.log(e);
-      res.status(400).send({ status: 'fail', message: 'Unable to login', e });
-    });
+    .catch(e => res.status(400).send({ status: 'fail', message: 'Unable to login', e }));
 });
 
 // make a user inactive

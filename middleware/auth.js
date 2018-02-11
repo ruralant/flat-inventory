@@ -1,5 +1,3 @@
-const jwt = require('jsonwebtoken');
-
 const User = require('./../models/userModel');
 
 /**
@@ -13,7 +11,10 @@ const User = require('./../models/userModel');
  * @param {*} next 
  */
 let authenticate = (req, res, next) => {
+  // empty because the session is stored in the database but not in the browser session
   let token = req.session.accessToken || req.header('x-auth');
+  console.log('req', req);
+  console.log('token in auth: ', token); // empty
   if (token === 'skip') {
     req.token = 'skip';
     next();
@@ -22,7 +23,7 @@ let authenticate = (req, res, next) => {
     req.user._id = req.header('x-userId');
     next();
   } else {
-    findByToken(token)
+    User.findByToken(token)
       .then(user => {
         if (!user) {
           let newInactiveUser = new User(JSON.parse(req.header('x-user')));
@@ -48,17 +49,4 @@ let adminAuth = (req, res, next) => {
   role === 'admin' ? next() : res.status(400).send({ message: 'No permissions' });
 };
 
-// a method for finding a user or device by JsonWebToken
-let findByToken = (codedToken) => {
-  let decoded;
-
-  try {
-    decoded = jwt.verify(codedToken, process.env.JWT_SECRET);
-  } catch (e) {
-    return Promise.reject();
-  }
-
-  return User.findOne({ '_id': decoded._id });
-};
-
-module.exports = { authenticate, adminAuth, findByToken };
+module.exports = { authenticate, adminAuth };

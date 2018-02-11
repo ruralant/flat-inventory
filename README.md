@@ -1,5 +1,12 @@
+![](./assets/pwa-logo.png)
+![](./assets/angular-logo.png)
+![](./assets/node-logo.png)
+![](./assets/mongo-logo.png)
+![](./assets/sass-logo.png)
+
+
 # FlatInventory
-### Project current in development
+### Project currently in development
 Flat Inventory is a single page application that allows property owners that rent they home/apartmetns short term (AirBnb, Booking.com, etc) to manage the stock of their apartments.
 
 I develop the application following the PWA (Progressive Web App) manifesto and it can we installed on every **Android phone** running **Chrome 38 or newver**.

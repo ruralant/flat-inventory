@@ -61,6 +61,7 @@ UserSchema.methods.generateAuthToken = function (access) {
 };
 
 UserSchema.statics.findByToken = function (token) {
+  console.log('token in modal: ', token); // empty
   const User = this;
   let decoded;
   try {
@@ -75,12 +76,8 @@ UserSchema.statics.findByToken = function (token) {
 UserSchema.statics.findByCredentials = function (email, password) {
   var User = this;
 
-  return User.findOne({
-    email,
-    active: true
-  })
+  return User.findOne({ email, active: true })
     .then((user) => {
-      console.log('user:' , user);
       if (!user) {
         return Promise.reject();
       }

@@ -39,6 +39,7 @@
     "morgan": "^1.9.0",
     "nodemailer": "^4.4.2",
     "path": "^0.12.7",
+    "pmx": "^1.5.6",
     "request-promise-native": "^1.0.5",
     "rxjs": "^5.5.6",
     "sass-loader": "^6.0.6",
