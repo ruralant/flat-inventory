@@ -4,15 +4,18 @@ mongoose.Promise = global.Promise;
 const ApartmentSchema = mongoose.Schema({
   name: {
     type: String,
+    trim: true,
     required: true
   },
   description: {
-    type: String
+    type: String,
+    trim: true
   },
   location: {
-    type: String
+    type: String,
+    trim: true,
   },
-  availability: {
+  available: {
     type: Boolean,
     default: false
   },

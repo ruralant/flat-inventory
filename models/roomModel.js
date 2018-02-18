@@ -3,7 +3,8 @@ mongoose.Promise = global.Promise;
 
 const RoomSchema = mongoose.Schema({
   reference: {
-    type: String
+    type: String,
+    trim: true
   },
   description: {
     type: String,
@@ -12,12 +13,14 @@ const RoomSchema = mongoose.Schema({
     type: mongoose.Schema.ObjectId, ref: 'Apartment'
   },
   availability: {
-    type: Boolean
+    type: Boolean,
+    default: false
   },
   label: {
     type: String,
     required: true,
-    lowercase: true
+    lowercase: true,
+    trim: true
   },
   createdBy: {
     type: mongoose.Schema.ObjectId, ref: 'User'

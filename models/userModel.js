@@ -7,14 +7,17 @@ mongoose.Promise = global.Promise;
 // a scheme for users
 const UserSchema = mongoose.Schema({
   firstName: { 
-    type: String
+    type: String,
+    trim: true
   },
   lastName: {
-    type: String
+    type: String,
+    trim: true
   },
   email: {
     type: String,
     trim: true,
+    lowercase: true,
     required: true,
     unique: true,
     minlength: 1
@@ -28,7 +31,7 @@ const UserSchema = mongoose.Schema({
   userType: {
     type: String,
     required: true,
-    default: 'standard'
+    default: 'user'
   },
   active: {
     type: Boolean,
