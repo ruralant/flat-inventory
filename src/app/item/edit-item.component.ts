@@ -4,7 +4,7 @@ import { NgForm } from '@angular/forms';
 import { Location } from '@angular/common';
 import { MatSnackBar } from '@angular/material';
 
-import { ItemService } from '../item.service';
+import { ItemService } from 'app/services/item.service';
 
 @Component({
   selector: 'app-edit-item',

@@ -5,8 +5,8 @@ import { Observable } from 'rxjs/Observable';
 
 import 'rxjs/add/observable/of';
 
-import { AuthenticationService } from './authentication.service';
-import { environment } from '../environments/environment';
+import { AuthenticationService } from 'app/services/authentication.service';
+import { environment } from '../../environments/environment';
 
 const constURL = `${environment.constURL}/api`;
 
@@ -24,7 +24,6 @@ export class AuthGuardService implements CanActivate {
     return this.http.get(`${constURL}/users/status`)
       .map(res => true)
       .catch(err => {
-        console.log(err);
         this.router.navigate(['/login']);
         this.authenticationService.emitChange('logout');
         return Observable.of(false);

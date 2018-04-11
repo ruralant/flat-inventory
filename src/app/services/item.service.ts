@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions } from '@angular/http';
-import { environment } from './../environments/environment';
+import { environment } from '../../environments/environment';
 import 'rxjs/add/operator/map';
 
 const constURL = `${environment.constURL}/api`;
@@ -8,7 +8,7 @@ const constURL = `${environment.constURL}/api`;
 @Injectable()
 export class ItemService {
 
-  constructor(private http: Http) { }
+  constructor( private http: Http ) { }
 
   private handleError(error: any): Promise<any> {
     return Promise.reject(error.message || error);

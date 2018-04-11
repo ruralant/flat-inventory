@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ItemService } from '../item.service';
-import { ApartmentService } from '../apartment.service';
+import { ItemService } from 'app/services/item.service';
+import { ApartmentService } from '../services/apartment.service';
 import { MatSnackBar } from '@angular/material';
 
 @Component({
@@ -23,17 +23,16 @@ export class CreateItemComponent implements OnInit {
     this.itemService.createItem(this.newItem)
       .subscribe(item => {
         this.snackbar.open(`The item has been created.`)
-    }), err => {
-        if(err.status === 400) { this.snackbar.open(`An error occurred. The item has not been created`) }
-      }
+    }, err => {
+        if (err.status === 400) {
+          this.snackbar.open(`An error occurred. The item has not been created`);
+        }
+      })
   }
 
   getApartments(): void {
     this.apartmentService.getApartments()
-      .subscribe(apartments => {
-        console.log(apartments);
-        this.apartments = apartments;
-      })
+      .subscribe(apartments => this.apartments = apartments);
   }
 
   ngOnInit() {

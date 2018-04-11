@@ -27,4 +27,4 @@ function sendEmail(req) {
   createEmail(sender, receiver, emailSubject, emailContent);
 }
 
-module.exports = { sendEmail };
+module.exports = { sendEmail }; 

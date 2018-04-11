@@ -18,7 +18,6 @@ const RoomSchema = mongoose.Schema({
   },
   label: {
     type: String,
-    required: true,
     lowercase: true,
     trim: true
   },

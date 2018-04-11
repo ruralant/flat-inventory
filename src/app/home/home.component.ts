@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 
-import { UserService } from '../user.service';
-import { ApartmentService } from '../apartment.service';
-import { ItemService } from '../item.service';
+import { UserService } from 'app/services/user.service';
+import { ApartmentService } from '../services/apartment.service';
+import { ItemService } from 'app/services/item.service';
 
 @Component({
   selector: 'app-home',
@@ -25,12 +25,12 @@ export class HomeComponent implements OnInit {
 
   getCurrentUser(): void {
     this.userService.getUser()
-      .subscribe(currentUser => { this.currentUser = currentUser.user })
+      .subscribe(currentUser => this.currentUser = currentUser.user);
   }
 
   getUserApartments(): void {
     this.apartmentService.getApartments()
-      .subscribe(apartments => { this.apartments = apartments })
+      .subscribe(apartments => this.apartments = apartments);
   }
 
   deleteApartment(id): void {

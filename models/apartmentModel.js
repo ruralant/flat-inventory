@@ -17,6 +17,7 @@ const ApartmentSchema = mongoose.Schema({
   },
   available: {
     type: Boolean,
+    required: true,
     default: false
   },
   rooms: [{

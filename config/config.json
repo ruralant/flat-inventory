@@ -1,33 +1,38 @@
 {
  	"development": {
-		"PORT": 3000,
+		"PORT": "8080",
 		"MONGODB_URI": "mongodb://localhost:27017/flat-inventory",
 		"MONGODB_SESSION": "mongodb://localhost:27017/connect_mongodb_session_flat",
 		"JWT_SECRET": "seidnyuaeifybeiouxw90eb7rb376r7b59034574382bn0572340ndtgr76ft9YesIamAMightyPassword",
 		"SESSION_SECRET": "Shewastooshorttoseeoverthefence",
-		"USEREMAIL": "",
-		"USERPASSWORD": "",
-		"HOSTEMAIL": "",
-		"PRODUCTIONADMINEMAILTO": "",
-		"RUN_USER": ""
+		"USEREMAIL": "tonio155@gmail.com",
+		"USERPASSWORD": "password",
+		"HOSTEMAIL": "mail@test",
+		"PRODUCTIONADMINEMAILTO": "tonio155@gmail.com",
+		"RUN_USER": "arossi"
  	},
   	"production": {
- 		"PORT": 3000,
+		"PORT": "8080",
 		"MONGODB_URI": "mongodb://localhost:27017/flat-inventory",
 		"MONGODB_SESSION": "mongodb://localhost:27017/connect_mongodb_session_flat",
  		"JWT_SECRET": "donwue982346bdq2p389v7g90[E798A6RAB7OEIX63IBP0498QV[0GP6X87OT673AYesIamAMightyPassword",
  		"SESSION_SECRET": "Shewastooshorttoseeoverthefence",
- 		"USEREMAIL": "",
- 		"USERPASSWORD": "",
- 		"HOSTEMAIL": "",
- 		"PRODUCTIONADMINEMAILTO": "",
- 		"RUN_USER": ""
+ 		"USEREMAIL": "tonio155@gmail.com",
+ 		"USERPASSWORD": "password",
+ 		"HOSTEMAIL": "mail@test",
+ 		"PRODUCTIONADMINEMAILTO": "tonio155@gmail.com",
+ 		"RUN_USER": "arossi"
  	},
  	"test": {
- 		"PORT": 3000,
+		"PORT": "8080",
 		"MONGODB_URI": "mongodb://localhost:27017/flat-inventory-test",
 		"MONGODB_SESSION": "mongodb://localhost:27017/connect_mongodb_session_flat",
  		"JWT_SECRET": "asjlkdjhsdilufhsdkljfhsjkldhf",
- 		"SESSION_SECRET": "fpoiertfiojsdofijsoifj"
+		"SESSION_SECRET": "Shewastooshorttoseeoverthefence",
+		"USEREMAIL": "tonio155@gmail.com",
+		"USERPASSWORD": "password",
+		"HOSTEMAIL": "mail@test",
+		"PRODUCTIONADMINEMAILTO": "tonio155@gmail.com",
+		"RUN_USER": "arossi"
 	}	
 }

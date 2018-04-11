@@ -3,7 +3,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { Location } from '@angular/common';
 import { MatSnackBar } from '@angular/material';
 
-import { RoomService } from '../room.service';
+import { RoomService } from 'app/services/room.service';
 
 @Component({
   selector: 'app-edit-room',
@@ -24,9 +24,7 @@ export class EditRoomComponent implements OnInit {
   ngOnInit() {
     this.route.params
       .switchMap((params: Params) => this.roomService.getOneRoom(params['id']))
-      .subscribe(result => {
-        this.roomToBeModified = result[0] // check if this syntax is working
-      })
+      .subscribe(result => this.roomToBeModified = result[0]);
   }
 
   updateRoom(id: any) {

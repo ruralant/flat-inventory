@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
 import { MatFormField, MatSnackBar } from '@angular/material';
 
-import { AuthenticationService } from 'app/authentication.service'
-import { UserService } from 'app/user.service'
+import { AuthenticationService } from 'app/services/authentication.service'
+import { UserService } from 'app/services/user.service'
 
 @Component({
   moduleId: module.id,

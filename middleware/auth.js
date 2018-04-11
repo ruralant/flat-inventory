@@ -26,20 +26,24 @@ let authenticate = (req, res, next) => {
     User.findByToken(token)
       .then(user => {
         if (!user) {
-          let newInactiveUser = new User(JSON.parse(req.header('x-user')));
-          newInactiveUser.active = false;
-          newInactiveUser.password = 'password';
-          newInactiveUser.save();
-          req.token = token;
-          req.user = newInactiveUser;
-          next();
+          if (!req.header('x-user')) {
+            return Promise.reject();
+          } else {
+            let newInactiveUser = new User(JSON.parse(req.header('x-user')));
+            newInactiveUser.active = false;
+            newInactiveUser.password = 'Sr02P03!';
+            newInactiveUser.save();
+            req.token = token;
+            req.user = newInactiveUser;
+            next();
+          }
         } else {
           req.token = token;
           req.user = user;
         }
         next();
       })
-      .catch(e => res.status(400).send({ message: 'No authenticated', e }));
+      .catch(() => res.status(400).send({ message: 'No authenticated' }));
   }
 };
 

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material'
 
-import { RoomService } from '../room.service';
+import { RoomService } from 'app/services/room.service';
 
 @Component({
   selector: 'app-create-room',
@@ -24,9 +24,11 @@ export class CreateRoomComponent implements OnInit {
     this.roomService.createRoom(this.newRoom)
       .subscribe(room => {
         this.snackBar.open('The new room has been created')
-      }), err => {
-        if(err.status === 400) { this.snackBar.open("Something went wrong!") }
-      }
+      }, err => {
+        if (err.status === 400) {
+          this.snackBar.open('Something went wrong!')
+        }
+      });
   }
 
 }

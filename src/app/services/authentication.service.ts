@@ -7,7 +7,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/of';
 
-import { environment } from '../environments/environment';
+import { environment } from '../../environments/environment';
 
 const constURL = `${environment.constURL}/api`;
 
@@ -21,13 +21,19 @@ export class AuthenticationService {
 
   constructor( private http: Http ) { }
 
+  register(data: object) {
+    console.log('data: ', data);
+    console.log('url: ', `${constURL}/users/register`);
+    return this.http.post(`${constURL}/users/register`, data)
+      .map(res => res.json());
+  }
+
   login(email: string, password: string): Observable<boolean> {
     return this.http.post(`${constURL}/users/login`, { email, password })
       .map(res => {
         return true;
       })
-      .catch(err => {
-        console.log(err);
+      .catch(() => {
         return Observable.of(false);
       });
   }
@@ -38,7 +44,7 @@ export class AuthenticationService {
       .map(res => {
         return true;
       })
-      .catch(err => {
+      .catch(() => {
         return Observable.of(false);
       });
   }
@@ -53,5 +59,4 @@ export class AuthenticationService {
   emitChange(change) {
     this.emitChangeSource.next(change);
   }
-
 }

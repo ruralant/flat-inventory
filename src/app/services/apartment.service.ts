@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/map';
 
-import { environment } from './../environments/environment';
+import { environment } from '../../environments/environment';
 
 const constURL = `${environment.constURL}/api`;
 

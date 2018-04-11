@@ -4,7 +4,7 @@ import { Http, Headers, Response, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
-import { environment } from './../environments/environment';
+import { environment } from '../../environments/environment';
 
 const constURL = `${environment.constURL}/api`;
 
@@ -72,17 +72,18 @@ export class UserService {
     // you returned this already no need to do it twice
     return this.http.patch(`${constURL}/users/profilePasswordChange`, passwordModel, options)
       .map(res => res.json())
-      .catch(err => { return Observable.of(false) });
+      .catch(() => {
+        return Observable.of(false);
+      });
   }
 
   forgotPassword(email: string, host: string) {
-    const body = {
-      email,
-      host
-    };
+    const body = { email, host };
 
     return this.http.post(`${constURL}/users/passwordreset`, body)
       .map(res => res.json())
-      .catch(err => { return Observable.of(false) });
+      .catch(err => {
+        return Observable.of(false);
+      });
   }
 }

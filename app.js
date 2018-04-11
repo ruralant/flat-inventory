@@ -1,12 +1,10 @@
 require('./config/config');
-
 const express = require('express');
 const mongoose = require('mongoose');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
-const MongoStore = require('connect-mongo')(session);
 const path = require('path');
 const cors = require('cors');
 
@@ -18,7 +16,6 @@ const apartment = require('./routes/apartmentRoutes');
 
 const app = express();
 
-//mongodb connection
 mongoose.Promise = global.Promise;
 mongoose.set('debug', true); //show all the mongo queries on the console
 mongoose.connect(process.env.MONGODB_URI, { useMongoClient: true }, (err) => {
@@ -44,25 +41,25 @@ app.use('/assets', express.static(path.join(__dirname, '../media')));
 app.use(cors());
 app.options('*', cors());
 
-//Handle Express Sessions/cookies
-let store = new MongoStore({
-  url: process.env.MONGODB_SESSION,
-  collection: 'sessions',
-  ttl: 1 * 12 * 60 * 60 // = 12 hours
-});
+// const authCheck = jwt({
+//   secret: jwks.expressJwtSecret({
+//         cache: true,
+//         rateLimit: true,
+//         jwksRequestsPerMinute: 5,
+//         jwksUri: "https://{YOUR-AUTH0-DOMAIN}.auth0.com/.well-known/jwks.json"
+//     }),
+//     // This is the identifier we set when we created the API
+//     audience: '{YOUR-API-AUDIENCE-ATTRIBUTE}',
+//     issuer: "{YOUR-AUTH0-DOMAIN}", // e.g., you.auth0.com
+//     algorithms: ['RS256']
+// });
 
-// Catch errors
-store.on('error', function(error) {
-  assert.ifError(error);
-  assert.ok(false);
-});
-
-app.use(session({
-  secret: process.env.SESSION_SECRET,
-  saveUninitialized: false,
-  resave: true,
-  store
-}));
+// app.get('/api/deals/private', authCheck, (req,res)=>{
+//   let deals = [
+//     // Array of private deals
+//   ];
+//   res.json(deals);
+// })
 
 app.use('/', index);
 app.use('/api/users', user);
@@ -70,7 +67,7 @@ app.use('/api/rooms', room);
 app.use('/api/items', item);
 app.use('/api/apartments', apartment);
 
-app.use('/public', express.static(path.join(__dirname, './media')));
+// app.use('/public', static(join(__dirname, './media')));
 
 // app.get('*', (req, res) => {
 //   res.sendFile(path.join(__dirname, 'dist/index.html'));

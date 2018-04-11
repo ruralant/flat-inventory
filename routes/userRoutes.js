@@ -1,39 +1,42 @@
 const express = require('express');
 const router = express.Router();
-const _ = require('lodash');
 const bcrypt = require('bcryptjs');
 const { ObjectID } = require('mongodb');
 const emailHandler = require('../config/email');
 const User = require('../models/userModel');
 const { authenticate } = require('./../middleware/auth');
 
-// creates a super user if does not exist, one time only
-User.findOne({ email: 'superuser@jayex.com' })
-  .then((user) => {
-    if (!user) {
-      let superUser = {
-        'firstName': 'superuser',
-        'lastName': 'superuser',
-        'email': 'super@user',
-        'password': 'password',
-        'userType': 'superuser',
-        'active': true
-      };
-      var newUser = new User(superUser);
-      newUser.save();
-    }
-  })
-  .catch(e => console.log(e));
+// // creates a super user if does not exist, one time only
+// User.findOne({ email: 'super@user' })
+//   .then((user) => {
+//     if (!user) {
+//       let superUser = {
+//         'firstName': 'superuser',
+//         'lastName': 'superuser',
+//         'email': 'super@user',
+//         'password': 'password',
+//         'userType': 'superuser',
+//         'active': true
+//       };
+//       var newUser = new User(superUser);
+//       newUser.save();
+//     }
+//   })
+//   .catch(e => console.log(e));
 
 // CREATE a user
-router.post('/', authenticate, (req, res) => {
-  let { body } = req;
+router.post('/register', async (req, res) => {
+  try {
+    const { body } = req;
+  
+    const user = new User(body);
+    const newUser = await user.save();
 
-  var user = new User(body);
-
-  user.save()
-    .then(() => res.send({ status: 'success', message: 'New user created' }))
-    .catch(e => res.status(400).send({ status: 'fail', message: 'Unable to create new user', e }));
+    res.send({ status: 'success', message: 'New user created' });
+  } catch (e) {
+    console.log(e);
+    res.status(400).send({ status: 'fail', message: 'Unable to create new user', e });
+  }
 });
 
 // LOGIN
@@ -47,6 +50,7 @@ router.post('/login', (req, res) => {
       return user.generateAuthToken('auth');
     })
     .then(token => {
+      console.log('token on Routes Login: ', token);
       res.setHeader('Set-Cookie', token);
       req.session.accessToken = token;
       let { _id, email, firstName, lastName, userType } = savedUser.toJSON();
@@ -69,9 +73,9 @@ router.delete('/', (req, res) => {
 
 // send a password reset link to a user
 router.post('/passwordreset', (req, res) => {
-  const body = _.pick(req.body, ['email', 'host']);
+  const { email, host } = req.body;
   let userFound;
-  User.findOne({ email: body.email })
+  User.findOne({ email })
     .then(user => {
       userFound = user;
       return user.generateAuthToken('resetPassword');
@@ -85,7 +89,7 @@ router.post('/passwordreset', (req, res) => {
           lastName: userFound.lastName,
           type: 'passwordReset',
           emailURL,
-          host: body.host,
+          host,
         }
       });
       res.send({
@@ -213,5 +217,7 @@ router.patch('/profilePasswordChange', authenticate, (req, res) => {
     })
     .catch(e => res.status(400).send(e));
 });
+
+
 
 module.exports = router;

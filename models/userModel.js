@@ -6,12 +6,14 @@ mongoose.Promise = global.Promise;
 
 // a scheme for users
 const UserSchema = mongoose.Schema({
-  firstName: { 
+  firstName: {
     type: String,
+    required: true,
     trim: true
   },
   lastName: {
     type: String,
+    required: true,
     trim: true
   },
   email: {
@@ -85,7 +87,6 @@ UserSchema.statics.findByCredentials = function (email, password) {
         return Promise.reject();
       }
       return new Promise((resolve, reject) => {
-        // Use bcrypt.compare to compare password and user.password
         bcrypt.compare(password, user.password, (err, res) => {
           if (res) {
             resolve(user);

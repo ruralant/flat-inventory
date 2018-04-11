@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import 'rxjs/add/operator/switchMap';
 
-import { ApartmentService } from '../apartment.service';
+import { ApartmentService } from 'app/services/apartment.service';
 
 @Component({
   selector: 'app-apartment',

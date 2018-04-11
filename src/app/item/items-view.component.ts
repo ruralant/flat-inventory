@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ItemService } from '../item.service';
+import { ItemService } from 'app/services/item.service';
 
 @Component({
   selector: 'app-items-view',
@@ -10,9 +10,7 @@ export class ItemsViewComponent implements OnInit {
 
   items: any = [];
 
-  constructor(
-    private itemService: ItemService
-  ) { }
+  constructor( private itemService: ItemService ) { }
 
   ngOnInit() {
     this.getItems();
@@ -20,10 +18,7 @@ export class ItemsViewComponent implements OnInit {
 
   getItems(): void {
     this.itemService.getItems()
-      .subscribe(items => {
-        this.items = items;
-        console.log(this.items);
-      })
+      .subscribe(items => this.items = items);
   }
 
 }

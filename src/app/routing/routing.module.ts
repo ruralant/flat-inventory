@@ -2,25 +2,27 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 
-import { AuthGuardService } from './../auth-guard.service';
+import { AuthGuardService } from 'app/services/auth-guard.service';
 
-import { LandingPageComponent } from '../landing-page/landing-page.component';
-import { HomeComponent } from '../home/home.component';
-import { LoginComponent } from '../login/login.component';
-import { ApartmentComponent } from '../apartment/apartment.component';
-import { EditAptComponent } from '../apartment/edit-apt.component';
-import { ApartmentSectionComponent } from '../apartment/apartment-section.component';
-import { RoomComponent } from '../room/room.component';
-import { RoomSectionComponent } from '../room/room-section.component';
-import { EditRoomComponent} from '../room/edit-room.component';
-import { ItemSectionComponent } from '../item/item-section.component';
-import { ItemComponent } from '../item/item.component';
-import { CreateItemComponent } from '../item/create-item.component';
-import { EditItemComponent } from '../item/edit-item.component';
-import { ItemsViewComponent } from '../item/items-view.component';
+import { LandingPageComponent } from 'app/landing-page/landing-page.component';
+import { HomeComponent } from 'app/home/home.component';
+import { RegisterComponent } from 'app/register/register.component';
+import { LoginComponent } from 'app/login/login.component';
+import { ApartmentComponent } from 'app/apartment/apartment.component';
+import { EditAptComponent } from 'app/apartment/edit-apt.component';
+import { ApartmentSectionComponent } from 'app/apartment/apartment-section.component';
+import { RoomComponent } from 'app/room/room.component';
+import { RoomSectionComponent } from 'app/room/room-section.component';
+import { EditRoomComponent} from 'app/room/edit-room.component';
+import { ItemSectionComponent } from 'app/item/item-section.component';
+import { ItemComponent } from 'app/item/item.component';
+import { CreateItemComponent } from 'app/item/create-item.component';
+import { EditItemComponent } from 'app/item/edit-item.component';
+import { ItemsViewComponent } from 'app/item/items-view.component';
 
 const routes: Routes = [
-  { path: 'landing', component: LandingPageComponent },
+  { path: '', component: LandingPageComponent },
+  { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
   { path: 'home', canActivate: [AuthGuardService], component: HomeComponent },
   {
@@ -43,7 +45,7 @@ const routes: Routes = [
       { path: 'edit/:id', component: EditItemComponent }
     ]
   },
-  { path: '**', redirectTo: '/landing', pathMatch: 'full' },
+  { path: '**', redirectTo: '/', pathMatch: 'full' },
 ]
 
 @NgModule({

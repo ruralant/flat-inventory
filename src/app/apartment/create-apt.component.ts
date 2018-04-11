@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ApartmentService } from '../apartment.service';
 import { MatSnackBar } from '@angular/material';
+
+import { ApartmentService } from 'app/services/apartment.service';
 
 @Component({
   selector: 'app-create-apt',
@@ -21,13 +22,12 @@ export class CreateAptComponent implements OnInit {
 
   createApartment(): void {
     this.apartmentService.createApartment(this.newApartment)
-    .subscribe(result => {
-      if (result.status === 'success') {
-        this.snackbar.open('The apartment has been created.');
-      } else {
-        this.snackbar.open('Somthing went wrong! The apartment has not been created');
-      }
-    });
+      .subscribe(result => {
+        if (result.status === 'success') {
+          this.snackbar.open('The apartment has been created.');
+        } else {
+          this.snackbar.open('Somthing went wrong! The apartment has not been created');
+        }
+      });
   }
-
 }

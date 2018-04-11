@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { UserService } from './../user.service';
+import { UserService } from 'app/services/user.service';
 
 @Component({
   selector: 'app-topnav',
@@ -16,7 +16,7 @@ export class TopnavComponent implements OnInit {
 
   ngOnInit() {
     this.userService.getUser()
-      .subscribe(user => { this.user = user.user });
+      .subscribe(user => this.user = user.user);
   }
 
 }
