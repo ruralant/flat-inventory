@@ -1,21 +1,24 @@
-![](./assets/pwa-logo.png)
-![](./assets/angular-logo.png)
-![](./assets/node-logo.png)
-![](./assets/mongo-logo.png)
-![](./assets/sass-logo.png)
-
-
 # FlatInventory
-### Project currently in development
+
+![pwa logo](./assets/pwa-logo.png)
+![angular logo](./assets/angular-logo.png)
+![node js logo](./assets/node-logo.png)
+![mongodb logo](./assets/mongo-logo.png)
+![sass logo](./assets/sass-logo.png)
+
+## Project currently in development
+
 Flat Inventory is a single page application that allows property owners that rent they home/apartmetns short term (AirBnb, Booking.com, etc) to manage the stock of their apartments.
 
 I develop the application following the PWA (Progressive Web App) manifesto and it can we installed on every **Android phone** running **Chrome 38 or newver**.
 It can also be added to the drower on any **iOS** device but until Safari is not fully supporting **Service Workers** notifications and offline features are limied.
 
-#### Live Demo: <link>
+### Live Demo
+
 (coming soon)
 
-## Technologies Used:
+## Technologies Used
+
 - **Angular 5.2.0**
 - **PWA Manifesto**
 - **Service Workers**
@@ -42,8 +45,8 @@ During the development process I used also the following tools:
 - **Heroku**: to deploy the application
 - **mLab**: ad database hosting provider
 
-
 ## Further Developments
+
 **v.1.1**
 Login with Facebook, Google and Twitter
 
