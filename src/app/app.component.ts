@@ -19,33 +19,33 @@ export class AppComponent implements OnInit {
   ) {
     authenticationService.changeEmitted$.subscribe(change => {
       if (change === 'login') {
-        this.getUser();
+        // this.getUser();
         this.display = true;
       } else if (change === 'logout') {
         this.display = false;
       } else if (change === 'updateUser') {
-        this.getUser();
+        // this.getUser();
       }
     });
   }
 
-  // get user info
-  getUser() {
-    this.authenticationService.getUser()
-      .subscribe(user => {
-        this.display = true;
-        this.user = user;
-        const theme = user.user.theme;
-        document.documentElement.style.setProperty(`--base`, `var(--${theme}-theme-base)`);
-        document.documentElement.style.setProperty(`--second`, `var(--${theme}-theme-second)`);
-        document.documentElement.style.setProperty(`--third`, `var(--${theme}-theme-third)`);
-        document.documentElement.style.setProperty(`--hint`, `var(--${theme}-theme-hint)`);
-        document.documentElement.style.setProperty(`--text`, `var(--${theme}-theme-text)`);
-        document.documentElement.style.setProperty(`--text-hint`, `var(--${theme}-theme-text-hint)`);
-      });
-  }
+  // // get user info
+  // getUser() {
+  //   this.authenticationService.getUser()
+  //     .subscribe(user => {
+  //       this.display = true;
+  //       this.user = user;
+  //       const theme = user.user.theme;
+  //       document.documentElement.style.setProperty(`--base`, `var(--${theme}-theme-base)`);
+  //       document.documentElement.style.setProperty(`--second`, `var(--${theme}-theme-second)`);
+  //       document.documentElement.style.setProperty(`--third`, `var(--${theme}-theme-third)`);
+  //       document.documentElement.style.setProperty(`--hint`, `var(--${theme}-theme-hint)`);
+  //       document.documentElement.style.setProperty(`--text`, `var(--${theme}-theme-text)`);
+  //       document.documentElement.style.setProperty(`--text-hint`, `var(--${theme}-theme-text-hint)`);
+  //     });
+  // }
 
   ngOnInit() {
-    this.getUser();
+    // this.getUser();
   }
 }

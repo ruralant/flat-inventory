@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthenticationService } from 'app/services/authentication.service';
 
 @Component({
@@ -10,11 +11,14 @@ export class RegisterComponent implements OnInit {
 
   data = {};
 
-  constructor( private authService: AuthenticationService ) { }
+  constructor(
+    private router: Router,
+    private authService: AuthenticationService
+  ) { }
 
   register() {
     this.authService.register(this.data)
-      .subscribe(res => console.log(res));
+      .subscribe(res => this.router.navigate(['/home']));
   }
 
   ngOnInit() {

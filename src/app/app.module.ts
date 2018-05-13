@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RoutingModule } from 'app/routing/routing.module';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -15,7 +15,8 @@ import { AuthGuardService } from 'app/services/auth-guard.service';
 import { ApartmentService } from 'app/services/apartment.service';
 import { UserService } from 'app/services/user.service';
 import { ItemService } from 'app/services/item.service';
-import { DataService } from './services/data.service';
+import { DataService } from 'app/services/data.service';
+import { AuthInterceptorService } from 'app/services/authInterceptor.service';
 
 import { AppComponent } from 'app/app.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
@@ -37,8 +38,6 @@ import { CreateAptComponent } from 'app/apartment/create-apt.component';
 import { CreateRoomComponent } from 'app/room/create-room.component';
 import { AppErrorHandler } from 'app/common/errors/app-error-handlet';
 import { RegisterComponent } from './register/register.component';
-
-
 
 @NgModule({
   declarations: [
@@ -65,8 +64,8 @@ import { RegisterComponent } from './register/register.component';
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule,
     RoutingModule,
+    HttpClientModule,
     BrowserAnimationsModule,
     MatFormFieldModule,
     MatSelectModule,
@@ -88,6 +87,8 @@ import { RegisterComponent } from './register/register.component';
     ApartmentService,
     ItemService,
     DataService,
+    AuthInterceptorService,
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true },
     { provide: ErrorHandler, useClass: AppErrorHandler }
   ],
   bootstrap: [AppComponent]

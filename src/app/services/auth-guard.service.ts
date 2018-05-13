@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router, CanActivate } from '@angular/router';
-import { Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 
 import 'rxjs/add/observable/of';
@@ -15,7 +15,7 @@ export class AuthGuardService implements CanActivate {
 
   constructor(
     private router: Router,
-    private http: Http,
+    private http: HttpClient,
     private authenticationService: AuthenticationService,
   ) { }
 

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, Response, RequestOptions } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 
@@ -19,23 +19,26 @@ export class AuthenticationService {
   // Observable string streams
   changeEmitted$ = this.emitChangeSource.asObservable();
 
-  constructor( private http: Http ) { }
+  TOKEN_KEY = 'token';
 
-  register(data: object) {
-    console.log('data: ', data);
-    console.log('url: ', `${constURL}/users/register`);
-    return this.http.post(`${constURL}/users/register`, data)
-      .map(res => res.json());
+  constructor( private http: HttpClient ) { }
+
+  private handleError(error: any): Promise<any> {
+    return Promise.reject(error.message || error);
   }
 
-  login(email: string, password: string): Observable<boolean> {
-    return this.http.post(`${constURL}/users/login`, { email, password })
-      .map(res => {
-        return true;
-      })
-      .catch(() => {
-        return Observable.of(false);
-      });
+  get token() {
+    return localStorage.getItem(this.TOKEN_KEY)
+  }
+
+  register(data: object) {
+    return this.http.post(`${constURL}/users/register`, data)
+      .map(res => res);
+  }
+
+  login(email: string, password: string) {
+    return this.http.post<any>(`${constURL}/users/login`, { email, password })
+      .subscribe(res => localStorage.setItem(this.TOKEN_KEY, res.token))
   }
 
   logout(): Observable<boolean> {
@@ -47,12 +50,6 @@ export class AuthenticationService {
       .catch(() => {
         return Observable.of(false);
       });
-  }
-
-  // get the Current User information to display in page
-  getUser() {
-    return this.http.get(`${constURL}/users/status`)
-      .map(res => res.json());
   }
 
   // Service message commands

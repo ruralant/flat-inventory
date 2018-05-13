@@ -9,7 +9,7 @@ let { authenticate } = require('./../middleware/auth');
 
 // GET all the apartments
 router.get('/', authenticate, (req, res) => {
-  const token = req.header('x-auth') || req.session.accessToken;
+  const token = req.header('authorization').split(' ')[1];
     
   User.findByToken(token)
     .then(user => {
@@ -52,7 +52,7 @@ router.get('/query', authenticate, (req, res) => {
 
 // Create a new apartment
 router.post('/', authenticate, (req, res) => {
-  const token = req.header('x-auth') || req.session.accessToken;
+  const token = req.header('authorization').split(' ')[1];
   const { body } = req;  
 
   const apartment = new Apartment(body);
@@ -62,13 +62,13 @@ router.post('/', authenticate, (req, res) => {
       apartment.createdBy = user;
       return apartment.save();
     })
-    .then(apartment => res.send({ status: 'success', message: 'The apartment has been created', apartment }))
-    .catch(e => res.status(400).send({ status: 'error', message: 'Unable to create the apartment', e }));
+    .then(apartment => res.send({ message: 'The apartment has been created', apartment }))
+    .catch(e => res.status(400).send({ message: 'Unable to create the apartment', e }));
 });
 
 // UPDATE apartment
 router.patch('/:id', authenticate, (req, res) => {
-  const token = req.header('x-auth') || req.session.accessToken;
+  const token = req.header('authorization').split(' ')[1];
   const { id } = req.params;
   const body = req;
 

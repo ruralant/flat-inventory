@@ -35,11 +35,6 @@ const UserSchema = mongoose.Schema({
     required: true,
     default: 'user'
   },
-  active: {
-    type: Boolean,
-    required: true,
-    default: true
-  },
   createdBy:{
     type: mongoose.Schema.ObjectId, ref: 'User'
   },
@@ -53,24 +48,27 @@ const UserSchema = mongoose.Schema({
   }
 });
 
-UserSchema.methods.generateAuthToken = function (access) {
+UserSchema.methods.generateAuthToken = async function (access) {
   // create a new date object so we can save the date to the user login history each time a token is created
-  let user = this;
-  let token = jwt.sign({
-    _id: user._id.toHexString(),
-    access
-  }, process.env.JWT_SECRET, { expiresIn: '8h' }).toString();
-  return user.save()
-    .then(() => token)
-    .catch(e => console.log(e));
+  try {
+    let user = this;
+    let token = await jwt.sign({
+      _id: user._id.toHexString(),
+      access
+    }, process.env.JWT_SECRET, { expiresIn: '8h' }).toString();
+    const newUser = await user.save();
+    return token;
+  } catch(e) {
+    console.log(e)
+  }
 };
 
-UserSchema.statics.findByToken = function (token) {
-  console.log('token in modal: ', token); // empty
+UserSchema.statics.findByToken = async function (token) {
+  console.log('token in modal: ', token);
   const User = this;
   let decoded;
   try {
-    decoded = jwt.verify(token, process.env.JWT_SECRET);
+    decoded = await jwt.verify(token, process.env.JWT_SECRET);
   } catch (e) {
     return Promise.reject({ action: 'logout', message: 'jwt expired, try logging out and back in again' });
   }
@@ -78,24 +76,23 @@ UserSchema.statics.findByToken = function (token) {
   return User.findOne({ '_id': decoded._id });
 };
 
-UserSchema.statics.findByCredentials = function (email, password) {
-  var User = this;
+UserSchema.statics.findByCredentials = async function (email, password) {
+  try {
+    const User = this;
+    const user = await User.findOne({ email });
 
-  return User.findOne({ email, active: true })
-    .then((user) => {
-      if (!user) {
-        return Promise.reject();
-      }
-      return new Promise((resolve, reject) => {
-        bcrypt.compare(password, user.password, (err, res) => {
-          if (res) {
-            resolve(user);
-          } else {
-            reject();
-          }
-        });
+    return new Promise((resolve, reject) => {
+      bcrypt.compare(password, user.password, (err, res) => {
+        if (res) {
+          resolve(user);
+        } else {
+          reject();
+        }
       });
     });
+  } catch (e) {
+    return Promise.reject();
+  }
 };
 
 UserSchema.pre('save', function (next) {

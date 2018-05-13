@@ -40,29 +40,43 @@ router.post('/register', async (req, res) => {
 });
 
 // LOGIN
-router.post('/login', (req, res) => {
-  const { email, password } = req.body;
-  let savedUser;
+router.post('/login', async (req, res) => {
+  try {
+    let { email, password } = req.body;
+    let savedUser;
+    const user = await User.findByCredentials(email, password);
+    console.log('user: ', user);
+    const token = await user.generateAuthToken('auth');
+    console.log('token on Routes Login: ', token);
 
-  User.findByCredentials(email, password)
-    .then(user => {
-      savedUser = user;
-      return user.generateAuthToken('auth');
-    })
-    .then(token => {
-      console.log('token on Routes Login: ', token);
-      res.setHeader('Set-Cookie', token);
-      req.session.accessToken = token;
-      let { _id, email, firstName, lastName, userType } = savedUser.toJSON();
-      req.session.user = {};
-      req.session.user = { _id, email, firstName, lastName, userType };
-      console.log('session: ', req.session);
-      res.send({
-        token,
-        user: req.session.user
-      });
-    })
-    .catch(e => res.status(400).send({ status: 'fail', message: 'Unable to login', e }));
+    // res.setHeader('Set-Cookie', token);
+    // console.log(res);
+    // req.session.accessToken = token;
+    // let { _id, firstName, lastName, userType } = user.toJSON();
+    // req.session.user = {};
+    // req.session.user = { _id, email, firstName, lastName, userType };    console.log('session: ', req.session);
+    res.send({ token });
+  } catch (e) {
+    console.log('error: ', e);
+    res.status(400).send({ status: 'fail', message: 'Unable to login', e });
+  }
+    // .then(user => {
+    //   savedUser = user;
+    //   return user.generateAuthToken('auth');
+    // })
+    // .then(token => {
+    //   console.log('token on Routes Login: ', token);
+    //   res.setHeader('Set-Cookie', token);
+    //   req.session.accessToken = token;
+    //   let { _id, email, firstName, lastName, userType } = savedUser.toJSON();
+    //   req.session.user = {};
+    //   req.session.user = { _id, email, firstName, lastName, userType };
+    //   console.log('session: ', req.session);
+    //   res.send({
+    //     token,
+    //     user: req.session.user
+    //   });
+    // })
 });
 
 // make a user inactive
@@ -104,6 +118,7 @@ router.post('/passwordreset', (req, res) => {
 
 // check status of current user based on a token
 router.get('/status', authenticate, (req, res) => {
+  console.log('_id: ', req.userId);
   res.status(200).json({
     status: true,
     user: req.session.user,

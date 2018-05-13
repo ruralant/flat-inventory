@@ -1,4 +1,5 @@
 const User = require('./../models/userModel');
+const jwt = require('jsonwebtoken');
 
 /**
  * In the authorization we check if session token exists, or if one has been passed through has a header
@@ -11,40 +12,15 @@ const User = require('./../models/userModel');
  * @param {*} next 
  */
 let authenticate = (req, res, next) => {
-  // empty because the session is stored in the database but not in the browser session
-  let token = req.session.accessToken || req.header('x-auth');
-  console.log('req', req);
-  console.log('token in auth: ', token); // empty
-  if (token === 'skip') {
-    req.token = 'skip';
-    next();
-  } else if (token === 'test') {
-    req.user = {};
-    req.user._id = req.header('x-userId');
-    next();
-  } else {
-    User.findByToken(token)
-      .then(user => {
-        if (!user) {
-          if (!req.header('x-user')) {
-            return Promise.reject();
-          } else {
-            let newInactiveUser = new User(JSON.parse(req.header('x-user')));
-            newInactiveUser.active = false;
-            newInactiveUser.password = 'Sr02P03!';
-            newInactiveUser.save();
-            req.token = token;
-            req.user = newInactiveUser;
-            next();
-          }
-        } else {
-          req.token = token;
-          req.user = user;
-        }
-        next();
-      })
-      .catch(() => res.status(400).send({ message: 'No authenticated' }));
-  }
+  if(!req.header('authorization')) return res.status(401).send({ message: 'Not authorised' });
+
+  let token = req.header('authorization').split(' ')[1];
+  const payload = jwt.verify(token, process.env.JWT_SECRET)
+
+  if(!payload) return res.status(401).send({ message: 'Not authorised' });
+
+  req.userId = payload._id;
+  next();
 };
 
 let adminAuth = (req, res, next) => {

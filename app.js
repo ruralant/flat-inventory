@@ -61,6 +61,13 @@ app.options('*', cors());
 //   res.json(deals);
 // })
 
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: true }
+}))
+
 app.use('/', index);
 app.use('/api/users', user);
 app.use('/api/rooms', room);
