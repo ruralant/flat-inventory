@@ -41,29 +41,31 @@ router.get('/query', authenticate, async (req, res) => {
       .populate('apartment')
       .populate('user');
     if (!rooms) res.status(400).send({ error: 'No rooms found', api: 'GET/rooms/query' });
-    
+
     res.send({ message: 'Rooms retrieved by the query', api: 'GET/rooms/query', rooms });
   } catch (e) {
-    res.status(400).send(e);
+    res.status(400).send({ message: 'There was an error in retrieving the rooms', e });
   }
 });
 
 // Create a new room
-router.post('/', authenticate, (req, res) => {
-  const token = req.header('x-auth') || req.session.accessToken;
-  const { body } = req;
-
-  const room = new Room(body);
-
-  User.findByToken(token)
-    .then(user => {
-      room.createdBy = user;
-      return room.save();
-    })
-    .then(room => res.send({ room }))
-    .catch(e => {
-      e.error ? res.status(400).send(e.error.erromsg) : res.status(400).send(e);
-    });
+router.post('/', authenticate, async (req, res) => {
+  try {
+    const token = req.header('authorization').split(' ')[1];
+    const { body } = req;
+  
+    const room = new Room(body);
+  
+    const user = await User.findByToken(token);
+    if (!user) res.status(400).send({ error: 'No user found', api: 'POST/rooms' });
+    
+    room.createdBy = user;
+    room = room.save();
+    
+    res.send({ message: 'Room correctly created', api: 'POST/rooms', room })
+  } catch (e) {
+    res.status(400).send({ message: 'There was an error in creating the room', e });
+  }
 });
 
 // UPDATE room
