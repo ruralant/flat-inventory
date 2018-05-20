@@ -15,35 +15,37 @@ router.get('/', authenticate, async (req, res) => {
       .populate('user');
     if (!rooms) res.status(400).send({ error: 'No rooms found', api: 'GET/rooms' });
     
-    res.send({ message: 'Rooms retreived succesfully', api: 'GET/rooms', rooms });
+    res.send({ message: 'Rooms retrieved succesfully', api: 'GET/rooms', rooms });
   } catch (e) {
-    res.status(400).send({ error: 'There was an error in retreiving the rooms', api: 'GET/rooms', e });
+    res.status(400).send({ error: 'There was an error in retrieving the rooms', api: 'GET/rooms', e });
   }
 });
 
 // GET query of rooms
-router.get('/query', authenticate, (req, res) => {
-  const searchQuery = req.query;
-  // in the search term I want to be able to query both query with name or description, then query both with only one. So I take which has been queried and copy that across to query both, plus I query the label with the search term just for wider visibilty
-  if (req.query.name || req.query.description) {
-    req.query.$or = [];
-    req.query.$or.push({ name: new RegExp(req.query.name || req.query.description, 'i') });
-    req.query.$or.push({ description: new RegExp(req.query.description || req.query.name, 'i') });
-    req.query.$or.push({ 'label': new RegExp(req.query.description || req.query.name, 'i') });
-    delete req.query.name;
-  }
-  const mongoQuery = {
-    $and: [{
-      // refine search
-    }]
-  };
-  mongoQuery.$and.push(searchQuery);
+router.get('/query', authenticate, async (req, res) => {
+  try {
+    const searchQuery = req.query;
+    // in the search term I want to be able to query both query with name or description, then query both with only one. So I take which has been queried and copy that across to query both, plus I query the label with the search term just for wider visibilty
+    if (req.query.name || req.query.description) {
+      req.query.$or = [];
+      req.query.$or.push({ name: new RegExp(req.query.name || req.query.description, 'i') });
+      req.query.$or.push({ description: new RegExp(req.query.description || req.query.name, 'i') });
+      req.query.$or.push({ 'label': new RegExp(req.query.description || req.query.name, 'i') });
+      delete req.query.name;
+    }
+    const mongoQuery = { $and: [{ }] };
 
-  Room.find(mongoQuery)
-    .populate('apartment')
-    .populate('user')
-    .then(rooms => res.send({ rooms }))
-    .catch(e => res.status(400).send(e));
+    mongoQuery.$and.push(searchQuery);
+  
+    const rooms = await Room.find(mongoQuery)
+      .populate('apartment')
+      .populate('user');
+    if (!rooms) res.status(400).send({ error: 'No rooms found', api: 'GET/rooms/query' });
+    
+    res.send({ message: 'Rooms retrieved by the query', api: 'GET/rooms/query', rooms });
+  } catch (e) {
+    res.status(400).send(e);
+  }
 });
 
 // Create a new room
