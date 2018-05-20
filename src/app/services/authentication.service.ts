@@ -31,6 +31,10 @@ export class AuthenticationService {
     return localStorage.getItem(this.TOKEN_KEY)
   }
 
+  get isAuthenticated() {
+    return !!localStorage.getItem(this.TOKEN_KEY)
+  }
+
   register(data: object) {
     return this.http.post(`${constURL}/users/register`, data)
       .map(res => res);
@@ -38,7 +42,10 @@ export class AuthenticationService {
 
   login(email: string, password: string) {
     return this.http.post<any>(`${constURL}/users/login`, { email, password })
-      .subscribe(res => localStorage.setItem(this.TOKEN_KEY, res.token))
+      .map(res => {
+        localStorage.setItem(this.TOKEN_KEY, res.token);
+        return res;
+      })
   }
 
   logout(): Observable<boolean> {

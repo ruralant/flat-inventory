@@ -32,8 +32,12 @@ export class LoginComponent implements OnInit {
 
   login() {
     this.loading = true;
-    this.authenticationService.login(this.model.email, this.model.password);
-    this.router.navigate(['/home']);
+    this.authenticationService.login(this.model.email, this.model.password)
+      .subscribe(res => {
+        console.log(res);
+        this.loading = false;
+      });
+      this.router.navigate(['/home']);
   }
 
   forgotPassword() {
