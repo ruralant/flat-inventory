@@ -44,7 +44,7 @@ router.get('/query', authenticate, async (req, res) => {
 
     res.send({ message: 'Rooms retrieved by the query', api: 'GET/rooms/query', rooms });
   } catch (e) {
-    res.status(400).send({ message: 'There was an error in retrieving the rooms', e });
+    res.status(400).send({ error: 'There was an error in retrieving the rooms', api: 'GET/rooms/query', e });
   }
 });
 
@@ -64,42 +64,46 @@ router.post('/', authenticate, async (req, res) => {
     
     res.send({ message: 'Room correctly created', api: 'POST/rooms', room })
   } catch (e) {
-    res.status(400).send({ message: 'There was an error in creating the room', e });
+    res.status(400).send({ error: 'There was an error in creating the room', api: 'POST/rooms', e });
   }
 });
 
 // UPDATE room
-router.patch('/:id', authenticate, (req, res) => {
-  const token = req.header('x-auth') || req.session.accessToken;
-  const { id } = req.params;
-  const { body } = req;
+router.patch('/:id', authenticate, async (req, res) => {
+  try {
+    const token = req.header('authorization').split(' ')[1];
+    const { id } = req.params;
+    const { body } = req;
+  
+    if (!ObjectID.isValid(id)) return res.status(404).send({ error: 'ObjectID not valid', api: `PATCH/rooms/${id}` });
+  
+    const user = User.findByToken(token);
+    if (!user) res.status(400).send({ error: 'No user found', api: `PATCH/rooms/${id}` });
+    
+    const room = await Room.findByIdAndUpdate(id, {
+      $set: body,
+      updatedBy: user._id
+    }, { new: true });
 
-  if (!ObjectID.isValid(id)) {
-    return res.status(404).send({ error: 'ObjectID not valid' });
+    res.send({ message: 'Room information correctly modified', api: `PATCH/rooms/${id}`, room });
+  } catch (e) {
+    res.status(400).send({ error: 'There was an error in updating the room', api: `PATCH/rooms/${id}`, e });
   }
-
-  User.findByToken(token)
-    .then(user => {
-      return Room.findByIdAndUpdate(id, {
-        $set: body,
-        updatedBy: user._id
-      }, { new: true });
-    })
-    .then(room => res.send({ room }))
-    .catch(e => res.status(400).send(e));
 });
 
 // DELETE room
-router.delete('/:id', authenticate, (req, res) => {
-  const { id } = req.params;
-
-  if (!ObjectID.isValid(id)) {
-    return res.status(404).send({ error: 'ObjectID not valid' });
+router.delete('/:id', authenticate, async (req, res) => {
+  try {
+    const { id } = req.params;
+  
+    if (!ObjectID.isValid(id)) return res.status(404).send({ error: 'ObjectID not valid', api: `DELETE/rooms/${id}` });
+  
+    const room = Room.findByIdAndRemove(id);
+    
+    res.send({ message: 'Room succesfully deleted', api: `DELETE/rooms/${id}` });
+  } catch (e) {
+    res.status(400).send({ error: 'There was an error in deleting the room', api: `DELETE/rooms/${id}`, e });
   }
-
-  Room.findByIdAndRemove(id)
-    .then(() => res.send({ message: 'Room Deleted' })
-    .catch(e => res.status(400).send(e)));
 });
 
 module.exports = router;
