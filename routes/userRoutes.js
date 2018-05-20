@@ -6,24 +6,6 @@ const emailHandler = require('../config/email');
 const User = require('../models/userModel');
 const { authenticate } = require('./../middleware/auth');
 
-// // creates a super user if does not exist, one time only
-// User.findOne({ email: 'super@user' })
-//   .then((user) => {
-//     if (!user) {
-//       let superUser = {
-//         'firstName': 'superuser',
-//         'lastName': 'superuser',
-//         'email': 'super@user',
-//         'password': 'password',
-//         'userType': 'superuser',
-//         'active': true
-//       };
-//       var newUser = new User(superUser);
-//       newUser.save();
-//     }
-//   })
-//   .catch(e => console.log(e));
-
 // CREATE a user
 router.post('/register', async (req, res) => {
   try {
@@ -35,192 +17,166 @@ router.post('/register', async (req, res) => {
     res.send({ status: 'success', message: 'New user created' });
   } catch (e) {
     console.log(e);
-    res.status(400).send({ status: 'fail', message: 'Unable to create new user', e });
+    res.status(400).send({ error: 'Unable to create new user', e });
   }
 });
 
 // LOGIN
 router.post('/login', async (req, res) => {
   try {
-    let { email, password } = req.body;
-    let savedUser;
+    const { email, password } = req.body;
+
     const user = await User.findByCredentials(email, password);
-    console.log('user: ', user);
     const token = await user.generateAuthToken('auth');
-    console.log('token on Routes Login: ', token);
 
-    // res.setHeader('Set-Cookie', token);
-    // console.log(res);
-    // req.session.accessToken = token;
-    // let { _id, firstName, lastName, userType } = user.toJSON();
-    // req.session.user = {};
-    // req.session.user = { _id, email, firstName, lastName, userType };    console.log('session: ', req.session);
-    res.send({ token });
+    res.send({ message: 'User logged in succesfully', token });
   } catch (e) {
-    console.log('error: ', e);
-    res.status(400).send({ status: 'fail', message: 'Unable to login', e });
+    res.status(400).send({ error: 'Unable to login', e });
   }
-    // .then(user => {
-    //   savedUser = user;
-    //   return user.generateAuthToken('auth');
-    // })
-    // .then(token => {
-    //   console.log('token on Routes Login: ', token);
-    //   res.setHeader('Set-Cookie', token);
-    //   req.session.accessToken = token;
-    //   let { _id, email, firstName, lastName, userType } = savedUser.toJSON();
-    //   req.session.user = {};
-    //   req.session.user = { _id, email, firstName, lastName, userType };
-    //   console.log('session: ', req.session);
-    //   res.send({
-    //     token,
-    //     user: req.session.user
-    //   });
-    // })
 });
 
-// make a user inactive
-router.delete('/', (req, res) => {
-  req.session.destroy();
-  res.send({ message: 'Successfully Logout' });
-});
+// Send a password reset link to a user
+router.post('/password-reset', async (req, res) => {
+  try {
+    const { email, host } = req.body;
+    
+    const user = await User.findOne({ email });
+    if (!user) res.status(400).send({ error: 'No user found', api: 'POST/user/password-reset' });
 
-// send a password reset link to a user
-router.post('/passwordreset', (req, res) => {
-  const { email, host } = req.body;
-  let userFound;
-  User.findOne({ email })
-    .then(user => {
-      userFound = user;
-      return user.generateAuthToken('resetPassword');
-    })
-    .then(token => {
-      let emailURL = (`/passwordReset/${token}`);
-      emailHandler.sendEmail({
-        body: {
-          receiver: userFound.email,
-          firstName: userFound.firstName,
-          lastName: userFound.lastName,
-          type: 'passwordReset',
-          emailURL,
-          host,
-        }
-      });
-      res.send({
-        message: 'A password reset has been emailed to your account. Follow the instructions in the email.'
-      });
-    })
-    .catch(e => {
-      console.log(e);
-      res.status(400).send({ func: 'Password reset error', e });
+    const token = await user.generateAuthToken('resetPassword');
+    if (!token) res.status(400).send({ error: 'Error in generating the token', api: 'POST/users/password-reset' });
+    
+    const emailURL = (`/password-reset/${token}`);
+      
+    const email = await emailHandler.sendEmail({
+      body: {
+        receiver: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        type: 'passwordReset',
+        emailURL,
+        host,
+      }
     });
+    res.send({ message: 'A password reset has been emailed to your account. Follow the instructions in the email.' });
+  } catch (e) {
+    res.status(400).send({ error: 'Password reset error', api: 'POST/users/password-reset', e });
+  }
 });
 
-// check status of current user based on a token
-router.get('/status', authenticate, (req, res) => {
-  console.log('_id: ', req.userId);
-  res.status(200).json({
-    status: true,
-    user: req.session.user,
-    token: req.session.accessToken
-  });
+// Check status of current user based on a token
+router.get('/status', authenticate, async (req, res) => {
+  try {
+    const token = req.header('authorization').split(' ')[1];
+    
+    const user = await User.findById(req.userId);
+    if (!user) res.status(400).send({ error: 'No user found. Authentication failed', api: 'GET/users/status' });
+
+    res.status(200).json({ 
+      status: true,
+      user,
+      token
+    });
+  } catch (e) {
+    res.status(400).send({ error: 'Error getting the status' });
+  }
 });
 
-// GET list of users
-router.get('/', (req, res) => {
-  User.find()
-    .populate('updatedBy')
-    .then(user => res.send({ user }))
-    .catch(e => res.status(400).send({ e }));
+// GET list of all users
+router.get('/', async (req, res) => {
+  try {
+    const users = await User.find({}, '-password -__v').populate('updatedBy')
+    if (!users) res.status(400).send({ error: 'No users found', api: 'GET/user/' });
+    
+    res.send({ message: 'List of users', api: 'GET/user', user });
+  } catch (e) {
+    res.status(400).send({ error: 'Error in retrieving the users', api: 'GET/users', e });
+  }
 });
 
 // QUERY for user
-router.get('/query', authenticate, (req, res) => {
-
-  const query = {};
-
-  if (req.query.length > 0) {
-    query.$or = [];
-    userLabel.forEach(label => query.$or.push({
-      'label.name': new RegExp(label)
-    }));
-  } else {
-    Object.keys(req.query).forEach(key => {
-      if (key === '_id') {
-        req.query[key] = ObjectID.ObjectId(req.query[key]);
-        if (!query[key]) {
-          query[key] = [];
+router.get('/query', authenticate, async (req, res) => {
+  try {
+    const query = {};
+  
+    if (req.query.length > 0) {
+      query.$or = [];
+  
+      Object.keys(req.query).forEach(key => {
+        if (key === '_id') {
+          req.query[key] = ObjectID.ObjectId(req.query[key]);
+          if (!query[key]) {
+            query[key] = [];
+          }
+          query[key].push(req.query[key]);
+        } else {
+          if (!query[key]) {
+            query[key] = [];
+          }
+          query[key].push(new RegExp(req.query[key]));
         }
-        query[key].push(req.query[key]);
-      } else {
-        if (!query[key]) {
-          query[key] = [];
-        }
-        query[key].push(new RegExp(req.query[key]));
-      }
-    });
+      });
+    }
+  
+    const users = await User.find(query).populate('updatedBy');
+    if (!users) res.status(204).send({ message: 'The query did not returned any user', api: 'GET/users/query', e });
+
+    res.send({ message: 'Users matching the query', api: 'GET/users/query', users });
+  } catch (e) {
+    res.status(400).send({ error: 'There was an error in retrieving the users using the query', api: 'GET/users/query', e });
   }
-
-  User.find(query)
-    .populate('updatedBy')
-    .then(user => res.send({ user }))
-    .catch(e => res.status(400).send(e));
 });
 
 // UPDATE user data
-router.patch('/updateUser/:id', authenticate, (req, res) => {
-  const id = req.params.id;
-  const { body } = req;
+router.patch('/:id', authenticate, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { body } = req;
+  
+    if (!ObjectID.isValid(id)) return res.status(404).send({ error: 'ObjectID not valid', api: 'PATCH/users' });
+  
+    const user = await User.findByIdAndUpdate(id, { 
+      $set: body,
+      updatedBy: ObjectID.ObjectId(req.session.user._id)
+    }, { new: true });
+    if (!users) res.status(400).send({ error: 'No users found', api: 'PATCH/users' });
 
-  if (!ObjectID.isValid(id)) {
-    return res.status(404).send({ error: 'ObjectID not valid' });
+    res.send({ message: 'User updated correctly', api: 'PATCH/users' });
+  } catch (e) {
+    res.status(400).send({ error: 'There was an error in updating the user information', api: 'PATCH/users', e });
   }
-
-  User.findByIdAndUpdate(id, {
-    $set: body,
-    updatedBy: ObjectID.ObjectId(req.session.user._id)
-  }, { new: true })
-    .then(user => {
-      req.session.user.firstName = user.firstName;
-      req.session.user.lastName = user.lastName;
-      res.send({ message: 'User Sent' });
-    })
-    .catch(e => res.status(400).send(e));
 });
 
 // DELETE user
-router.delete('/:id', authenticate, (req, res) => {
-  const id = req.params.id;
-
-  if (!ObjectID.isValid(id)) return res.status(404).send({ error: 'ObjectID not valid' });
-
-  User.findByIdAndUpdate(id, {
-    $set: {
-      updatedBy: ObjectID.ObjectId(req.session.user._id),
-      active: false
-    }
-  }, { new: true })
-    .then(() => res.send({ message: 'User Deleted' }))
-    .catch(e => res.status(400).send(e));
+router.delete('/:id', authenticate, async (req, res) => {
+  try {
+    const { id } = req.params;
+  
+    if (!ObjectID.isValid(id)) return res.status(404).send({ error: 'ObjectID not valid', api: `DELETE/users/${id}` });
+  
+    const user = await User.findOneAndRemove(id);
+    res.send({ message: 'User correctly deleted', api: `DELETE/users/${id}` });
+  } catch (e) {
+    res.status(400).send({ error: 'There was an error in deleting the user', api: `DELETE/users/${id}`, e })
+  }
 });
 
 // CHANGE password
-router.patch('/profilePasswordChange', authenticate, (req, res) => {
-  const token = req.session.accessToken;
+router.patch('/profile-password-change', authenticate, (req, res) => {
+  const token = req.header('authorization').split(' ')[1];
 
   User.findByToken(token)
     .then(user => {
       // if the auth type is password "reset" then bypass the password check
-      if (req.header('x-auth-type') === 'reset') {
-        return user;
-      }
+      if (req.header('x-auth-type') === 'reset') return user;
+
       return new Promise((resolve, reject) => {
         // Use bcrypt.compare to compare password and user.password
         bcrypt.compare(req.body.currentPassword, user.password, (err, res) => {
           if (res) {
             resolve(user);
           } else {
-            reject({ message: 'Password incorrect' });
+            reject({ error: 'Password incorrect', api: 'PATCH/users/profile-password-change' });
           }
         });
       });
@@ -228,9 +184,9 @@ router.patch('/profilePasswordChange', authenticate, (req, res) => {
     .then(user => {
       user.password = req.body.newPassword;
       return user.save()
-        .then(result => res.status(200).send({ result }));
+        .then(result => res.status(200).send({ message: 'Password changed correctly', api: 'PATCH/users/profilePasswordChange', result }));
     })
-    .catch(e => res.status(400).send(e));
+    .catch(e => res.status(400).send({ error: `There was an error in changing the user' password`, api: 'PATCH/users/profilePasswordChange', e }));
 });
 
 
