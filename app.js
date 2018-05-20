@@ -4,7 +4,6 @@ const mongoose = require('mongoose');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const session = require('express-session');
 const path = require('path');
 const cors = require('cors');
 
@@ -40,33 +39,6 @@ app.use('/assets', express.static('assets'));
 app.use('/assets', express.static(path.join(__dirname, '../media')));
 app.use(cors());
 app.options('*', cors());
-
-// const authCheck = jwt({
-//   secret: jwks.expressJwtSecret({
-//         cache: true,
-//         rateLimit: true,
-//         jwksRequestsPerMinute: 5,
-//         jwksUri: "https://{YOUR-AUTH0-DOMAIN}.auth0.com/.well-known/jwks.json"
-//     }),
-//     // This is the identifier we set when we created the API
-//     audience: '{YOUR-API-AUDIENCE-ATTRIBUTE}',
-//     issuer: "{YOUR-AUTH0-DOMAIN}", // e.g., you.auth0.com
-//     algorithms: ['RS256']
-// });
-
-// app.get('/api/deals/private', authCheck, (req,res)=>{
-//   let deals = [
-//     // Array of private deals
-//   ];
-//   res.json(deals);
-// })
-
-app.use(session({
-  secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: false,
-  cookie: { secure: true }
-}))
 
 app.use('/', index);
 app.use('/api/users', user);

@@ -8,12 +8,17 @@ let { authenticate } = require('./../middleware/auth');
 
 
 // GET all the rooms
-router.get('/', authenticate, (req, res) => {
-  Room.find()
-    .populate('apartment')
-    .populate('user')
-    .then(rooms => res.send(rooms))
-    .catch(e => res.status(400).send(e));
+router.get('/', authenticate, async (req, res) => {
+  try {
+    const rooms = await Room.find()
+      .populate('apartment')
+      .populate('user');
+    if (!rooms) res.status(400).send({ error: 'No rooms found', api: 'GET/rooms' });
+    
+    res.send({ message: 'Rooms retreived succesfully', api: 'GET/rooms', rooms });
+  } catch (e) {
+    res.status(400).send({ error: 'There was an error in retreiving the rooms', api: 'GET/rooms', e });
+  }
 });
 
 // GET query of rooms
