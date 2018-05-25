@@ -28,9 +28,6 @@ export class EditAptComponent implements OnInit {
   }
 
   apartmentUpdate(id: any) {
-    console.log('called');
-    console.log('id: ', id);
-    console.log('apt to be modify: ', this.apartmentToBeModified);
     this.apartmentService.editApartment(id, this.apartmentToBeModified)
       .subscribe(result => {
         if (result.apartment) {

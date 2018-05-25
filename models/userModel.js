@@ -64,7 +64,6 @@ UserSchema.methods.generateAuthToken = async function (access) {
 };
 
 UserSchema.statics.findByToken = async function (token) {
-  console.log('token in modal: ', token);
   const User = this;
   let decoded;
   try {

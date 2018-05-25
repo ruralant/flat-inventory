@@ -20,7 +20,6 @@ router.get('/', authenticate, async (req, res) => {
 
       res.send({ message: 'List of apartments', api: 'GET/apartments', apartments});
   } catch (e) {
-    console.log(e);
     res.status(400).send({ message: 'Error in retreving the apartments list', api: 'GET/apartments' })
   }
 });
@@ -75,29 +74,21 @@ router.patch('/:id', authenticate, async (req, res) => {
   try {
     const token = req.header('authorization').split(' ')[1];
     const { id } = req.params;
-    console.log('id: ', id);
     const { body } = req;
-
-    console.log('body: ', body);
   
     if (!ObjectID.isValid(id)) return res.status(404).send({ error: 'ObjectID not valid' });
   
     const user = await User.findByToken(token);
 
     if (!user) res.status(400).send({ error: 'No user found', api: 'POST/rooms' });
-
-    console.log('user: ', user);
     
     const apartment = await Apartment.findByIdAndUpdate(id, {
       $set: body,
       updatedBy: user._id
     }, { new: true });
-
-    console.log('apartment: ', apartment);
       
     res.send({ message: 'Apartment updated successully', api: `PATCH/apartments/${id}`, apartment });
   } catch (e) {
-    console.log(e);
     res.status(400).send({ message: 'Error in updating the apartment information', api: `PATCH/apartments/${id}`, e});  
   }
 });

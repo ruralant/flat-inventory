@@ -16,7 +16,6 @@ router.post('/register', async (req, res) => {
 
     res.send({ status: 'success', message: 'New user created' });
   } catch (e) {
-    console.log(e);
     res.status(400).send({ error: 'Unable to create new user', e });
   }
 });
