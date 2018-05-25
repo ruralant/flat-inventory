@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 
 import { ApartmentService } from 'app/services/apartment.service';
@@ -10,7 +10,9 @@ import { ApartmentService } from 'app/services/apartment.service';
 })
 export class CreateAptComponent implements OnInit {
 
-  newApartment: any = {}
+  newApartment: any = {};
+  // output apartment after save
+  apartments = [];
 
   constructor(
     private apartmentService: ApartmentService,
@@ -23,8 +25,10 @@ export class CreateAptComponent implements OnInit {
   createApartment(): void {
     this.apartmentService.createApartment(this.newApartment)
       .subscribe(result => {
-        if (result.status === 'success') {
+        if (result.apartment) {
           this.snackbar.open('The apartment has been created.');
+          this.apartmentService.getApartments()
+            .subscribe(rst => this.apartments = rst.apartments);
         } else {
           this.snackbar.open('Somthing went wrong! The apartment has not been created');
         }

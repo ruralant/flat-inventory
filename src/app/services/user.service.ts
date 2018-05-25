@@ -44,7 +44,7 @@ export class UserService {
   }
 
   editUser(id: string, user: any): any {
-    return this.http.patch<any>(`${constURL}/users/updateUser/${id}`, user)
+    return this.http.patch<any>(`${constURL}/users/update-user/${id}`, user)
       .map(res => res.user)
       .catch(this.handleError);
   }

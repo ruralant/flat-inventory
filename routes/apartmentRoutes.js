@@ -13,13 +13,14 @@ router.get('/', authenticate, async (req, res) => {
     const token = req.header('authorization').split(' ')[1];
       
     const user = await User.findByToken(token);
-    const apartment = await Apartment.find({ createdBy: ObjectID.ObjectId(user._id) })
+    const apartments = await Apartment.find({ createdBy: ObjectID.ObjectId(user._id) })
       .populate('rooms')
       .populate('user')
       .populate('updatedBy')
 
       res.send({ message: 'List of apartments', api: 'GET/apartments', apartments});
   } catch (e) {
+    console.log(e);
     res.status(400).send({ message: 'Error in retreving the apartments list', api: 'GET/apartments' })
   }
 });

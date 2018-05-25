@@ -25,12 +25,12 @@ export class HomeComponent implements OnInit {
 
   getCurrentUser(): void {
     this.userService.getUser()
-      .subscribe(currentUser => this.currentUser = currentUser.user);
+      .subscribe(result => this.currentUser = result.user);
   }
 
   getUserApartments(): void {
     this.apartmentService.getApartments()
-      .subscribe(apartments => this.apartments = apartments);
+      .subscribe(response => this.apartments = response.apartments);
   }
 
   deleteApartment(id): void {

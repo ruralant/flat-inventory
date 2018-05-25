@@ -48,7 +48,7 @@ router.post('/password-reset', async (req, res) => {
     
     const emailURL = (`/password-reset/${token}`);
       
-    const email = await emailHandler.sendEmail({
+    const emailToSend = await emailHandler.sendEmail({
       body: {
         receiver: user.email,
         firstName: user.firstName,
