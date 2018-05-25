@@ -28,13 +28,16 @@ export class EditAptComponent implements OnInit {
   }
 
   apartmentUpdate(id: any) {
+    console.log('called');
+    console.log('id: ', id);
+    console.log('apt to be modify: ', this.apartmentToBeModified);
     this.apartmentService.editApartment(id, this.apartmentToBeModified)
       .subscribe(result => {
-        this.snackbar.open('The room has been modified.');
-        this.location.back();
-      }, err => {
-        if (err.status === 400) {
-          this.snackbar.open('Something went wrong!')
+        if (result.apartment) {
+          this.snackbar.open('The room has been modified.');
+          this.location.back();
+        } else {
+          this.snackbar.open('Something went wrong!');
         }
       });
   }
