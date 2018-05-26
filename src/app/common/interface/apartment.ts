@@ -1,12 +1,12 @@
-import { RoomInterface } from './room';
+import { Room } from './room';
 
-export interface ApartmentInterface {
+export interface Apartment {
   _id: string,
   name: string,
   description?: string,
   location?: string,
   available: boolean,
-  rooms?: RoomInterface[],
+  rooms?: Room[],
   label?: string
 }
 

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import 'rxjs/add/operator/map';
+import { Apartment } from '../common/interface/apartment';
+
 
 import { environment } from '../../environments/environment';
 
@@ -18,44 +19,30 @@ export class ApartmentService {
 
   searchApartments(search: string): any {
     const url = search != null ? `${constURL}/apartments/query${search}` : `${constURL}/apartments/`;
-    return this.http.get<any>(url)
-      .map(res => res.apartment)
-      .catch(this.handleError)
+    return this.http.get<Apartment>(url);
   }
 
   getApartments(): any {
-    return this.http.get(`${constURL}/apartments`)
-      .map(res => res)
-      .catch(this.handleError)
+    return this.http.get(`${constURL}/apartments`);
   }
 
   getOneApartment(id: any): any {
-    return this.http.get<any>(`${constURL}/apartments/query?_id=${id}`)
-      .map(res =>  res.apartments)
-      .catch(this.handleError)
+    return this.http.get<Apartment>(`${constURL}/apartments/query?_id=${id}`);
   }
 
   getApartmentItems(id: any): any {
-    return this.http.get(`${constURL}/apartments/query?_id=${id}`)
-      .map(res =>  res)
-      .catch(this.handleError)
+    return this.http.get(`${constURL}/apartments/query?_id=${id}`);
   }
 
   createApartment(apartment: object): any {
-    return this.http.post<any>(`${constURL}/apartments`, apartment)
-      .map(res => res.apartment)
-      .catch(this.handleError)
+    return this.http.post<Apartment>(`${constURL}/apartments`, apartment);
   }
 
   editApartment(id: string, apartment: object): any {
-    return this.http.patch(`${constURL}/apartments/${id}`, apartment)
-      .map(res => res)
-      .catch(this.handleError);
+    return this.http.patch(`${constURL}/apartments/${id}`, apartment);
   }
 
   deleteApartment(id: string): any {
-    return this.http.delete(`${constURL}/apartments/${id}`)
-      .map(res => res)
-      .catch(this.handleError);
+    return this.http.delete(`${constURL}/apartments/${id}`);
   }
 }

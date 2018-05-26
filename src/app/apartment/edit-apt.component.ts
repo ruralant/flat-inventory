@@ -23,7 +23,7 @@ export class EditAptComponent implements OnInit {
 
   ngOnInit() {
     this.route.params
-      .switchMap((params: Params) => this.apartmentService.getOneApartment(params['id']))
+      .map((params: Params) => this.apartmentService.getOneApartment(params['id']))
       .subscribe(result => this.apartmentToBeModified = result[0])
   }
 

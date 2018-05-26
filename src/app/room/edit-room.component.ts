@@ -23,7 +23,7 @@ export class EditRoomComponent implements OnInit {
 
   ngOnInit() {
     this.route.params
-      .switchMap((params: Params) => this.roomService.getOneRoom(params['id']))
+      .map((params: Params) => this.roomService.getOneRoom(params['id']))
       .subscribe(result => this.roomToBeModified = result[0]);
   }
 

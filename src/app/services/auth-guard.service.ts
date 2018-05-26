@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Router, CanActivate } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
-import 'rxjs/add/observable/of';
+
 
 import { AuthenticationService } from 'app/services/authentication.service';
 import { environment } from '../../environments/environment';

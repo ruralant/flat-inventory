@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import 'rxjs/add/operator/switchMap';
+
 
 import { ApartmentService } from 'app/services/apartment.service';
 
@@ -27,7 +27,7 @@ export class ApartmentComponent implements OnInit {
   getApartment(): void {
     this.route.params
       .switchMap((params: Params) => this.apartmentService.getOneApartment(params['id']))
-      .subscribe(result => { this.apartment = result[0] })
+      .subscribe(result => this.apartment = result['apartments'][0]);
   }
 
   getAptItems(): void {

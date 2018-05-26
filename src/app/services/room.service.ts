@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import 'rxjs/add/operator/map';
+import { Room } from '../common/interface/room';
+
 
 const constURL = `${environment.constURL}/api`;
 
@@ -16,45 +17,31 @@ export class RoomService {
 
   searchRooms(search: string): any {
     const url = search != null ? `${constURL}/rooms/query${search}` : `${constURL}/rooms/`;
-    return this.http.get<any>(url)
-      .map(res => res.room)
-      .catch(this.handleError)
+    return this.http.get<Room>(url);
   }
 
   getRooms(): any {
-    return this.http.get(`${constURL}/rooms`)
-      .map(res => res)
-      .catch(this.handleError)
+    return this.http.get(`${constURL}/rooms`);
   }
 
   getOneRoom(id: any): any {
-    return this.http.get<any>(`${constURL}/rooms/query?_id=${id}`)
-      .map(res =>  res.room)
-      .catch(this.handleError)
+    return this.http.get<Room>(`${constURL}/rooms/query?_id=${id}`);
   }
 
   getRoomItems(id: any): any {
-    return this.http.get(`${constURL}/rooms/query?_id=${id}`)
-      .map(res =>  res)
-      .catch(this.handleError)
+    return this.http.get<Room>(`${constURL}/rooms/query?_id=${id}`);
   }
 
   createRoom(room: object): any {
-    return this.http.post<any>(`${constURL}/rooms`, room)
-      .map(res =>  res.room)
-      .catch(this.handleError)
+    return this.http.post<Room>(`${constURL}/rooms`, room);
   }
 
   editRoom(id: string, room: object): any {
-    return this.http.patch(`${constURL}/rooms/${id}`, room)
-      .map(res => res)
-      .catch(this.handleError);
+    return this.http.patch<Room>(`${constURL}/rooms/${id}`, room);
   }
 
-  deconsteRoom(id: string): any {
-    return this.http.delete(`${constURL}/rooms/${id}`)
-      .map(res => res)
-      .catch(this.handleError);
+  deleteRoom(id: string): any {
+    return this.http.delete<Room>(`${constURL}/rooms/${id}`);
   }
 
 }

@@ -1,10 +1,10 @@
-import { ApartmentInterface } from './apartment';
+import { Apartment } from './apartment';
 
-export interface RoomInterface {
+export interface Room {
   _id: string,
   reference?: string,
   description?: string,
-  location: ApartmentInterface,
+  location: Apartment,
   availablity: boolean,
   label: string,
 }
