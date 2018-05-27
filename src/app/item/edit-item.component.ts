@@ -23,11 +23,10 @@ export class EditItemComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.route.params
-      .switchMap((params: Params) => this.itemService.getOneItem(params['id']))
-      .subscribe(result => {
-        this.itemToBeModified = result[0];
-        this.snackBar.open(`The ${this.itemToBeModified.name} has been edited correctly`)
+    this.route.paramMap
+      .subscribe(params => {
+        this.itemService.getOneItem(params.get('id'))
+          .subscribe(item => this.itemToBeModified = item[0]);
       })
   }
 

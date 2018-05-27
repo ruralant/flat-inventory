@@ -19,21 +19,19 @@ export class ApartmentComponent implements OnInit {
     private route: ActivatedRoute
   ) { }
 
+  getApartment(): void {
+    this.route.paramMap
+      .subscribe(params => this.apartment = params.get('id'));
+  }
+
+  // getAptItems(): void {
+  //   this.route.paramMap
+  //     .switchMap((params: Params) => this.apartmentService.getApartmentItems(params['id']))
+  //     .subscribe(result => { this.items = result })
+  // }
+
   ngOnInit() {
     this.getApartment();
-    this.getAptItems();
-  }
-
-  getApartment(): void {
-    this.route.params
-      .switchMap((params: Params) => this.apartmentService.getOneApartment(params['id']))
-      .subscribe(result => this.apartment = result['apartments'][0]);
-  }
-
-  getAptItems(): void {
-    this.route.params
-      .switchMap((params: Params) => this.apartmentService.getApartmentItems(params['id']))
-      .subscribe(result => { this.items = result })
   }
 
 }

@@ -1,11 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable ,  Subject } from 'rxjs';
-
-
-
-
-
+import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
 const constURL = `${environment.constURL}/api`;
@@ -55,7 +51,7 @@ export class AuthenticationService {
       })
       .catch(() => {
         return Observable.of(false);
-      });
+      })
   }
 
   // Service message commands

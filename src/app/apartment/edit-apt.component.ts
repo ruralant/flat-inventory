@@ -21,10 +21,13 @@ export class EditAptComponent implements OnInit {
     private snackbar: MatSnackBar
   ) { }
 
+  getApartment(): void {
+    this.route.paramMap
+      .subscribe(params => this.apartmentToBeModified = params.get('id'));
+  }
+
   ngOnInit() {
-    this.route.params
-      .map((params: Params) => this.apartmentService.getOneApartment(params['id']))
-      .subscribe(result => this.apartmentToBeModified = result[0])
+    this.getApartment();
   }
 
   apartmentUpdate(id: any) {

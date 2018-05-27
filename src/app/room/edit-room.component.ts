@@ -22,9 +22,11 @@ export class EditRoomComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.route.params
-      .map((params: Params) => this.roomService.getOneRoom(params['id']))
-      .subscribe(result => this.roomToBeModified = result[0]);
+    this.route.paramMap
+      .subscribe(params => {
+        this.roomService.getOneRoom(params.get('id'))
+          .subscribe(result => this.roomToBeModified = result[0]);
+      })
   }
 
   updateRoom(id: any) {
