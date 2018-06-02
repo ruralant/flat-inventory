@@ -77,6 +77,7 @@ router.get('/status', authenticate, async (req, res) => {
       token
     });
   } catch (e) {
+    console.log(e);
     res.status(400).send({ error: 'Error getting the status' });
   }
 });

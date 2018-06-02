@@ -30,10 +30,11 @@ export class LoginComponent implements OnInit {
     this.authenticationService.logout()
   }
 
-  login() {
+  async login() {
     this.loading = true;
-    this.authenticationService.login(this.model.email, this.model.password)
-      .subscribe(res => this.router.navigate(['/home']));
+    await this.authenticationService.login(this.model.email, this.model.password)
+      .subscribe(res => localStorage.setItem('token', res.token));
+    this.router.navigate(['/home']);
   }
 
   forgotPassword() {

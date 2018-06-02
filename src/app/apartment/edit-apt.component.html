@@ -1,45 +1,43 @@
 <div class="wrapper">
   <div class="content">
 
-    <form class="form" name="edit-apartment-form" (ngSubmit)="f.form.valid && apartmentUpdate(apartmentToBeModified._id, apartmentToBeModified, f)" #f="ngForm"
+    <form class="form" name="edit-apartment-form" (ngSubmit)="f.form.valid && apartmentUpdate(apartmentToBeModified, apartment, f)" #f="ngForm"
       novalidate>
 
-      <input type="hidden" value="{{apartmentToBeModified._id}}" name="id">
-
       <mat-form-field>
-        <input matInput type="text" id="name" value="{{apartmentToBeModified.name}}" #name="ngModel" placeholder="Apartment Name"
-          [(ngModel)]="apartmentToBeModified.name" name="apartment-name">
+        <input matInput type="text" id="name" value="{{apartment.name}}" #name="ngModel" placeholder="Apartment Name"
+          [(ngModel)]="apartment.name" name="apartment-name">
       </mat-form-field>
         
       <mat-form-field>
-        <input matInput type="text" id="description" value="{{apartmentToBeModified.description}}" #description="ngModel" placeholder="Add the apartment description"
-          [(ngModel)]="apartmentToBeModified.description" name="apartment-description">
+        <input matInput type="text" id="description" value="{{apartment.description}}" #description="ngModel" placeholder="Add the apartment description"
+          [(ngModel)]="apartment.description" name="apartment-description">
       </mat-form-field>
 
       <mat-form-field>        
-        <input matInput type="text" value="{{apartmentToBeModified.location}}" #location="ngModel" placeholder="Add the apartment location"
-          [(ngModel)]="apartmentToBeModified.location" name="apartment-location">
+        <input matInput type="text" value="{{apartment.location}}" #location="ngModel" placeholder="Add the apartment location"
+          [(ngModel)]="apartment.location" name="apartment-location">
       </mat-form-field>
 
       <mat-form-field>
-        <mat-select name="availability" [(ngModel)]="apartmentToBeModified.availability" #availability="ngModel">
+        <mat-select name="availability" [(ngModel)]="apartment.availability" #availability="ngModel">
           <mat-option value="true">Available</mat-option>
           <mat-option value="false">Unavailable</mat-option>
         </mat-select>
       </mat-form-field>
 
-      <mat-form-field *ngIf="apartmentToBeModified.apartmentType === 'local'">
-        <input matInput *ngIf="apartmentToBeModified.family[0]" type="text" value="{{apartmentToBeModified.family[0].name}}" #family="ngModel" placeholder="apartment family"
-            [(ngModel)]="apartmentToBeModified.family[0].name" name="apartment-family" disabled>
-        <input matInput *ngIf="!apartmentToBeModified.family[0]" type="text" value="This apartment is not part of a Group" placeholder="apartment family" name="apartment-family" disabled>
+      <mat-form-field *ngIf="apartment.apartmentType === 'local'">
+        <input matInput *ngIf="apartment.family[0]" type="text" value="{{apartment.family[0].name}}" #family="ngModel" placeholder="apartment family"
+            [(ngModel)]="apartment.family[0].name" name="apartment-family" disabled>
+        <input matInput *ngIf="!apartment.family[0]" type="text" value="This apartment is not part of a Group" placeholder="apartment family" name="apartment-family" disabled>
       </mat-form-field>
 
       <mat-form-field> 
-        <input matInput type="date" value="{{apartmentToBeModified.labels}}" #labels="ngModel" [(ngModel)]="apartmentToBeModified.labels"
+        <input matInput type="date" value="{{apartment.labels}}" #labels="ngModel" [(ngModel)]="apartment.labels"
           name="istance-labels">
       </mat-form-field>
 
-      <p *ngIf="apartmentToBeModified.updatedAt && apartmentToBeModified.updatedBy" class="updatedBy">Updated by {{apartmentToBeModified.updatedBy.firstName}} {{apartmentToBeModified.updatedBy.lastName}} on {{apartmentToBeModified.updatedAt | date:'short'}}</p>
+      <p *ngIf="apartment.updatedAt && apartment.updatedBy" class="updatedBy">Updated by {{apartment.updatedBy.firstName}} {{apartment.updatedBy.lastName}} on {{apartment.updatedAt | date:'short'}}</p>
 
       <button mat-raised-button>Save apartment</button>
     </form>

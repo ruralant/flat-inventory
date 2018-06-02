@@ -11,12 +11,13 @@ const jwt = require('jsonwebtoken');
  * @param {*} res 
  * @param {*} next 
  */
-let authenticate = (req, res, next) => {
+let authenticate = async (req, res, next) => {
   if(!req.header('authorization')) return res.status(401).send({ message: 'Not authorised' });
 
   let token = req.header('authorization').split(' ')[1];
-  const payload = jwt.verify(token, process.env.JWT_SECRET)
-
+  console.log('token: ', token);
+  const payload = await jwt.verify(token, process.env.JWT_SECRET);
+  console.log('payload: ', payload);
   if(!payload) return res.status(401).send({ message: 'Not authorised' });
 
   req.userId = payload._id;

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 
-
 import { ApartmentService } from 'app/services/apartment.service';
 
 @Component({
@@ -11,7 +10,8 @@ import { ApartmentService } from 'app/services/apartment.service';
 })
 export class ApartmentComponent implements OnInit {
 
-  apartment: any = {};
+  apartmentId: string;
+  apartment: any;
   items: any = [];
 
   constructor(
@@ -19,16 +19,12 @@ export class ApartmentComponent implements OnInit {
     private route: ActivatedRoute
   ) { }
 
-  getApartment(): void {
-    this.route.paramMap
-      .subscribe(params => this.apartment = params.get('id'));
+  async getApartment() {
+    await this.route.paramMap
+      .subscribe(params => this.apartmentId = params.get('id'));
+    await this.apartmentService.getOneApartment(this.apartmentId)
+      .subscribe(response => this.apartment = response.apartments[0]);
   }
-
-  // getAptItems(): void {
-  //   this.route.paramMap
-  //     .switchMap((params: Params) => this.apartmentService.getApartmentItems(params['id']))
-  //     .subscribe(result => { this.items = result })
-  // }
 
   ngOnInit() {
     this.getApartment();

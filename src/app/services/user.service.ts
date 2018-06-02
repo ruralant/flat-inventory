@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { RequestOptions } from '@angular/http';
-
 import { Observable } from 'rxjs';
-
+import { map, catchError } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
 
@@ -14,45 +13,33 @@ export class UserService {
 
   constructor( private http: HttpClient ) { }
 
-  private handleError(error: any): Promise<any> {
-    return Promise.reject(error.message || error);
+  errorHandler() {
+    return Observable.throw(false);
   }
 
   getUser() {
-    return this.http.get(`${constURL}/users/status`)
-      .map(res => res)
-      .catch(this.handleError);
+    return this.http.get<any>(`${constURL}/users/status`);
   }
 
   getInstanceUsers() {
-    return this.http.get<any>(`${constURL}/users/`)
-      .map(res => res.user)
-      .catch(this.handleError)
+    return this.http.get<any>(`${constURL}/users/`);
   }
 
   getOneUser(id: string): any {
-    return this.http.get<any>(`${constURL}/users/query?_id=${id}`)
-      .map(res => res.user)
-      .catch(this.handleError);
+    return this.http.get<any>(`${constURL}/users/query?_id=${id}`);
   }
 
   newUser(model: any): any {
     const paths = [];
-    return this.http.post(`${constURL}/users`, model)
-      .map(res => res)
-      .catch(this.handleError);
+    return this.http.post(`${constURL}/users`, model);
   }
 
   editUser(id: string, user: any): any {
-    return this.http.patch<any>(`${constURL}/users/update-user/${id}`, user)
-      .map(res => res.user)
-      .catch(this.handleError);
+    return this.http.patch<any>(`${constURL}/users/update-user/${id}`, user);
   }
 
   deconsteUser(id: string): any {
-    return this.http.delete(`${constURL}/users/${id}`)
-      .map(res => res)
-      .catch(this.handleError);
+    return this.http.delete(`${constURL}/users/${id}`);
   }
 
   submitChangePassword(passwordModel: any, token: string): any {
@@ -71,20 +58,16 @@ export class UserService {
     const options = new RequestOptions({ headers });
 
     // you returned this already no need to do it twice
-    return this.http.patch(`${constURL}/users/profilePasswordChange`, passwordModel)
-      .map(res => res)
-      .catch(() => {
-        return Observable.of(false);
-      });
+    return this.http.patch<any>(`${constURL}/users/profilePasswordChange`, passwordModel).pipe(
+      map(res => res),
+      catchError(this.errorHandler));
   }
 
   forgotPassword(email: string, host: string) {
     const body = { email, host };
 
-    return this.http.post(`${constURL}/users/passwordreset`, body)
-      .map(res => res)
-      .catch(err => {
-        return Observable.of(false);
-      });
+    return this.http.post<any>(`${constURL}/users/passwordreset`, body).pipe(
+      map(res => res),
+      catchError(this.errorHandler));
   }
 }

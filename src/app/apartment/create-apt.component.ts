@@ -2,6 +2,7 @@ import { Component, OnInit, Output } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 
 import { ApartmentService } from 'app/services/apartment.service';
+import { Apartment } from './../common/interface/apartment';
 
 @Component({
   selector: 'app-create-apt',
@@ -12,7 +13,7 @@ export class CreateAptComponent implements OnInit {
 
   newApartment: any = {};
   // output apartment after save
-  apartments = [];
+  apartments: Apartment[] = [];
 
   constructor(
     private apartmentService: ApartmentService,

@@ -4,6 +4,7 @@ import { Location } from '@angular/common';
 import { MatSnackBar } from '@angular/material';
 
 import { ApartmentService } from 'app/services/apartment.service';
+import { Apartment } from './../common/interface/apartment';
 
 @Component({
   selector: 'app-edit-apt',
@@ -12,7 +13,8 @@ import { ApartmentService } from 'app/services/apartment.service';
 })
 export class EditAptComponent implements OnInit {
 
-  apartmentToBeModified: any = {};
+  apartmentToBeModified: string;
+  apartment: any = {};
 
   constructor(
     private apartmentService: ApartmentService,
@@ -21,9 +23,11 @@ export class EditAptComponent implements OnInit {
     private snackbar: MatSnackBar
   ) { }
 
-  getApartment(): void {
-    this.route.paramMap
+  async getApartment() {
+    await this.route.paramMap
       .subscribe(params => this.apartmentToBeModified = params.get('id'));
+    await this.apartmentService.getOneApartment(this.apartmentToBeModified)
+      .subscribe(response => this.apartment = response.apartments[0]);
   }
 
   ngOnInit() {
@@ -31,10 +35,10 @@ export class EditAptComponent implements OnInit {
   }
 
   apartmentUpdate(id: any) {
-    this.apartmentService.editApartment(id, this.apartmentToBeModified)
+    this.apartmentService.editApartment(id, this.apartment)
       .subscribe(result => {
         if (result.apartment) {
-          this.snackbar.open('The room has been modified.');
+          this.snackbar.open('The apartment has been modified.');
           this.location.back();
         } else {
           this.snackbar.open('Something went wrong!');

@@ -15,46 +15,46 @@
   </table>
 
   <td><button routerLink="/apartments/edit/{{apartment._id}}">Edit</button></td>
-</div>
 
-<div *ngIf="apartment.rooms">
-  <div *ngFor="let room of apartment.rooms">
-    <table>
-      <tr>
-        <th>Number</th>
-        <th>Description</th>
-        <th>Availability</th>
-        <th>Labels</th>
-        <th></th>
-      </tr>
-      <tr>
-        <td>{{room.reference}}</td>
-        <td>{{room.description}}</td>
-        <td>{{room.availability}}</td>
-        <td>{{room.label}}</td>
-        <td><button routerLink="/rooms/edit/{{room._id}}">Edit</button></td>
-      </tr>
-    </table>
+  <div *ngIf="apartment.rooms">
+    <div *ngFor="let room of apartment.rooms">
+      <table>
+        <tr>
+          <th>Number</th>
+          <th>Description</th>
+          <th>Availability</th>
+          <th>Labels</th>
+          <th></th>
+        </tr>
+        <tr>
+          <td>{{room.reference}}</td>
+          <td>{{room.description}}</td>
+          <td>{{room.availability}}</td>
+          <td>{{room.label}}</td>
+          <td><button routerLink="/rooms/edit/{{room._id}}">Edit</button></td>
+        </tr>
+      </table>
+    </div>
   </div>
-</div>
-
-<div *ngIf="apartment.items">
-  <div *ngFor="let item of apartment.items">
-    <table>
-      <tr>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Quantity/Stock</th>
-        <th>Labels</th>
-        <th></th>
-      </tr>
-      <tr>
-        <td>{{item.name}}</td>
-        <td>{{item.description}}</td>
-        <td>{{item.availability}}/{{items.stock}}</td>
-        <td>{{item.label}}</td>
-        <td><button routerLink="/rooms/edit/{{item._id}}">Edit</button></td>
-      </tr>
-    </table>
+  
+  <div *ngIf="apartment.items">
+    <div *ngFor="let item of apartment.items">
+      <table>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Quantity/Stock</th>
+          <th>Labels</th>
+          <th></th>
+        </tr>
+        <tr>
+          <td>{{item.name}}</td>
+          <td>{{item.description}}</td>
+          <td>{{item.availability}}/{{items.stock}}</td>
+          <td>{{item.label}}</td>
+          <td><button routerLink="/rooms/edit/{{item._id}}">Edit</button></td>
+        </tr>
+      </table>
+    </div>
   </div>
 </div>

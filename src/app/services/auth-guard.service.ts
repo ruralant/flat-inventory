@@ -2,8 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router, CanActivate } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
-
+import { map, catchError } from 'rxjs/operators';
 
 import { AuthenticationService } from 'app/services/authentication.service';
 import { environment } from '../../environments/environment';
@@ -19,14 +18,16 @@ export class AuthGuardService implements CanActivate {
     private authenticationService: AuthenticationService,
   ) { }
 
+  errorHandler() {
+    this.router.navigate(['/login']);
+    this.authenticationService.emitChange('logout');
+    return Observable.throw(false);
+  }
+
   // this is the middleware to authenticate all the users
   canActivate(route) {
-    return this.http.get(`${constURL}/users/status`)
-      .map(res => true)
-      .catch(err => {
-        this.router.navigate(['/login']);
-        this.authenticationService.emitChange('logout');
-        return Observable.of(false);
-      });
+    return this.http.get<any>(`${constURL}/users/status`).pipe(
+      map(res => true),
+      catchError(this.errorHandler));
   }
 }
