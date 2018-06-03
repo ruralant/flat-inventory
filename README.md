@@ -7,9 +7,9 @@
 ![mongodb logo](./assets/mongo-logo.png)
 ![sass logo](./assets/sass-logo.png)
 
-## Project currently in development
+## Project Summary
 
-Flat Inventory is a single page application that allows property owners that rent they home/apartmetns short term (AirBnb, Booking.com, etc) to manage the stock of their apartments.
+**Flat Inventory** is a single page application that allows property owners that rent they home/apartmetns short term (AirBnb, Booking.com, etc) to manage the stock of their apartments.
 
 I develop the application following the PWA (Progressive Web App) manifesto and it can we installed on every **Android phone** running **Chrome 38 or newver**.
 It can also be added to the drower on any **iOS** device but until Safari is not fully supporting **Service Workers** notifications and offline features are limied.
@@ -21,11 +21,13 @@ It can also be added to the drower on any **iOS** device but until Safari is not
 ## Technologies Used
 
 - **Angular 6**
+- **Angular Material**
 - **PWA Manifesto**
 - **Service Workers**
-- **Node.JS 9.3.0**
+- **Node.JS 10**
 - **Express.JS**
 - **MongoDB**
+- **PM2**
 - **TypeScript**
 - **JWT**
 - **Bcrypt.JS**
@@ -35,14 +37,13 @@ It can also be added to the drower on any **iOS** device but until Safari is not
 
 During the development process I used also the following tools:
 
-- **Insomnia RESTFul API**: to test the API
+- **Postman**: to test the API
 - **Robo 3T**: MongoDB management tool
 - **Visual Studio Code**: GUI
 - **Trello**: as project management tool
 - **Omnigraffle**: to create the ERD
 - **Adobe XD**: to create the wireframe and mokeup
 - **Photoshop CC**: as photo editor
-- **MacDown**: to create this README file
 - **Heroku**: to deploy the application
 - **mLab**: ad database hosting provider
 
