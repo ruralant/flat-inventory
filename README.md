@@ -1,5 +1,6 @@
 # FlatInventory
 
+![material design logo](./assets/material-logo.png)
 ![pwa logo](./assets/pwa-logo.png)
 ![angular logo](./assets/angular-logo.png)
 ![node js logo](./assets/node-logo.png)
@@ -19,7 +20,7 @@ It can also be added to the drower on any **iOS** device but until Safari is not
 
 ## Technologies Used
 
-- **Angular 5.2.0**
+- **Angular 6**
 - **PWA Manifesto**
 - **Service Workers**
 - **Node.JS 9.3.0**
