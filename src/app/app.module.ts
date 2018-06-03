@@ -4,11 +4,16 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RoutingModule } from 'app/routing/routing.module';
+
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatGridListModule } from '@angular/material/grid-list';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatButtonModule } from '@angular/material/button';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatIconModule } from '@angular/material/icon';
 
 import { AuthenticationService } from 'app/services/authentication.service';
 import { AuthGuardService } from 'app/services/auth-guard.service';
@@ -59,7 +64,7 @@ import { RegisterComponent } from './register/register.component';
     ItemsViewComponent,
     CreateAptComponent,
     CreateRoomComponent,
-    RegisterComponent
+    RegisterComponent,
   ],
   imports: [
     BrowserModule,
@@ -71,14 +76,22 @@ import { RegisterComponent } from './register/register.component';
     MatSelectModule,
     MatSnackBarModule,
     MatInputModule,
-    MatButtonModule
+    MatButtonModule,
+    MatToolbarModule,
+    MatGridListModule,
+    MatExpansionModule,
+    MatIconModule
   ],
   exports: [
     MatFormFieldModule,
     MatSelectModule,
     MatSnackBarModule,
     MatInputModule,
-    MatButtonModule
+    MatButtonModule,
+    MatToolbarModule,
+    MatGridListModule,
+    MatExpansionModule,
+    MatIconModule
   ],
   providers: [
     AuthGuardService,

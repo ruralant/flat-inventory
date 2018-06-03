@@ -1,13 +1,20 @@
 <app-topnav>Loading...</app-topnav>
 <h3 *ngIf="currentUser">Hello {{currentUser.firstName}}!!</h3>
 
-<app-create-apt></app-create-apt>
+<mat-grid-list cols="2" rowHeight="2:1" id="apartments-grid">
+  <div *ngFor="let apartment of apartments">
+    <mat-grid-tile>
+      <mat-grid-tile-header>
+        {{apartment.name}}
+      </mat-grid-tile-header>
+      {{apartment.description}}
+      <mat-grid-tile-footer class="grid-footer">
+        <button mat-raised-button routerLink="/apartments/{{apartment._id}}">View</button>
+        <button mat-raised-button routerLink="/apartments/edit/{{apartment._id}}">Edit</button>
+        <button mat-raised-button (click)="deleteApartment(apartment._id)" >Delete</button>  
+      </mat-grid-tile-footer>
+    </mat-grid-tile>
+  </div>
+</mat-grid-list>
 
-<div *ngFor="let apartment of apartments">
-  <table>
-    <td>{{apartment.name}}</td>
-    <td><button mat-raised-button routerLink="/apartments/{{apartment._id}}">View</button></td>
-    <td><button mat-raised-button routerLink="/apartments/edit/{{apartment._id}}">Edit</button></td>
-    <td><button mat-raised-button (click)="deleteApartment(apartment._id)" >Delete</button></td>
-  </table>
-</div>
+<app-create-apt class="new-apartment"></app-create-apt>

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatToolbar } from '@angular/material';
 
 import { UserService } from 'app/services/user.service';
 

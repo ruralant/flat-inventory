@@ -1,29 +1,44 @@
-<h2>Create a new apartment</h2>
-<form name="form" (ngSubmit)="createApartment()" novalidate>
-  <mat-form-field>
-    <input matInput id="name" type="text" placeholder="Add the name of the apartment" name="name" [(ngModel)]="newApartment.name"
-      #name="ngModel" required>
-  </mat-form-field>
+<mat-accordion>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        New Apartment
+      </mat-panel-title>
+      <mat-panel-description>
+        Create a new apartment
+      </mat-panel-description>
+    </mat-expansion-panel-header>
 
-  <mat-form-field>
-    <input matInput id="description" type="text" placeholder="Add the apartment descripton" name="description" description="description" [(ngModel)]="newApartment.description"
-      #description="ngModel">
-  </mat-form-field>
-
-  <mat-form-field>
-    <input matInput id="location" type="text" placeholder="Add the postcode of the apartment" name="location" location="location" [(ngModel)]="newApartment.location"
-      #location="ngModel">
-  </mat-form-field>
-
-  <mat-select [(ngModel)]="newApartment.availability" id="availability" name="availability">
-      <mat-option value="true">Yes</mat-option>
-      <mat-option value="false">No</mat-option>
-  </mat-select>
-
-  <mat-form-field>
-    <input matInput id="label" type="text" placeholder="Add labels dividied by a comma" name="label" label="label" [(ngModel)]="newApartment.label"
-      #label="ngModel">
-  </mat-form-field>
-
-  <button mat-raised-button>Save</button>
-</form>
+    <form name="form" (ngSubmit)="createApartment()" novalidate>
+      <mat-form-field>
+        <input matInput id="name" type="text" placeholder="Apartment's Name" name="name" [(ngModel)]="newApartment.name"
+          #name="ngModel" required>
+      </mat-form-field>
+    
+      <mat-form-field>
+        <input matInput id="description" type="text" placeholder="Apartment's descripton" name="description" description="description" [(ngModel)]="newApartment.description"
+          #description="ngModel">
+      </mat-form-field>
+    
+      <mat-form-field>
+        <input matInput id="location" type="text" placeholder="Apartment's postcode" name="location" location="location" [(ngModel)]="newApartment.location"
+          #location="ngModel">
+      </mat-form-field>
+    
+      <mat-form-field>
+        <mat-select [(ngModel)]="newApartment.availability" id="availability" name="availability" placeholder="Current Availability">
+          <mat-option value="true">Available</mat-option>
+          <mat-option value="false">Not Available</mat-option>
+        </mat-select>
+      </mat-form-field>
+    
+      <!-- <mat-form-field>
+        <input matInput id="label" type="text" placeholder="Add labels dividied by a comma" name="label" label="label" [(ngModel)]="newApartment.label"
+          #label="ngModel">
+      </mat-form-field> -->
+      <div class="button-section">
+        <button mat-raised-button>Save</button>
+      </div>
+    </form>
+  </mat-expansion-panel>
+</mat-accordion>
