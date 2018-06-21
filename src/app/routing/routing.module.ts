@@ -34,7 +34,7 @@ const routes: Routes = [
   {
     path: 'rooms', canActivate: [AuthGuardService], component: RoomSectionComponent, children: [
       { path: ':id', component: RoomComponent },
-      { path: 'edit/:id', component: EditRoomComponent }
+      { path: ':id/edit', component: EditRoomComponent }
     ]
   },
   {
@@ -42,7 +42,7 @@ const routes: Routes = [
       { path: '', component: ItemsViewComponent },
       { path: ':id',  component: ItemComponent },
       { path: 'new', component: CreateItemComponent },
-      { path: 'edit/:id', component: EditItemComponent }
+      { path: ':id/edit', component: EditItemComponent }
     ]
   },
   { path: '**', redirectTo: '/home', pathMatch: 'full' },

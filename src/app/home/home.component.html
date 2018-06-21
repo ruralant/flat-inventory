@@ -10,7 +10,7 @@
       {{apartment.description}}
       <mat-grid-tile-footer class="grid-footer">
         <button mat-raised-button [routerLink]="['/apartments', apartment._id]">View</button>
-        <button mat-raised-button [routerLink]="['/apartments', 'edit', apartment._id]">Edit</button>
+        <button mat-raised-button [routerLink]="['/apartments', apartment._id, 'edit']">Edit</button>
         <button mat-raised-button (click)="deleteApartment(apartment._id)" >Delete</button>  
       </mat-grid-tile-footer>
     </mat-grid-tile>
