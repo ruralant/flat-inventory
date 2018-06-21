@@ -1,3 +1,4 @@
+import { Apartment } from './../common/interface/apartment';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Data } from '@angular/router';
 
@@ -8,7 +9,7 @@ import { ActivatedRoute, Params, Data } from '@angular/router';
 })
 export class ApartmentComponent implements OnInit {
 
-  apartment: any;
+  apartment: Apartment;
 
   constructor( private route: ActivatedRoute ) { }
 

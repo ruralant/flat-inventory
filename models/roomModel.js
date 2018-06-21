@@ -12,15 +12,15 @@ const RoomSchema = mongoose.Schema({
   location: {
     type: mongoose.Schema.ObjectId, ref: 'Apartment'
   },
-  availability: {
+  available: {
     type: Boolean,
     default: false
   },
-  label: {
+  labels: [{
     type: String,
     lowercase: true,
     trim: true
-  },
+  }],
   createdBy: {
     type: mongoose.Schema.ObjectId, ref: 'User'
   },

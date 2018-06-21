@@ -20,10 +20,11 @@ const ItemSchema = mongoose.Schema({
     type: Number,
     default: 0
   },
-  label: {
+  labels: [{
     type: String,
-    lowercase: true
-  },
+    lowercase: true,
+    trim: true
+  }],
   createdBy: {
     type: mongoose.Schema.ObjectId, ref: 'User'
   },

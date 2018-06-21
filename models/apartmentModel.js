@@ -23,10 +23,11 @@ const ApartmentSchema = mongoose.Schema({
   rooms: [{
     type: mongoose.Schema.ObjectId, ref: 'Room'
   }],
-  label: {
+  labels: [{
     type: String,
-    lowercase: true
-  },
+    lowercase: true,
+    trim: true
+  }],
   createdBy: {
     type: mongoose.Schema.ObjectId, ref: 'User'
   },

@@ -12,7 +12,7 @@ import { ApartmentService } from 'app/services/apartment.service';
 })
 export class EditAptComponent implements OnInit {
 
-  apartment = {};
+  apartment: Apartment = {};
 
   constructor(
     private apartmentService: ApartmentService,

@@ -7,5 +7,5 @@ export interface Item {
   location: Apartment,
   quantity: number,
   stock: number,
-  label?: string,
+  labels?: [string],
 }

@@ -1,4 +1,5 @@
 import { Room } from './room';
+import { Item } from './item';
 
 export interface Apartment {
   _id?: string,
@@ -7,6 +8,7 @@ export interface Apartment {
   location?: string,
   available?: boolean,
   rooms?: Room[],
-  label?: string
+  items?: Item[],
+  labels?: [string]
 }
 
