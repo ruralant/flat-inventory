@@ -24,8 +24,8 @@ export class EditAptComponent implements OnInit {
   ) { }
 
   async getApartment() {
-    await this.route.paramMap
-      .subscribe(params => this.apartmentToBeModified = params.get('id'));
+    await this.route.params
+      .subscribe((params: Params) => this.apartmentToBeModified = params['id']);
     await this.apartmentService.getOneApartment(this.apartmentToBeModified)
       .subscribe(response => this.apartment = response.apartments[0]);
   }

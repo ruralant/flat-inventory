@@ -14,7 +14,7 @@
     </tr>
   </table>
 
-  <td><button routerLink="/apartments/edit/{{apartment._id}}">Edit</button></td>
+  <td><button mat-button [routerLink]="['/apartments', 'edit', apartment._id]">Edit</button></td>
 
   <div *ngIf="apartment.rooms">
     <div *ngFor="let room of apartment.rooms">
@@ -31,7 +31,7 @@
           <td>{{room.description}}</td>
           <td>{{room.availability}}</td>
           <td>{{room.label}}</td>
-          <td><button routerLink="/rooms/edit/{{room._id}}">Edit</button></td>
+          <td><button  mat-button [routerLink]="['/rooms', 'edit', room._id]">Edit</button></td>
         </tr>
       </table>
     </div>
@@ -52,7 +52,7 @@
           <td>{{item.description}}</td>
           <td>{{item.availability}}/{{items.stock}}</td>
           <td>{{item.label}}</td>
-          <td><button routerLink="/rooms/edit/{{item._id}}">Edit</button></td>
+          <td><button mat-button [routerLink]="['/rooms', 'edit', item._id]">Edit</button></td>
         </tr>
       </table>
     </div>

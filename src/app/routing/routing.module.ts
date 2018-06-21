@@ -45,7 +45,7 @@ const routes: Routes = [
       { path: 'edit/:id', component: EditItemComponent }
     ]
   },
-  { path: '**', redirectTo: '/', pathMatch: 'full' },
+  { path: '**', redirectTo: '/home', pathMatch: 'full' },
 ]
 
 @NgModule({
