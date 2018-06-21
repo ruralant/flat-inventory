@@ -29,7 +29,7 @@ const routes: Routes = [
   {
     path: 'apartments', canActivate: [AuthGuardService], component: ApartmentSectionComponent, children: [
       { path: ':id', component: ApartmentComponent, resolve: {apartment: ApartmentResolver} },
-      { path: ':id/edit', component: EditAptComponent }
+      { path: ':id/edit', component: EditAptComponent, resolve: {apartment: ApartmentResolver} }
     ]
   },
   {

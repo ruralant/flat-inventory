@@ -1,7 +1,7 @@
 <div class="wrapper">
   <div class="content">
 
-    <form class="form" name="edit-apartment-form" (ngSubmit)="f.form.valid && apartmentUpdate(apartmentToBeModified, apartment, f)" #f="ngForm"
+    <form class="form" name="edit-apartment-form" (ngSubmit)="f.form.valid && apartmentUpdate(apartment._id, apartment, f)" #f="ngForm"
       novalidate>
 
       <mat-form-field>

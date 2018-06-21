@@ -1,6 +1,6 @@
 import { Apartment } from './../common/interface/apartment';
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, Params } from '@angular/router';
+import { Router, ActivatedRoute, Params, Data } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
 
 import { ApartmentService } from 'app/services/apartment.service';
@@ -12,7 +12,6 @@ import { ApartmentService } from 'app/services/apartment.service';
 })
 export class EditAptComponent implements OnInit {
 
-  apartmentToBeModified: string;
   apartment = {};
 
   constructor(
@@ -22,15 +21,9 @@ export class EditAptComponent implements OnInit {
     private snackbar: MatSnackBar
   ) { }
 
-  async getApartment() {
-    await this.route.params
-      .subscribe((params: Params) => this.apartmentToBeModified = params['id']);
-    await this.apartmentService.getApartment(this.apartmentToBeModified)
-      .subscribe((apartment: Apartment) => this.apartment = apartment);
-  }
-
   ngOnInit() {
-    this.getApartment();
+    this.route.data
+      .subscribe((data: Data) => this.apartment = data['apartment']);
   }
 
   apartmentUpdate(id: string) {
