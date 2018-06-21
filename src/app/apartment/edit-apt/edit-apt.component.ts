@@ -1,4 +1,4 @@
-import { Apartment } from './../common/interface/apartment';
+import { Apartment } from 'app/common/interface/apartment';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params, Data } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
