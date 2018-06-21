@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 
 import { AuthGuardService } from 'app/services/auth-guard.service';
+import { ApartmentResolver } from './../apartment/apartment-resolver.service';
 
 import { LandingPageComponent } from 'app/landing-page/landing-page.component';
 import { HomeComponent } from 'app/home/home.component';
@@ -27,8 +28,8 @@ const routes: Routes = [
   { path: 'home', canActivate: [AuthGuardService], component: HomeComponent },
   {
     path: 'apartments', canActivate: [AuthGuardService], component: ApartmentSectionComponent, children: [
-      { path: ':id', component: ApartmentComponent },
-      { path: 'edit/:id', component: EditAptComponent }
+      { path: ':id', component: ApartmentComponent, resolve: {apartment: ApartmentResolver} },
+      { path: ':id/edit', component: EditAptComponent }
     ]
   },
   {

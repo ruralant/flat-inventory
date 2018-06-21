@@ -1,11 +1,11 @@
 import { Room } from './room';
 
 export interface Apartment {
-  _id: string,
-  name: string,
+  _id?: string,
+  name?: string,
   description?: string,
   location?: string,
-  available: boolean,
+  available?: boolean,
   rooms?: Room[],
   label?: string
 }

@@ -18,9 +18,9 @@ router.get('/', authenticate, async (req, res) => {
       .populate('user')
       .populate('updatedBy')
 
-      res.send({ message: 'List of apartments', api: 'GET/apartments', apartments});
+      res.send(apartments);
   } catch (e) {
-    res.status(400).send({ message: 'Error in retreving the apartments list', api: 'GET/apartments' })
+    res.status(400).send({ message: 'Error in retrieving the apartments list', api: 'GET/apartments' })
   }
 });
 
@@ -44,10 +44,15 @@ router.get('/query', authenticate, async (req, res) => {
       .populate('rooms')
       .populate('user')
       .populate('updatedBy');
-    
-      res.send({ message: 'List of queried appartments', api: 'GET/apartments/query', apartments })
+
+      if (apartments.length === 1) {
+        const apartment = apartments[0];
+        res.send(apartment)
+      } else {
+        res.send(apartments)
+      }
     } catch (e) {
-      res.status(400).send({ message: 'Error in revreving the list of apartments', api: 'GET/apartments/query', e});
+      res.status(400).send({ message: 'Error in retrieving the list of apartments', api: 'GET/apartments/query', e });
   }
 });
 
@@ -63,7 +68,7 @@ router.post('/', authenticate, async (req, res) => {
     apartment.createdBy = user;
     await apartment.save();
     
-    res.send({ message: 'The apartment has been created successully', api: 'POST/apartments', apartment });
+    res.send({ apartment });
   } catch (e) {
     res.status(400).send({ message: 'Unable to create the apartment', api: 'POST/apartments', e });
   }
@@ -87,9 +92,9 @@ router.patch('/:id', authenticate, async (req, res) => {
       updatedBy: user._id
     }, { new: true });
       
-    res.send({ message: 'Apartment updated successully', api: `PATCH/apartments/${id}`, apartment });
+    res.send({ apartment });
   } catch (e) {
-    res.status(400).send({ message: 'Error in updating the apartment information', api: `PATCH/apartments/${id}`, e});  
+    res.status(400).send({ message: 'Error in updating the apartment information', api: `PATCH/apartments/${id}`, e });  
   }
 });
 
@@ -102,9 +107,9 @@ router.delete('/:id', authenticate, async (req, res) => {
   
     const result = await Apartment.findByIdAndRemove(id);
     
-    res.send({ message: 'Apartment deleted successully', api: `DELETE/apartments/${id}`, result });
+    res.send({ result });
   } catch (e) {
-    res.status(400).send({ status: 'error', message: 'Unable to delete the apartment', e});
+    res.status(400).send({ status: 'error', message: 'Unable to delete the apartment', e });
   }
 });
 

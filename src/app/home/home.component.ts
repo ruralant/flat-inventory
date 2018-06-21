@@ -5,6 +5,9 @@ import { UserService } from 'app/services/user.service';
 import { ApartmentService } from '../services/apartment.service';
 import { ItemService } from 'app/services/item.service';
 
+import { Apartment } from './../common/interface/apartment';
+import { Result } from './../common/interface/result';
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -30,13 +33,13 @@ export class HomeComponent implements OnInit {
 
   getUserApartments(): void {
     this.apartmentService.getApartments()
-      .subscribe(response => this.apartments = response.apartments);
+      .subscribe((apartments: Apartment[]) => this.apartments = apartments);
   }
 
   deleteApartment(id): void {
     if (confirm('Are you sure you want to delete the apartment?')) {
       this.apartmentService.deleteApartment(id)
-        .subscribe(result => {
+        .subscribe((result: Result) => {
           if (result.status === 'success') {
             this.snackbar.open('The apartment has been deleted.')
             this.getUserApartments();

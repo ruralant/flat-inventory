@@ -34,7 +34,7 @@
 
       <mat-form-field> 
         <input matInput type="date" value="{{apartment.labels}}" #labels="ngModel" [(ngModel)]="apartment.labels"
-          name="istance-labels">
+          name="instance-labels">
       </mat-form-field>
 
       <p *ngIf="apartment.updatedAt && apartment.updatedBy" class="updatedBy">Updated by {{apartment.updatedBy.firstName}} {{apartment.updatedBy.lastName}} on {{apartment.updatedAt | date:'short'}}</p>

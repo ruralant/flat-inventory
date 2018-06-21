@@ -1,10 +1,9 @@
+import { Apartment } from './../common/interface/apartment';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
-import { Location } from '@angular/common';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
 
 import { ApartmentService } from 'app/services/apartment.service';
-import { Apartment } from './../common/interface/apartment';
 
 @Component({
   selector: 'app-edit-apt',
@@ -14,32 +13,32 @@ import { Apartment } from './../common/interface/apartment';
 export class EditAptComponent implements OnInit {
 
   apartmentToBeModified: string;
-  apartment: any = {};
+  apartment = {};
 
   constructor(
     private apartmentService: ApartmentService,
     private route: ActivatedRoute,
-    private location: Location,
+    private router: Router,
     private snackbar: MatSnackBar
   ) { }
 
   async getApartment() {
     await this.route.params
       .subscribe((params: Params) => this.apartmentToBeModified = params['id']);
-    await this.apartmentService.getOneApartment(this.apartmentToBeModified)
-      .subscribe(response => this.apartment = response.apartments[0]);
+    await this.apartmentService.getApartment(this.apartmentToBeModified)
+      .subscribe((apartment: Apartment) => this.apartment = apartment);
   }
 
   ngOnInit() {
     this.getApartment();
   }
 
-  apartmentUpdate(id: any) {
+  apartmentUpdate(id: string) {
     this.apartmentService.editApartment(id, this.apartment)
-      .subscribe(result => {
-        if (result.apartment) {
-          this.snackbar.open('The apartment has been modified.');
-          this.location.back();
+      .subscribe((apartment: Apartment) => {
+        if (apartment) {
+          this.snackbar.open('The apartment has been modified.', 'CLOSE', { duration: 1000 });
+          this.router.navigate(['../'], { relativeTo: this.route })
         } else {
           this.snackbar.open('Something went wrong!');
         }

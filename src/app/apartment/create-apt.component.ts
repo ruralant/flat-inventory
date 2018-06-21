@@ -25,13 +25,13 @@ export class CreateAptComponent implements OnInit {
 
   createApartment(): void {
     this.apartmentService.createApartment(this.newApartment)
-      .subscribe(result => {
-        if (result.apartment) {
+      .subscribe((apartment: Apartment) => {
+        if (apartment) {
           this.snackbar.open('The apartment has been created.');
           this.apartmentService.getApartments()
-            .subscribe(rst => this.apartments = rst.apartments);
+            .subscribe((apartments: Apartment[]) => this.apartments = apartments);
         } else {
-          this.snackbar.open('Somthing went wrong! The apartment has not been created');
+          this.snackbar.open('Something went wrong! The apartment has not been created');
         }
       });
   }

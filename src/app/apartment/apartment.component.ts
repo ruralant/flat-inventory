@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Data } from '@angular/router';
 
 import { ApartmentService } from 'app/services/apartment.service';
 
@@ -19,15 +19,9 @@ export class ApartmentComponent implements OnInit {
     private route: ActivatedRoute
   ) { }
 
-  async getApartment() {
-    await this.route.paramMap
-      .subscribe(params => this.apartmentId = params.get('id'));
-    await this.apartmentService.getOneApartment(this.apartmentId)
-      .subscribe(response => this.apartment = response.apartments[0]);
-  }
-
   ngOnInit() {
-    this.getApartment();
+    this.route.data
+      .subscribe((data: Data) => this.apartment = data['apartment']);
   }
 
 }

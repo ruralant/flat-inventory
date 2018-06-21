@@ -1,7 +1,9 @@
+import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Apartment } from '../common/interface/apartment';
 
+import { Apartment } from '../common/interface/apartment';
+import { Result } from '../common/interface/result';
 
 import { environment } from '../../environments/environment';
 
@@ -17,32 +19,32 @@ export class ApartmentService {
     return Promise.reject(error.message || error);
   }
 
-  searchApartments(search: string): any {
+  searchApartments(search: string): Observable<Apartment[]> {
     const url = search != null ? `${constURL}/apartments/query${search}` : `${constURL}/apartments/`;
-    return this.http.get<Apartment>(url);
+    return this.http.get<Apartment[]>(url);
   }
 
-  getApartments(): any {
-    return this.http.get(`${constURL}/apartments`);
+  getApartments(): Observable<Apartment[]> {
+    return this.http.get<Apartment[]>(`${constURL}/apartments`);
   }
 
-  getOneApartment(id: any): any {
+  getApartment(id: string): Observable<Apartment> {
     return this.http.get<Apartment>(`${constURL}/apartments/query?_id=${id}`);
   }
 
-  getApartmentItems(id: any): any {
-    return this.http.get(`${constURL}/apartments/query?_id=${id}`);
-  }
+  // getApartmentItems(id: string): any {
+  //   return this.http.get(`${constURL}/apartments/query?_id=${id}`);
+  // }
 
-  createApartment(apartment: object): any {
+  createApartment(apartment: Apartment): Observable<Apartment> {
     return this.http.post<Apartment>(`${constURL}/apartments`, apartment);
   }
 
-  editApartment(id: string, apartment: object): any {
-    return this.http.patch(`${constURL}/apartments/${id}`, apartment);
+  editApartment(id: string, apartment: Apartment): Observable<Apartment> {
+    return this.http.patch<Apartment>(`${constURL}/apartments/${id}`, apartment);
   }
 
-  deleteApartment(id: string): any {
-    return this.http.delete(`${constURL}/apartments/${id}`);
+  deleteApartment(id: string) {
+    return this.http.delete<Result>(`${constURL}/apartments/${id}`);
   }
 }
