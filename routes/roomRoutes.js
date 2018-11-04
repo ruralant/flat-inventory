@@ -15,7 +15,7 @@ router.get('/', authenticate, async (req, res) => {
       .populate('user');
     if (!rooms) res.status(400).send({ error: 'No rooms found', api: 'GET/rooms' });
     
-    res.send({ message: 'Rooms retrieved succesfully', api: 'GET/rooms', rooms });
+    res.send({ message: 'Rooms retrieved successfully', api: 'GET/rooms', rooms });
   } catch (e) {
     res.status(400).send({ error: 'There was an error in retrieving the rooms', api: 'GET/rooms', e });
   }
@@ -25,7 +25,7 @@ router.get('/', authenticate, async (req, res) => {
 router.get('/query', authenticate, async (req, res) => {
   try {
     const searchQuery = req.query;
-    // in the search term I want to be able to query both query with name or description, then query both with only one. So I take which has been queried and copy that across to query both, plus I query the label with the search term just for wider visibilty
+    // in the search term I want to be able to query both query with name or description, then query both with only one. So I take which has been queried and copy that across to query both, plus I query the label with the search term just for wider visibility
     if (req.query.name || req.query.description) {
       req.query.$or = [];
       req.query.$or.push({ name: new RegExp(req.query.name || req.query.description, 'i') });
@@ -54,7 +54,7 @@ router.post('/', authenticate, async (req, res) => {
     const token = req.header('authorization').split(' ')[1];
     const { body } = req;
   
-    const room = new Room(body);
+    let room = new Room(body);
   
     const user = await User.findByToken(token);
     if (!user) res.status(400).send({ error: 'No user found', api: 'POST/rooms' });
@@ -62,7 +62,7 @@ router.post('/', authenticate, async (req, res) => {
     room.createdBy = user;
     room = room.save();
     
-    res.send({ message: 'Room correctly created', api: 'POST/rooms', room })
+    res.send({ message: 'Room correctly created', api: 'POST/rooms', room });
   } catch (e) {
     res.status(400).send({ error: 'There was an error in creating the room', api: 'POST/rooms', e });
   }
@@ -87,7 +87,7 @@ router.patch('/:id', authenticate, async (req, res) => {
 
     res.send({ message: 'Room information correctly modified', api: `PATCH/rooms/${id}`, room });
   } catch (e) {
-    res.status(400).send({ error: 'There was an error in updating the room', api: `PATCH/rooms/${id}`, e });
+    res.status(400).send({ error: 'There was an error in updating the room', api: 'PATCH/rooms', e });
   }
 });
 
@@ -98,11 +98,11 @@ router.delete('/:id', authenticate, async (req, res) => {
   
     if (!ObjectID.isValid(id)) return res.status(404).send({ error: 'ObjectID not valid', api: `DELETE/rooms/${id}` });
   
-    const room = Room.findByIdAndRemove(id);
+    const result = Room.findByIdAndRemove(id);
     
-    res.send({ message: 'Room succesfully deleted', api: `DELETE/rooms/${id}` });
+    res.send({ message: 'Room successfully deleted', api: `DELETE/rooms/${id}`, result });
   } catch (e) {
-    res.status(400).send({ error: 'There was an error in deleting the room', api: `DELETE/rooms/${id}`, e });
+    res.status(400).send({ error: 'There was an error in deleting the room', api: 'DELETE/rooms/', e });
   }
 });
 

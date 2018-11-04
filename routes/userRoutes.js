@@ -14,7 +14,7 @@ router.post('/register', async (req, res) => {
     const user = new User(body);
     const newUser = await user.save();
 
-    res.send({ status: 'success', message: 'New user created' });
+    res.send({ message: 'New user created', newUser });
   } catch (e) {
     res.status(400).send({ error: 'Unable to create new user', e });
   }
@@ -28,7 +28,7 @@ router.post('/login', async (req, res) => {
     const user = await User.findByCredentials(email, password);
     const token = await user.generateAuthToken('auth');
 
-    res.send({ message: 'User logged in succesfully', token });
+    res.send({ message: 'User logged in successfully', token });
   } catch (e) {
     res.status(400).send({ error: 'Unable to login', e });
   }
@@ -57,7 +57,7 @@ router.post('/password-reset', async (req, res) => {
         host,
       }
     });
-    res.send({ message: 'A password reset has been emailed to your account. Follow the instructions in the email.' });
+    res.send({ message: 'A password reset has been emailed to your account. Follow the instructions in the email.', emailToSend });
   } catch (e) {
     res.status(400).send({ error: 'Password reset error', api: 'POST/users/password-reset', e });
   }
@@ -77,7 +77,6 @@ router.get('/status', authenticate, async (req, res) => {
       token
     });
   } catch (e) {
-    console.log(e);
     res.status(400).send({ error: 'Error getting the status' });
   }
 });
@@ -85,10 +84,10 @@ router.get('/status', authenticate, async (req, res) => {
 // GET list of all users
 router.get('/', async (req, res) => {
   try {
-    const users = await User.find({}, '-password -__v').populate('updatedBy')
+    const users = await User.find({}, '-password -__v').populate('updatedBy');
     if (!users) res.status(400).send({ error: 'No users found', api: 'GET/user/' });
     
-    res.send({ message: 'List of users', api: 'GET/user', user });
+    res.send({ message: 'List of users', api: 'GET/user', users });
   } catch (e) {
     res.status(400).send({ error: 'Error in retrieving the users', api: 'GET/users', e });
   }
@@ -119,7 +118,7 @@ router.get('/query', authenticate, async (req, res) => {
     }
   
     const users = await User.find(query).populate('updatedBy');
-    if (!users) res.status(204).send({ message: 'The query did not returned any user', api: 'GET/users/query', e });
+    if (!users) res.status(204).send({ message: 'The query did not returned any user', api: 'GET/users/query' });
 
     res.send({ message: 'Users matching the query', api: 'GET/users/query', users });
   } catch (e) {
@@ -139,7 +138,7 @@ router.patch('/:id', authenticate, async (req, res) => {
       $set: body,
       updatedBy: ObjectID.ObjectId(req.session.user._id)
     }, { new: true });
-    if (!users) res.status(400).send({ error: 'No users found', api: 'PATCH/users' });
+    if (!user) res.status(400).send({ error: 'No users found', api: 'PATCH/users' });
 
     res.send({ message: 'User updated correctly', api: 'PATCH/users' });
   } catch (e) {
@@ -154,10 +153,10 @@ router.delete('/:id', authenticate, async (req, res) => {
   
     if (!ObjectID.isValid(id)) return res.status(404).send({ error: 'ObjectID not valid', api: `DELETE/users/${id}` });
   
-    const user = await User.findOneAndRemove(id);
-    res.send({ message: 'User correctly deleted', api: `DELETE/users/${id}` });
+    const result = await User.findOneAndRemove(id);
+    res.send({ message: 'User correctly deleted', api: `DELETE/users/${id}`, result });
   } catch (e) {
-    res.status(400).send({ error: 'There was an error in deleting the user', api: `DELETE/users/${id}`, e })
+    res.status(400).send({ error: 'There was an error in deleting the user', api: 'DELETE/users/', e });
   }
 });
 
@@ -186,9 +185,7 @@ router.patch('/profile-password-change', authenticate, (req, res) => {
       return user.save()
         .then(result => res.status(200).send({ message: 'Password changed correctly', api: 'PATCH/users/profilePasswordChange', result }));
     })
-    .catch(e => res.status(400).send({ error: `There was an error in changing the user' password`, api: 'PATCH/users/profilePasswordChange', e }));
+    .catch(e => res.status(400).send({ error: 'There was an error in changing the user password', api: 'PATCH/users/profilePasswordChange', e }));
 });
-
-
 
 module.exports = router;
