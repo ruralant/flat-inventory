@@ -24,7 +24,7 @@ export class RoomService {
     return this.http.get(`${constURL}/rooms`);
   }
 
-  getOneRoom(id: any): any {
+  getRoom(id: any): any {
     return this.http.get<Room>(`${constURL}/rooms/query?_id=${id}`);
   }
 

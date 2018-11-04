@@ -24,7 +24,7 @@ export class EditRoomComponent implements OnInit {
   ngOnInit() {
     this.route.paramMap
       .subscribe(params => {
-        this.roomService.getOneRoom(params.get('id'))
+        this.roomService.getRoom(params.get('id'))
           .subscribe(result => this.roomToBeModified = result[0]);
       })
   }

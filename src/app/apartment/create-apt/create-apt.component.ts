@@ -1,4 +1,4 @@
-import { Component, OnInit, Output } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 
 import { ApartmentService } from 'app/services/apartment.service';
@@ -9,9 +9,9 @@ import { Apartment } from 'app/common/interface/apartment';
   templateUrl: './create-apt.component.html',
   styleUrls: ['./create-apt.component.scss']
 })
-export class CreateAptComponent implements OnInit {
+export class CreateAptComponent {
 
-  newApartment: any = {};
+  newApartment = {};
   // output apartment after save
   apartments: Apartment[] = [];
 
@@ -19,9 +19,6 @@ export class CreateAptComponent implements OnInit {
     private apartmentService: ApartmentService,
     private snackbar: MatSnackBar
   ) { }
-
-  ngOnInit() {
-  }
 
   createApartment(): void {
     this.apartmentService.createApartment(this.newApartment)

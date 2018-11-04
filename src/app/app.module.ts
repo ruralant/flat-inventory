@@ -14,6 +14,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
 
 import { AuthenticationService } from 'app/services/authentication.service';
 import { AuthGuardService } from 'app/services/auth-guard.service';
@@ -33,14 +34,14 @@ import { ApartmentSectionComponent } from 'app/apartment/apartment-section.compo
 import { TopnavComponent } from 'app/topnav/topnav.component';
 import { RoomComponent } from 'app/room/room.component';
 import { RoomSectionComponent } from 'app/room/room-section.component';
-import { EditRoomComponent } from 'app/room/edit-room.component';
+import { EditRoomComponent } from 'app/room/edit-room/edit-room.component';
 import { ItemComponent } from 'app/item/item.component';
-import { EditItemComponent } from 'app/item/edit-item.component';
-import { CreateItemComponent } from 'app/item/create-item.component';
+import { EditItemComponent } from 'app/item/edit-item/edit-item.component';
+import { CreateItemComponent } from 'app/item/create-item/create-item.component';
 import { ItemSectionComponent } from 'app/item/item-section.component';
 import { ItemsViewComponent } from 'app/item/items-view.component';
 import { CreateAptComponent } from 'app/apartment/create-apt/create-apt.component';
-import { CreateRoomComponent } from 'app/room/create-room.component';
+import { CreateRoomComponent } from 'app/room/create-room/create-room.component';
 import { AppErrorHandler } from 'app/common/errors/app-error-handlet';
 import { RegisterComponent } from './register/register.component';
 
@@ -80,7 +81,8 @@ import { RegisterComponent } from './register/register.component';
     MatToolbarModule,
     MatGridListModule,
     MatExpansionModule,
-    MatIconModule
+    MatIconModule,
+    MatCardModule
   ],
   exports: [
     MatFormFieldModule,

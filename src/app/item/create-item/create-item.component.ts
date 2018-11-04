@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ItemService } from 'app/services/item.service';
-import { ApartmentService } from '../services/apartment.service';
+import { ApartmentService } from '../../services/apartment.service';
 import { MatSnackBar } from '@angular/material';
 
 @Component({

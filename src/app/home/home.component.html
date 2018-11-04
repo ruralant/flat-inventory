@@ -2,7 +2,7 @@
 <h3 *ngIf="currentUser">Hello {{currentUser.firstName}}!!</h3>
 
 <mat-grid-list cols="2" rowHeight="2:1" id="apartments-grid">
-  <div *ngFor="let apartment of apartments">
+  <!-- <div *ngFor="let apartment of apartments">
     <mat-grid-tile>
       <mat-grid-tile-header>
         {{apartment.name}}
@@ -14,7 +14,23 @@
         <button mat-raised-button (click)="deleteApartment(apartment._id)" >Delete</button>  
       </mat-grid-tile-footer>
     </mat-grid-tile>
-  </div>
+  </div> -->
+  <mat-card class="apartment-card" *ngFor="let apartment of apartments">
+    <mat-card-header>
+      <div mat-card-avatar class="example-header-image"></div>
+      <mat-card-title>{{apartment.name}}</mat-card-title>
+      <mat-card-subtitle>Rooms: {{apartment.rooms.length}}</mat-card-subtitle>
+    </mat-card-header>
+    <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
+    <mat-card-content>
+      <p>{{apartment.description}}</p>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-button>Manage</button>
+      <button mat-button>Delete</button>
+    </mat-card-actions>
+  </mat-card>
 </mat-grid-list>
+
 
 <app-create-apt class="new-apartment"></app-create-apt>

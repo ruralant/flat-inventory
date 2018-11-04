@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { AuthGuardService } from 'app/services/auth-guard.service';
 import { ApartmentResolver } from 'app/apartment/apartment-resolver.service';
+import { RoomResolver } from 'app/room/room-resolver.service';
 
 import { LandingPageComponent } from 'app/landing-page/landing-page.component';
 import { HomeComponent } from 'app/home/home.component';
@@ -14,11 +15,11 @@ import { EditAptComponent } from 'app/apartment/edit-apt/edit-apt.component';
 import { ApartmentSectionComponent } from 'app/apartment/apartment-section.component';
 import { RoomComponent } from 'app/room/room.component';
 import { RoomSectionComponent } from 'app/room/room-section.component';
-import { EditRoomComponent} from 'app/room/edit-room.component';
+import { EditRoomComponent} from 'app/room/edit-room/edit-room.component';
 import { ItemSectionComponent } from 'app/item/item-section.component';
 import { ItemComponent } from 'app/item/item.component';
-import { CreateItemComponent } from 'app/item/create-item.component';
-import { EditItemComponent } from 'app/item/edit-item.component';
+import { CreateItemComponent } from 'app/item/create-item/create-item.component';
+import { EditItemComponent } from 'app/item/edit-item/edit-item.component';
 import { ItemsViewComponent } from 'app/item/items-view.component';
 
 const routes: Routes = [
@@ -34,8 +35,8 @@ const routes: Routes = [
   },
   {
     path: 'rooms', canActivate: [AuthGuardService], component: RoomSectionComponent, children: [
-      { path: ':id', component: RoomComponent },
-      { path: ':id/edit', component: EditRoomComponent }
+      { path: ':id', component: RoomComponent, resolve: {room: RoomResolver} },
+      { path: ':id/edit', component: EditRoomComponent, resolve: {room: RoomResolver} }
     ]
   },
   {

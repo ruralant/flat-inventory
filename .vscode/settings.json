@@ -1,6 +1,8 @@
 {
     "vsicons.presets.angular": true,
     "cSpell.words": [
-        "snackbar"
+        "component",
+        "snackbar",
+        "topnav"
     ]
 }
