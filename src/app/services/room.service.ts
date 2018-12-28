@@ -11,36 +11,36 @@ export class RoomService {
 
   constructor( private http: HttpClient ) { }
 
-  private handleError(error: any): Promise<any> {
+  private handleError(error): Promise<any> {
     return Promise.reject(error.message || error);
   }
 
-  searchRooms(search: string): any {
+  searchRooms(search: string) {
     const url = search != null ? `${constURL}/rooms/query${search}` : `${constURL}/rooms/`;
     return this.http.get<Room>(url);
   }
 
-  getRooms(): any {
+  getRooms() {
     return this.http.get(`${constURL}/rooms`);
   }
 
-  getRoom(id: any): any {
+  getRoom(id: string) {
     return this.http.get<Room>(`${constURL}/rooms/query?_id=${id}`);
   }
 
-  getRoomItems(id: any): any {
+  getRoomItems(id: string) {
     return this.http.get<Room>(`${constURL}/rooms/query?_id=${id}`);
   }
 
-  createRoom(room: object): any {
+  createRoom(room: object) {
     return this.http.post<Room>(`${constURL}/rooms`, room);
   }
 
-  editRoom(id: string, room: object): any {
+  editRoom(id: string, room: object) {
     return this.http.patch<Room>(`${constURL}/rooms/${id}`, room);
   }
 
-  deleteRoom(id: string): any {
+  deleteRoom(id: string) {
     return this.http.delete<Room>(`${constURL}/rooms/${id}`);
   }
 

@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Location } from '@angular/common';
 import { MatSnackBar } from '@angular/material';
-
 import { RoomService } from 'app/services/room.service';
+import { Room } from '../../common/interface/room';
 
 @Component({
   selector: 'app-edit-room',
@@ -12,7 +12,7 @@ import { RoomService } from 'app/services/room.service';
 })
 export class EditRoomComponent implements OnInit {
 
-  roomToBeModified: any = {}
+  roomToBeModified: Room;
 
   constructor(
     private roomService: RoomService,
@@ -23,15 +23,15 @@ export class EditRoomComponent implements OnInit {
 
   ngOnInit() {
     this.route.paramMap
-      .subscribe(params => {
+      .subscribe((params: Params) => {
         this.roomService.getRoom(params.get('id'))
-          .subscribe(result => this.roomToBeModified = result[0]);
+          .subscribe((result: Room[]) => this.roomToBeModified = result[0]);
       })
   }
 
   updateRoom(id: any) {
     this.roomService.editRoom(id, this.roomToBeModified)
-      .subscribe(result => {
+      .subscribe(() => {
         this.snackbar.open(`The room ${this.roomToBeModified.name} has been correctly modified`)
         this.location.back()
       }, err => {

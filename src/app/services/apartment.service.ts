@@ -32,10 +32,6 @@ export class ApartmentService {
     return this.http.get<Apartment>(`${constURL}/apartments/query?_id=${id}`);
   }
 
-  // getApartmentItems(id: string): any {
-  //   return this.http.get(`${constURL}/apartments/query?_id=${id}`);
-  // }
-
   createApartment(apartment: Apartment): Observable<Apartment> {
     return this.http.post<Apartment>(`${constURL}/apartments`, apartment);
   }

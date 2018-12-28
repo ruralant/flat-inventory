@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core'
-import { Router, ActivatedRoute } from '@angular/router'
-import { MatFormField, MatSnackBar } from '@angular/material';
+import { Router } from '@angular/router'
+import { MatSnackBar } from '@angular/material';
 
 import { AuthenticationService } from 'app/services/authentication.service'
 import { UserService } from 'app/services/user.service'
@@ -13,13 +13,9 @@ import { UserService } from 'app/services/user.service'
 })
 export class LoginComponent implements OnInit {
   model: any = {}
-  loading = false
-  error = ''
-  instance: any
 
   constructor(
     private router: Router,
-    private route: ActivatedRoute,
     private authenticationService: AuthenticationService,
     private userService: UserService,
     private snackBar: MatSnackBar
@@ -31,7 +27,6 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    // this.loading = true;
     this.authenticationService.login(this.model.email, this.model.password)
       .subscribe(res => {
         localStorage.setItem('token', res.token)

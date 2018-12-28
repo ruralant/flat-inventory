@@ -11,7 +11,7 @@ import { Room } from 'app/common/interface/room';
 })
 export class CreateRoomComponent {
 
-  newRoom = {}
+  newRoom: Room = {}
   rooms: Room[] = [];
   constructor(
     private roomService: RoomService,

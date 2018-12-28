@@ -19,11 +19,11 @@ export class ItemService {
     return this.http.get(`${constURL}/items`);
   }
 
-  getOneItem(id: any) {
+  getOneItem(id: string) {
     return this.http.get(`${constURL}/items/query?_id=${id}`);
   }
 
-  createItem(item: any) {
+  createItem(item: Item) {
     return this.http.post(`${constURL}/items/`, item);
   }
 

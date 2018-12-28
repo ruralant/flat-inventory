@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-
 import { ItemService } from 'app/services/item.service';
+import { Item } from '../common/interface/item';
 
 @Component({
   selector: 'app-item',
@@ -9,13 +9,13 @@ import { ItemService } from 'app/services/item.service';
 })
 export class ItemComponent implements OnInit {
 
-  items: any = [];
+  items: Item[];
 
   constructor( private itemService: ItemService ) { }
 
   getItems() {
     this.itemService.getItems()
-      .subscribe(items => this.items = items);
+      .subscribe((items: Item[]) => this.items = items);
   }
 
   ngOnInit() {

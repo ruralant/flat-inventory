@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ItemService } from 'app/services/item.service';
 import { ApartmentService } from '../../services/apartment.service';
+import { Apartment } from 'app/common/interface/apartment';
+import { Item } from '../../common/interface/item';
 import { MatSnackBar } from '@angular/material';
 
 @Component({
@@ -10,8 +12,8 @@ import { MatSnackBar } from '@angular/material';
 })
 export class CreateItemComponent implements OnInit {
 
-  newItem: any = {};
-  apartments: any = [];
+  newItem: Item;
+  apartments: Apartment[];
 
   constructor(
     private itemService: ItemService,
@@ -21,7 +23,7 @@ export class CreateItemComponent implements OnInit {
 
   createItem(): void {
     this.itemService.createItem(this.newItem)
-      .subscribe(item => {
+      .subscribe(() => {
         this.snackbar.open(`The item has been created.`)
     }, err => {
         if (err.status === 400) {
@@ -32,7 +34,7 @@ export class CreateItemComponent implements OnInit {
 
   getApartments(): void {
     this.apartmentService.getApartments()
-      .subscribe(apartments => this.apartments = apartments);
+      .subscribe((apartments: Apartment[]) => this.apartments = apartments);
   }
 
   ngOnInit() {

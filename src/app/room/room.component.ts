@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RoomService } from 'app/services/room.service';
+import { Room } from '../common/interface/room';
 
 @Component({
   selector: 'app-room',
@@ -8,7 +9,7 @@ import { RoomService } from 'app/services/room.service';
 })
 export class RoomComponent implements OnInit {
 
-  rooms: any = []
+  rooms: Room[] = []
 
   constructor( private roomService: RoomService ) { }
 
@@ -18,7 +19,7 @@ export class RoomComponent implements OnInit {
 
   getRooms() {
     this.roomService.getRooms()
-      .subscribe(rooms => this.rooms = rooms);
+      .subscribe((rooms: Room[]) => this.rooms = rooms);
   }
 
 }

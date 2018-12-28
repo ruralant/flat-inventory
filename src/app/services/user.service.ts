@@ -3,8 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-
 import { environment } from '../../environments/environment';
+import { User } from '../common/interface/user';
 
 const constURL = `${environment.constURL}/api`;
 
@@ -18,31 +18,30 @@ export class UserService {
   }
 
   getUser() {
-    return this.http.get<any>(`${constURL}/users/status`);
+    return this.http.get<User>(`${constURL}/users/status`);
   }
 
   getInstanceUsers() {
-    return this.http.get<any>(`${constURL}/users/`);
+    return this.http.get<User[]>(`${constURL}/users/`);
   }
 
-  getOneUser(id: string): any {
-    return this.http.get<any>(`${constURL}/users/query?_id=${id}`);
+  getOneUser(id: string) {
+    return this.http.get<User>(`${constURL}/users/query?_id=${id}`);
   }
 
-  newUser(model: any): any {
-    const paths = [];
+  newUser(model: User) {
     return this.http.post(`${constURL}/users`, model);
   }
 
-  editUser(id: string, user: any): any {
+  editUser(id: string, user: User) {
     return this.http.patch<any>(`${constURL}/users/update-user/${id}`, user);
   }
 
-  deconsteUser(id: string): any {
+  deconsteUser(id: string) {
     return this.http.delete(`${constURL}/users/${id}`);
   }
 
-  submitChangePassword(passwordModel: any, token: string): any {
+  submitChangePassword(passwordModel: object, token: string): any {
     const user = localStorage.getItem('currentUser');
     let headers;
     // if token has been submitted then it is a password reset, if there is no token then this is a logged in user request

@@ -18,7 +18,7 @@ export class RegisterComponent implements OnInit {
 
   register() {
     this.authService.register(this.data)
-      .subscribe(res => this.router.navigate(['/home']));
+      .subscribe(() => this.router.navigate(['/home']));
   }
 
   ngOnInit() {

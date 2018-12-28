@@ -3,10 +3,10 @@ import { MatSnackBar } from '@angular/material';
 
 import { UserService } from 'app/services/user.service';
 import { ApartmentService } from '../services/apartment.service';
-import { ItemService } from 'app/services/item.service';
 
-import { Apartment } from './../common/interface/apartment';
 import { Result } from './../common/interface/result';
+import { Apartment } from './../common/interface/apartment';
+import { User } from './../common/interface/user';
 
 @Component({
   selector: 'app-home',
@@ -15,14 +15,13 @@ import { Result } from './../common/interface/result';
 })
 export class HomeComponent implements OnInit {
 
-  currentUser: any;
-  apartments: any = [];
-  newApartment: any = {}
+  currentUser: User;
+  apartments: Apartment[];
+  newApartment: Apartment = {}
 
   constructor(
     private userService: UserService,
     private apartmentService: ApartmentService,
-    private itemService: ItemService,
     private snackbar: MatSnackBar
   ) { }
 
@@ -36,7 +35,7 @@ export class HomeComponent implements OnInit {
       .subscribe((apartments: Apartment[]) => this.apartments = apartments);
   }
 
-  deleteApartment(id): void {
+  deleteApartment(id: string): void {
     if (confirm('Are you sure you want to delete the apartment?')) {
       this.apartmentService.deleteApartment(id)
         .subscribe((result: Result) => {

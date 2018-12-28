@@ -11,9 +11,9 @@ import { Apartment } from 'app/common/interface/apartment';
 })
 export class CreateAptComponent {
 
-  newApartment = {};
+  newApartment: Apartment;
   // output apartment after save
-  apartments: Apartment[] = [];
+  apartments: Apartment[];
 
   constructor(
     private apartmentService: ApartmentService,

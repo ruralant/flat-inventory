@@ -25,9 +25,9 @@ export class AuthGuardService implements CanActivate {
   }
 
   // this is the middleware to authenticate all the users
-  canActivate(route) {
+  canActivate() {
     return this.http.get<any>(`${constURL}/users/status`).pipe(
-      map(res => true),
+      map(() => true),
       catchError(this.errorHandler));
   }
 }

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { MatToolbar } from '@angular/material';
-
 import { UserService } from 'app/services/user.service';
+import { User } from '../common/interface/user';
 
 @Component({
   selector: 'app-topnav',
@@ -11,13 +10,13 @@ import { UserService } from 'app/services/user.service';
 })
 
 export class TopnavComponent implements OnInit {
-  user: any;
+  user: User;
 
   constructor( private userService: UserService ) { }
 
   ngOnInit() {
     this.userService.getUser()
-      .subscribe(user => this.user = user);
+      .subscribe((user: User) => this.user = user);
   }
 
 }

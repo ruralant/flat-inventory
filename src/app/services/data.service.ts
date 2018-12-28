@@ -19,15 +19,15 @@ export class DataService {
     return this.http.get(`${this.url}query?${queryString}`);
   }
 
-  postNew(payload) {
+  postNew(payload: object) {
     return this.http.post(`${this.url}`, payload);
   }
 
-  delete(id) {
+  delete(id: string) {
     return this.http.delete(`${this.url}/${id}`);
   }
 
-  patchSaved(id, payload) {
+  patchSaved(id: string, payload: object) {
     return this.http.patch(`${this.url}/${id}`, payload);
   }
 

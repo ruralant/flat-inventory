@@ -7,7 +7,6 @@ const logger = require('morgan');
 
 module.exports = function (app) {
   app.use(cors());
-  // app.options('*', cors({ origin: true }));
 
   app.use(logger('dev'));
 

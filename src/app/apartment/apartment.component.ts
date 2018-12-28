@@ -1,6 +1,6 @@
-import { Apartment } from './../common/interface/apartment';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params, Data } from '@angular/router';
+import { ActivatedRoute, Data } from '@angular/router';
+import { Apartment } from './../common/interface/apartment';
 
 @Component({
   selector: 'app-apartment',
