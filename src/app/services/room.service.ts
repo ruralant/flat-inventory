@@ -17,15 +17,15 @@ export class RoomService {
 
   searchRooms(search: string) {
     const url = search != null ? `${constURL}/rooms/query${search}` : `${constURL}/rooms/`;
-    return this.http.get<Room>(url);
+    return this.http.get<Room[]>(url);
   }
 
   getRooms() {
-    return this.http.get(`${constURL}/rooms`);
+    return this.http.get<Room[]>(`${constURL}/rooms`);
   }
 
   getRoom(id: string) {
-    return this.http.get<Room>(`${constURL}/rooms/query?_id=${id}`);
+    return this.http.get<Room[]>(`${constURL}/rooms/query?_id=${id}`);
   }
 
   getRoomItems(id: string) {
